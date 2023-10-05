@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 196379874}
   - component: {fileID: 196379873}
   m_Layer: 5
-  m_Name: PlayButton
+  m_Name: StartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -391,7 +391,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 5001
+  m_text: 5000
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 94fb0ac81c236184d96a9e8cee11d148, type: 2}
   m_sharedMaterial: {fileID: 2745078550853736072, guid: 94fb0ac81c236184d96a9e8cee11d148, type: 2}
@@ -1728,8 +1728,9 @@ GameObject:
   - component: {fileID: 2033898876}
   - component: {fileID: 2033898875}
   - component: {fileID: 2033898874}
+  - component: {fileID: 2033898878}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: MainMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1819,6 +1820,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &2033898878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033898873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4031458351630524f90da8b7dc619322, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _startButton: {fileID: 196379873}
+  _exitButton: {fileID: 2123000643}
 --- !u!1 &2123000641
 GameObject:
   m_ObjectHideFlags: 0

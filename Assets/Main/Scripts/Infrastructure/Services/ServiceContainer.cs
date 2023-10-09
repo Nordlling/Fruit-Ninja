@@ -6,6 +6,13 @@ namespace Main.Scripts.Infrastructure.Services
 {
     public class ServiceContainer
     {
+        public static ServiceContainer Instance;
+
+        public ServiceContainer()
+        {
+            Instance ??= this;
+        }
+
         private readonly Dictionary<Type, IServiceContainer> _containers = new();
 
         public void SetServiceSelf<TService>(TService value)
@@ -37,7 +44,10 @@ namespace Main.Scripts.Infrastructure.Services
         private Container<T> FindContainer<T>()
         {
             var typeBind = typeof(T);
-            if (_containers.TryGetValue(typeBind, out var container)) return container as Container<T>;
+            if (_containers.TryGetValue(typeBind, out var container))
+            {
+                return container as Container<T>;
+            }
 
             var bindContainer = new Container<T>();
             _containers[typeBind] = bindContainer;

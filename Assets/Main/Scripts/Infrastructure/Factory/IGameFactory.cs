@@ -4,7 +4,6 @@ namespace Main.Scripts.Infrastructure.Factory
 {
   public interface IGameFactory : IService
   {
-    void CreateSpawner();
     void Cleanup();
   }
 }

@@ -35,7 +35,6 @@ namespace Main.Scripts.Infrastructure.States
 
         private void InitGameWorld()
         {
-            _gameFactory.CreateSpawner();
         }
     }
 }

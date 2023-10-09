@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Main.Scripts.Infrastructure.Configs;
 using Main.Scripts.Infrastructure.Factory;
 using Main.Scripts.Infrastructure.Services;
 
@@ -12,12 +13,12 @@ namespace Main.Scripts.Infrastructure.States
         private IState _activeState;
         
 
-        public GameStateMachine(SceneLoader sceneLoader, ServiceContainer serviceContainer)
+        public GameStateMachine(SceneLoader sceneLoader, ServiceContainer serviceContainer, BootstrapConfig _bootstrapConfig)
         {
             
             _states = new Dictionary<Type, IState>()
             {
-                { typeof(BootstrapState), new BootstrapState(this, sceneLoader, serviceContainer) },
+                { typeof(BootstrapState), new BootstrapState(this, sceneLoader, serviceContainer, _bootstrapConfig) },
                 { typeof(LoadSceneState), new LoadSceneState(this, sceneLoader, serviceContainer.Get<IGameFactory>()) },
                 { typeof(GameLoopState), new GameLoopState() }
             };

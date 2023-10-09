@@ -1,72 +1,59 @@
+using System.Collections;
+using Main.Scripts.Infrastructure.Services.Difficulty;
+using Main.Scripts.Logic.Blocks;
 using UnityEngine;
 
 namespace Main.Scripts.Logic.Spawn
 {
     public class SpawnArea : MonoBehaviour
     {
+        private readonly float _distanceToOffset = 1f;
+        
         private SpawnerAreaInfo _spawnerInfo;
-        
-        private Vector2 _firstPointPosition;
-        private Vector2 _lastPointPosition;
-        private Vector2 _normal;
-        private Vector2 _newPoint;
 
-        private float _leftTime;
-        
-        private Vector2 _screenOffset;
+        private Vector2 _normal;
+        private Vector2 _newPointPosition;
 
         public void Construct(SpawnerAreaInfo spawnerInfo)
         {
             _spawnerInfo = spawnerInfo;
         }
-
-        private void Start()
+        
+        public void SpawnPack(DifficultyLevel difficultyLevel)
         {
-            _screenOffset = new Vector2(Screen.width * 0.1f, Screen.height * 0.1f);
-            CalculateSpawnBounds();
+            StartCoroutine(StartSpawnPack(difficultyLevel));
         }
 
-        public void SpawnFruit()
+        private IEnumerator StartSpawnPack(DifficultyLevel difficultyLevel)
         {
-            Vector2 direction = GenerateDirection();
-            float speed = Random.Range(_spawnerInfo._minSpeed,_spawnerInfo. _maxSpeed);
-            
-            GameObject fruitObject = Instantiate(_spawnerInfo._throwableObjectPrefab, _newPoint, Quaternion.identity);
-            Fruit fruit = fruitObject.GetComponent<Fruit>();
-            fruit.Construct(direction, speed);
-        }
-
-        private void CalculateSpawnBounds()
-        {
-            Vector2 firstPointScreenPosition = new Vector2();
-            Vector2 lastPointScreenPosition = new Vector2();
-            float width = Screen.width;
-            float height = Screen.height;
-            
-            switch (_spawnerInfo._spawnerPositionType)
+            for (int i = 0; i < difficultyLevel.BlockCount; i++)
             {
-                case SpawnerPositionType.Bottom:
-                    _normal = new Vector2(0, 1);
-                    firstPointScreenPosition = new Vector2(0f + (width / 100 * _spawnerInfo._firstPointPercents), 0f - _screenOffset.y);
-                    lastPointScreenPosition = new Vector2(0f + (width / 100 * _spawnerInfo._lastPointPercents), 0f - _screenOffset.y);
-                    break;
-                case SpawnerPositionType.Left:
-                    _normal = new Vector2(1, 0);
-                    firstPointScreenPosition = new Vector2(0f - _screenOffset.x, 0f + (height / 100 * _spawnerInfo._firstPointPercents));
-                    lastPointScreenPosition = new Vector2(0f - _screenOffset.x, 0f + (height / 100 * _spawnerInfo._lastPointPercents));
-                    break;
-                case SpawnerPositionType.Right:
-                    _normal = new Vector2(-1, 0);
-                    firstPointScreenPosition = new Vector2(width + _screenOffset.x, 0f + (height / 100 * _spawnerInfo._firstPointPercents));
-                    lastPointScreenPosition = new Vector2(width + _screenOffset.x, 0f + (height / 100 * _spawnerInfo._lastPointPercents));
-                    break;
+                SpawnBlock();
+                yield return new WaitForSeconds(difficultyLevel.Frequency);
             }
-            
-            _firstPointPosition = Camera.main.ScreenToWorldPoint(firstPointScreenPosition);
-            _lastPointPosition = Camera.main.ScreenToWorldPoint(lastPointScreenPosition);
-           
         }
 
+        public void SpawnBlock()
+        {
+            GenerateNormal();
+            Vector2 direction = GenerateDirection();
+            OffsetPoint(direction);
+            float speed = Random.Range(_spawnerInfo._minSpeed,_spawnerInfo. _maxSpeed);
+            Block block = Instantiate(_spawnerInfo._blockPrefab, _newPointPosition, Quaternion.identity);
+            block.BlockMovement.Construct(direction, speed);
+        }
+
+        private void OffsetPoint(Vector2 direction)
+        {
+            _newPointPosition -= direction * _distanceToOffset;
+        }
+        
+        private void GenerateNormal()
+        {
+            Vector2 lineVector = _spawnerInfo._lastPoint - _spawnerInfo._firstPoint;
+            _normal = new Vector2(-lineVector.y, lineVector.x).normalized;
+        }
+        
         private Vector2 GenerateDirection()
         {
             GeneratePointPosition();
@@ -77,7 +64,7 @@ namespace Main.Scripts.Logic.Spawn
         private void GeneratePointPosition()
         {
             float newPointValue = Random.Range(0f, 1f);
-            _newPoint = Vector2.Lerp(_firstPointPosition, _lastPointPosition, newPointValue);
+            _newPointPosition = Vector2.Lerp( _spawnerInfo._firstPoint, _spawnerInfo._lastPoint, newPointValue);
         }
 
         private Vector2 GenerateAngle(Vector2 normal)

@@ -1,4 +1,5 @@
 using System;
+using Main.Scripts.Logic.Blocks;
 using UnityEngine;
 
 namespace Main.Scripts.Logic.Spawn
@@ -6,22 +7,29 @@ namespace Main.Scripts.Logic.Spawn
     [Serializable]
     public class SpawnerAreaInfo
     {
-        public SpawnerPositionType _spawnerPositionType;
-        public GameObject _throwableObjectPrefab;
+        [Range(0, 1)]
+        public float _firstPointXPercents;
+        [Range(0, 1)]
+        public float _firstPointYPercents;
 
-        [Range(0, 100)]
-        public float _firstPointPercents;
+        [Range(0, 1)]
+        public float _lastPointXPercents;
+        [Range(0, 1)]
+        public float _lastPointYPercents;
 
-        [Range(0, 100)]
-        public float _lastPointPercents;
-
-        [Range(-90, 90)]
+        [Range(-180, 180)]
         public float _leftAngle;
-
-        [Range(-90, 90)]
+        [Range(-180, 180)]
         public float _rightAngle;
 
         public float _minSpeed;
         public float _maxSpeed;
+        
+        [HideInInspector]
+        public Block _blockPrefab;
+        [HideInInspector]
+        public Vector2 _firstPoint;
+        [HideInInspector]
+        public Vector2 _lastPoint;
     }
 }

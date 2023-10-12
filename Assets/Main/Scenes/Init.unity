@@ -218,6 +218,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bootstrap
       objectReference: {fileID: 0}
+    - target: {fileID: 1409634195833058414, guid: dd1ee9d53ef75e0408e57efe5cfb1a90, type: 3}
+      propertyPath: _bootstrapConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: 653258cba4fba34499b403056b17c919, type: 2}
     - target: {fileID: 1409634195833058415, guid: dd1ee9d53ef75e0408e57efe5cfb1a90, type: 3}
       propertyPath: m_RootOrder
       value: 0

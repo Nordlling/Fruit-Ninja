@@ -10,20 +10,29 @@ namespace Main.Scripts.Infrastructure
     {
         [SerializeField] private SceneContext _sceneContext;
         [SerializeField] private BootstrapConfig _bootstrapConfig;
-        private IGameStateMachine GameStateMachine;
+        private IGameStateMachine _gameStateMachine;
         private void Awake()
         {
-            if (FindObjectsOfType<Bootstrap>().Length > 1)
-            {
-                return;
-            }
+            // if (FindObjectsOfType<Bootstrap>().Length > 1)
+            // {
+            //     return;
+            // }
 
             ServiceContainer serviceContainer = new ServiceContainer();
-            _sceneContext.Setup(serviceContainer);
-            GameStateMachine = new GameStateMachine(new SceneLoader(this), serviceContainer, _bootstrapConfig);
-            GameStateMachine.Enter<BootstrapState>();
+            SceneLoader sceneLoader = new SceneLoader(this);
             
-            DontDestroyOnLoad(this);
+            InitGameStateMachine(serviceContainer, sceneLoader);
+            _gameStateMachine.Enter<BootstrapState>();
+            
+            // DontDestroyOnLoad(this);
+        }
+
+        private void InitGameStateMachine(ServiceContainer serviceContainer, SceneLoader sceneLoader)
+        {
+            _gameStateMachine = new GameStateMachine();
+            _gameStateMachine.AddState(new BootstrapState(sceneLoader, serviceContainer, _bootstrapConfig));
+            _gameStateMachine.AddState(new LoadSceneState(sceneLoader, _sceneContext, serviceContainer));
+            _gameStateMachine.AddState(new GameLoopState());
         }
     }
 }

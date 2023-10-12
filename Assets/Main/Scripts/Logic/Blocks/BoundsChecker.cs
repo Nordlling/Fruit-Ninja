@@ -13,11 +13,6 @@ namespace Main.Scripts.Logic.Blocks
             _livingZone = livingZone;
         }
 
-        private void Start()
-        {
-            _livingZone = ServiceContainer.Instance.Get<LivingZone>();
-        }
-
         private void Update()
         {
             if (!_livingZone.IsInLivingZone(transform.position))

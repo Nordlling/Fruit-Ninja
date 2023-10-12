@@ -4,9 +4,8 @@ using Main.Scripts.Infrastructure.Services;
 using Main.Scripts.Infrastructure.Services.Collision;
 using Main.Scripts.Infrastructure.Services.Difficulty;
 using Main.Scripts.Infrastructure.Services.LivingZone;
-using Main.Scripts.Logic;
 using Main.Scripts.Logic.Spawn;
-using Main.Scripts.Logic.Trail;
+using Main.Scripts.Logic.Swipe;
 using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Installers

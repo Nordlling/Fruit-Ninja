@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Main.Scripts.Logic.Trail
+namespace Main.Scripts.Logic.Swipe
 {
     public class Swiper : MonoBehaviour, ISwiper
     {
@@ -12,6 +12,7 @@ namespace Main.Scripts.Logic.Trail
 
         private Camera _camera;
         private Vector3 _lastPosition;
+        private bool _touched;
 
         public void Construct(Camera mainCamera)
         {
@@ -35,6 +36,15 @@ namespace Main.Scripts.Logic.Trail
                 SwitchEmission(Speed > 0f);
                 Vector2 mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition);
                 transform.position = mousePosition;
+                if (!_touched)
+                {
+                    _lastPosition = transform.position;
+                }
+                _touched = true;
+            }
+            else
+            {
+                _touched = false;
             }
             Speed = Vector2.Distance(_lastPosition, transform.position) / Time.deltaTime;
             _lastPosition = transform.position;

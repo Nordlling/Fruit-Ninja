@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Main.Scripts.Logic.Trail
+namespace Main.Scripts.Logic.Swipe
 {
     public interface ISwiper
     {

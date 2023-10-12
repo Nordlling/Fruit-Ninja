@@ -41,7 +41,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1525716950435998998}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 303d2ce381a544129e14d4ee20258fc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _minSpeedToSlice: 0.01
+  _minSpeedToSlice: 5
   _particleSystem: {fileID: 1525716951848838060}
 --- !u!1 &1525716951848838057
 GameObject:

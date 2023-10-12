@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using Main.Scripts.Logic;
 using Main.Scripts.Logic.Blocks;
-using Main.Scripts.Logic.Trail;
+using Main.Scripts.Logic.Swipe;
 using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Services.Collision

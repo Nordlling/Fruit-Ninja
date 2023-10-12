@@ -10,22 +10,19 @@ namespace Main.Scripts.Infrastructure.Installers
     {
         [SerializeField] private List<MonoInstaller> _installers = new();
 
-        private void Start()
+        public void Setup(ServiceContainer serviceContainer)
         {
-            Setup();
+            BuildContainer(serviceContainer);
         }
 
-        private void Setup()
+        private ServiceContainer BuildContainer(ServiceContainer serviceContainer)
         {
-            BuildContainer();
-        }
+            foreach (var installer in _installers)
+            {
+                installer.InstallBindings(serviceContainer);
+            }
 
-        private ServiceContainer BuildContainer()
-        {
-            var container = ServiceContainer.Instance;
-            foreach (var installer in _installers) installer.InstallBindings(container);
-
-            return container;
+            return serviceContainer;
         }
     }
 }

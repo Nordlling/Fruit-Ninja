@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Main.Scripts.Logic.Blocks
 {
-    public class BlockMovement : MonoBehaviour, IChoppable
+    public class BlockMovement : MonoBehaviour
     {
         private Vector2 _startDirection;
         private float _speed;
@@ -24,7 +24,7 @@ namespace Main.Scripts.Logic.Blocks
             _currentPosition = transform.position;
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             Move();
         }

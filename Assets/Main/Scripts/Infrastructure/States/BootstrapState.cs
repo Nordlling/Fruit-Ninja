@@ -25,8 +25,6 @@ namespace Main.Scripts.Infrastructure.States
 
         private void RegisterServices()
         {
-            RegisterDifficultyService();
-            _serviceContainer.SetService<IGameFactory, GameFactory>(new GameFactory());
         }
 
         public void Enter()
@@ -42,17 +40,6 @@ namespace Main.Scripts.Infrastructure.States
         private void EnterLoadScene()
         {
             _stateMachine.Enter<LoadSceneState>();
-        }
-        
-        private void RegisterDifficultyService()
-        {
-            DifficultyLevel difficultyLevel = new DifficultyLevel()
-            {
-                BlockCount = 1,
-                Frequency = 1f
-            };
-            DifficultyService difficultyService = new DifficultyService(difficultyLevel, 2, 2, 1, 0.1f);
-            _serviceContainer.SetService<IDifficultyService, DifficultyService>(difficultyService);
         }
     }
 }

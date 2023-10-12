@@ -1,4 +1,5 @@
 using Main.Scripts.Infrastructure.Services;
+using Main.Scripts.Infrastructure.Services.LivingZone;
 using UnityEngine;
 
 namespace Main.Scripts.Logic.Blocks
@@ -7,6 +8,11 @@ namespace Main.Scripts.Logic.Blocks
     {
         private LivingZone _livingZone;
 
+        public void Construct(LivingZone livingZone)
+        {
+            _livingZone = livingZone;
+        }
+
         private void Start()
         {
             _livingZone = ServiceContainer.Instance.Get<LivingZone>();
@@ -14,7 +20,7 @@ namespace Main.Scripts.Logic.Blocks
 
         private void Update()
         {
-            if (!_livingZone.IsInDeadZone(transform.position))
+            if (!_livingZone.IsInLivingZone(transform.position))
             {
                 Destroy(gameObject);
             }

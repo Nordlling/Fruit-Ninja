@@ -1,4 +1,6 @@
 using System.Collections;
+using Main.Scripts.Infrastructure.Factory;
+using Main.Scripts.Infrastructure.Services.Collision;
 using Main.Scripts.Infrastructure.Services.Difficulty;
 using Main.Scripts.Logic.Blocks;
 using UnityEngine;
@@ -14,8 +16,12 @@ namespace Main.Scripts.Logic.Spawn
         private Vector2 _normal;
         private Vector2 _newPointPosition;
 
-        public void Construct(SpawnerAreaInfo spawnerInfo)
+        private ICollisionService _collisionService;
+        private IGameFactory _gameFactory;
+
+        public void Construct(SpawnerAreaInfo spawnerInfo, IGameFactory gameFactory)
         {
+            _gameFactory = gameFactory;
             _spawnerInfo = spawnerInfo;
         }
         
@@ -39,7 +45,8 @@ namespace Main.Scripts.Logic.Spawn
             Vector2 direction = GenerateDirection();
             OffsetPoint(direction);
             float speed = Random.Range(_spawnerInfo._minSpeed,_spawnerInfo. _maxSpeed);
-            Block block = Instantiate(_spawnerInfo._blockPrefab, _newPointPosition, Quaternion.identity);
+            
+            Block block = _gameFactory.CreateBlock(_spawnerInfo._blockPrefab, _newPointPosition);
             block.BlockMovement.Construct(direction, speed);
         }
 

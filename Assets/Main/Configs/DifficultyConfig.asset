@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc5fdd3b8ecd41a783a21aebaf18cc41, type: 3}
+  m_Name: DifficultyConfig
+  m_EditorClassIdentifier: 
+  LevelsToIncreaseBlockCount: 3
+  LevelsToIncreaseFrequency: 3
+  BlockCountProgression: 2
+  FrequencyProgression: 0.1
+  InitialBlockCount: 1
+  InitialFrequency: 0.2
+  MaxBlockCount: 1
+  MinFrequency: 0

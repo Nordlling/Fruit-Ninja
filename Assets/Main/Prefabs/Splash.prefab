@@ -97,9 +97,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 822fbea374784652b1834a4e3bd22be3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _endFadeValue: 0
+  _durationFade: 3
   _spriteRenderer: {fileID: 4839357026080946987}
-  _sprites:
-  - {fileID: 21300000, guid: ed470200b87d1cd4c96dc4f76d7931b8, type: 3}
-  - {fileID: 21300000, guid: 8bd45a6e69dbac843bf63493f0256211, type: 3}
-  - {fileID: 21300000, guid: 003798844a593dc458d4fc353875c688, type: 3}
-  - {fileID: 21300000, guid: 81ea6d9d962c1c84ea60cb9a873d6cd1, type: 3}

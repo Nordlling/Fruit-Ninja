@@ -1,6 +1,5 @@
 ﻿using Main.Scripts.Infrastructure.Services.Collision;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Main.Scripts.Logic.Blocks
 {
@@ -19,19 +18,12 @@ namespace Main.Scripts.Logic.Blocks
 
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private SpriteRenderer _shadowSpriteRenderer;
-        [SerializeField] private Sprite[] _sprites;
         
         private ICollisionService _collisionService;
         
         public void Construct(ICollisionService collisionService)
         {
             _collisionService = collisionService;
-        }
-
-        private void Awake()
-        {
-            int randomIndex = Random.Range(0, _sprites.Length);
-            _spriteRenderer.sprite = _sprites[randomIndex];
         }
 
         private void Start()

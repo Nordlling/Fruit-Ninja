@@ -22,6 +22,6 @@ namespace Main.Scripts.Infrastructure.Configs
         public float InitialFrequency;
 
         public int MaxBlockCount;
-        [FormerlySerializedAs("MaxFrequency")] public float MinFrequency;
+        public float MinFrequency;
     }
 }

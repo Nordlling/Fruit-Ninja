@@ -1,25 +1,26 @@
-using Main.Scripts.Infrastructure.Factory;
+using Main.Scripts.Infrastructure.Installers;
+using Main.Scripts.Infrastructure.Services;
 
 namespace Main.Scripts.Infrastructure.States
 {
-    public class LoadSceneState : IState
+    public class LoadSceneState : IParametrizedState<string>
     {
-        private readonly GameStateMachine _stateMachine;
         private readonly SceneLoader _sceneLoader;
-        private readonly IGameFactory _gameFactory;
+        private readonly SceneContext _sceneContext;
+        private readonly ServiceContainer _serviceContainer;
+        
+        public GameStateMachine StateMachine { get; set; }
 
-        private const string _sceneName = "Gameplay";
-
-        public LoadSceneState(GameStateMachine stateMachine, SceneLoader sceneLoader, IGameFactory gameFactory)
+        public LoadSceneState(SceneLoader sceneLoader, SceneContext sceneContext, ServiceContainer serviceContainer)
         {
-            _stateMachine = stateMachine;
             _sceneLoader = sceneLoader;
-            _gameFactory = gameFactory;
+            _sceneContext = sceneContext;
+            _serviceContainer = serviceContainer;
         }
 
-        public void Enter()
+        public void Enter(string sceneName)
         {
-            _sceneLoader.Load(_sceneName, OnLoaded);
+            _sceneLoader.Load(sceneName, OnLoaded);
         }
 
         public void Exit()
@@ -30,11 +31,12 @@ namespace Main.Scripts.Infrastructure.States
         {
             InitGameWorld();
 
-            _stateMachine.Enter<GameLoopState>();
+            StateMachine.Enter<GameLoopState>();
         }
 
         private void InitGameWorld()
         {
+            _sceneContext.Setup(_serviceContainer);
         }
     }
 }

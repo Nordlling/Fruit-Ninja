@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Main.Scripts.Infrastructure.Factory;
 using Main.Scripts.Infrastructure.Services.Difficulty;
@@ -24,6 +25,8 @@ namespace Main.Scripts.Logic.Spawn
         private float _leftTime;
         private float[] _spawnWeights;
 
+        private bool _spawnPackBusy;
+
         public void Construct(IDifficultyService difficultyService, IGameFactory gameFactory)
         {
             _difficultyService = difficultyService;
@@ -39,24 +42,42 @@ namespace Main.Scripts.Logic.Spawn
 
         private void Update()
         {
+            if (_spawnPackBusy)
+            {
+                return;
+            }
+            
             if (_leftTime > 0f)
             {
                 _leftTime -= Time.deltaTime;
                 return;
             }
 
+            var randomIndex = GenerateRandomIndex();
+
+            _difficultyService.IncreaseDifficulty();
+
+            SpawnPack(randomIndex);
+
+            _leftTime = Random.Range(_minInterval, _maxInterval);
+        }
+
+        private int GenerateRandomIndex()
+        {
             int randomIndex = _spawnWeights.GetRandomWeightedIndex();
             if (randomIndex == -1)
             {
                 Debug.LogError("Can't find weighted random index");
                 randomIndex = Random.Range(0, _spawnWeights.Length);
             }
-            
-            _difficultyService.IncreaseDifficulty();
-            
-            _spawnAreas[randomIndex].SpawnArea.SpawnPack(_difficultyService.GetDifficultyLevel());
-        
-            _leftTime = Random.Range(_minInterval, _maxInterval) + _difficultyService.GetDifficultyLevel().BlockCount * _difficultyService.GetDifficultyLevel().Frequency;
+
+            return randomIndex;
+        }
+
+        private void SpawnPack(int randomIndex)
+        {
+            _spawnPackBusy = true;
+            _spawnAreas[randomIndex].SpawnArea.SpawnPack(_difficultyService.GetDifficultyLevel(), () => _spawnPackBusy = false);
         }
 
         private void CreateSpawnAreas()

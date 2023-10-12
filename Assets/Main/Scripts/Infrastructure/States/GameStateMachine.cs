@@ -1,35 +1,33 @@
 using System;
 using System.Collections.Generic;
-using Main.Scripts.Infrastructure.Configs;
-using Main.Scripts.Infrastructure.Factory;
-using Main.Scripts.Infrastructure.Services;
 
 namespace Main.Scripts.Infrastructure.States
 {
     public class GameStateMachine : IGameStateMachine
     {
 
-        private Dictionary<Type, IState> _states;
-        private IState _activeState;
-        
+        private Dictionary<Type, IExitableState> _states = new();
+        private IExitableState _activeState;
 
-        public GameStateMachine(SceneLoader sceneLoader, ServiceContainer serviceContainer, BootstrapConfig _bootstrapConfig)
+        public void AddState(IExitableState state)
         {
-            
-            _states = new Dictionary<Type, IState>()
-            {
-                { typeof(BootstrapState), new BootstrapState(this, sceneLoader, serviceContainer, _bootstrapConfig) },
-                { typeof(LoadSceneState), new LoadSceneState(this, sceneLoader, serviceContainer.Get<IGameFactory>()) },
-                { typeof(GameLoopState), new GameLoopState() }
-            };
+            _states[state.GetType()] = state;
+            state.StateMachine = this;
         }
+        
         public void Enter<TState>() where TState : class, IState
         {
             IState state = ChangeState<TState>();
             state.Enter();
         }
 
-        private TState ChangeState<TState>() where TState : class, IState
+        public void Enter<TState, TParameter>(TParameter payload) where TState : class, IParametrizedState<TParameter>
+        {
+            TState state = ChangeState<TState>();
+            state.Enter(payload);
+        }
+
+        private TState ChangeState<TState>() where TState : class, IExitableState
         {
             _activeState?.Exit();
       
@@ -39,7 +37,9 @@ namespace Main.Scripts.Infrastructure.States
             return state;
         }
 
-        private TState GetState<TState>() where TState : class, IState => 
-            _states[typeof(TState)] as TState;
+        private TState GetState<TState>() where TState : class, IExitableState
+        {
+            return _states[typeof(TState)] as TState;
+        }
     }
 }

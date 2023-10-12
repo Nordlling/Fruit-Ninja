@@ -7,5 +7,6 @@ namespace Main.Scripts.Infrastructure.Configs
     {
         public bool StartCurrentScene;
         public string InitialScene; 
+        public string FirstGameScene; 
     }
 }

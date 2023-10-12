@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using Main.Scripts.Infrastructure.Factory;
 using Main.Scripts.Infrastructure.Services.Collision;
 using Main.Scripts.Infrastructure.Services.Difficulty;
 using Main.Scripts.Logic.Blocks;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Main.Scripts.Logic.Spawn
 {
@@ -25,18 +27,19 @@ namespace Main.Scripts.Logic.Spawn
             _spawnerInfo = spawnerInfo;
         }
         
-        public void SpawnPack(DifficultyLevel difficultyLevel)
+        public void SpawnPack(DifficultyLevel difficultyLevel, Action onPackSpawned)
         {
-            StartCoroutine(StartSpawnPack(difficultyLevel));
+            StartCoroutine(StartSpawnPack(difficultyLevel, onPackSpawned));
         }
 
-        private IEnumerator StartSpawnPack(DifficultyLevel difficultyLevel)
+        private IEnumerator StartSpawnPack(DifficultyLevel difficultyLevel, Action onPackSpawned = null)
         {
             for (int i = 0; i < difficultyLevel.BlockCount; i++)
             {
                 SpawnBlock();
                 yield return new WaitForSeconds(difficultyLevel.Frequency);
             }
+            onPackSpawned?.Invoke();
         }
 
         public void SpawnBlock()

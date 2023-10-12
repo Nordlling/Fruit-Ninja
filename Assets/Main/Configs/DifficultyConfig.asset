@@ -16,7 +16,7 @@ MonoBehaviour:
   LevelsToIncreaseFrequency: 3
   BlockCountProgression: 2
   FrequencyProgression: 0.1
-  InitialBlockCount: 1
+  InitialBlockCount: 3
   InitialFrequency: 0.2
-  MaxBlockCount: 1
+  MaxBlockCount: 20
   MinFrequency: 0

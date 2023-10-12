@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StartCurrentScene: 1
   InitialScene: Init
+  FirstGameScene: Menu

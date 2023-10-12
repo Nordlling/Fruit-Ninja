@@ -14,6 +14,7 @@ namespace Main.Scripts.Infrastructure.Installers
     public class GameWorldInstaller : MonoInstaller
     {
         [SerializeField] private DifficultyConfig _difficultyConfig;
+        [SerializeField] private BlockConfig _blockConfig;
         [SerializeField] private LivingZone _livingZone;
         [SerializeField] private Spawner _spawner;
         [SerializeField] private Camera _camera;
@@ -61,11 +62,10 @@ namespace Main.Scripts.Infrastructure.Installers
             serviceContainer.SetService<ICollisionService, CollisionService>(collisionService);
         }
 
-        private static void RegisterGameFactory(ServiceContainer serviceContainer)
+        private void RegisterGameFactory(ServiceContainer serviceContainer)
         {
             serviceContainer.SetService<IGameFactory, GameFactory>(
-                new GameFactory(serviceContainer.Get<ICollisionService>(), 
-                    serviceContainer.Get<LivingZone>()));
+                new GameFactory(serviceContainer.Get<ICollisionService>(),serviceContainer.Get<LivingZone>(), _blockConfig));
         }
 
         private void RegisterSpawner(ServiceContainer serviceContainer)

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90ef67e17d65438db2e873ae7af6c795, type: 3}
   m_Name: BootstrapConfig
   m_EditorClassIdentifier: 
-  StartCurrentScene: 0
+  StartCurrentScene: 1
   InitialScene: Init
   FirstGameScene: Menu

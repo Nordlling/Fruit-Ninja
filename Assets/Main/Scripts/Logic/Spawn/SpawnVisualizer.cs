@@ -22,11 +22,11 @@ namespace Main.Scripts.Logic.Spawn
             float currentScreenWidth = _camera.pixelWidth;
             float currentScreenHeight = _camera.pixelHeight;
             
-            float firstPositionX = currentScreenWidth * spawnerInfo._firstPointXPercents;
-            float firstPositionY = currentScreenHeight * spawnerInfo._firstPointYPercents;
+            float firstPositionX = currentScreenWidth * spawnerInfo._firstPointX;
+            float firstPositionY = currentScreenHeight * spawnerInfo._firstPointY;
             
-            float lastPositionX = currentScreenWidth * spawnerInfo._lastPointXPercents;
-            float lastPositionY = currentScreenHeight * spawnerInfo._lastPointYPercents;
+            float lastPositionX = currentScreenWidth * spawnerInfo._lastPointX;
+            float lastPositionY = currentScreenHeight * spawnerInfo._lastPointY;
             
             spawnerInfo._firstPoint = _camera.ScreenToWorldPoint(new Vector2(firstPositionX, firstPositionY));
             spawnerInfo._lastPoint = _camera.ScreenToWorldPoint(new Vector2(lastPositionX, lastPositionY));

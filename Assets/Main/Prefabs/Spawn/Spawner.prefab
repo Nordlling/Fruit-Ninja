@@ -47,15 +47,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _blockPrefab: {fileID: 7451329234354239626, guid: 2f51cb6d3b5579c4cbd086a900f43db0, type: 3}
   _spawnerAreaPrefab: {fileID: 8366439391440360969, guid: 2e45461581f40a645a6d7ab735bf23ac, type: 3}
-  _minInterval: 1
-  _maxInterval: 3
+  _minInterval: 2
+  _maxInterval: 4
   _spawnAreas:
   - ProbabilityWeight: 0.5
     spawnerAreaInfo:
-      _firstPointXPercents: 0
-      _firstPointYPercents: 0
-      _lastPointXPercents: 0.2
-      _lastPointYPercents: 0
+      _firstPointX: 0
+      _firstPointY: 0
+      _lastPointX: 0.2
+      _lastPointY: 0
       _leftAngle: -5
       _rightAngle: 35
       _minSpeed: 10
@@ -65,23 +65,23 @@ MonoBehaviour:
       _lastPoint: {x: -5.335938, y: -5}
   - ProbabilityWeight: 0.5
     spawnerAreaInfo:
-      _firstPointXPercents: 0.25
-      _firstPointYPercents: 0
-      _lastPointXPercents: 0.775
-      _lastPointYPercents: 0
+      _firstPointX: 0.25
+      _firstPointY: 0
+      _lastPointX: 0.75
+      _lastPointY: 0
       _leftAngle: 35
       _rightAngle: 35
       _minSpeed: 10
       _maxSpeed: 14
       _blockPrefab: {fileID: 7451329234354239626, guid: 2f51cb6d3b5579c4cbd086a900f43db0, type: 3}
       _firstPoint: {x: -4.4466147, y: -5}
-      _lastPoint: {x: 4.891277, y: -5}
+      _lastPoint: {x: 4.4466147, y: -5}
   - ProbabilityWeight: 0.5
     spawnerAreaInfo:
-      _firstPointXPercents: 0.8
-      _firstPointYPercents: 0
-      _lastPointXPercents: 1
-      _lastPointYPercents: 0
+      _firstPointX: 0.8
+      _firstPointY: 0
+      _lastPointX: 1
+      _lastPointY: 0
       _leftAngle: 35
       _rightAngle: -5
       _minSpeed: 10
@@ -91,30 +91,30 @@ MonoBehaviour:
       _lastPoint: {x: 8.8932295, y: -5}
   - ProbabilityWeight: 0.2
     spawnerAreaInfo:
-      _firstPointXPercents: 0
-      _firstPointYPercents: 0.5
-      _lastPointXPercents: 0
-      _lastPointYPercents: 0
-      _leftAngle: 65
+      _firstPointX: 0
+      _firstPointY: 0.4
+      _lastPointX: 0
+      _lastPointY: 0
+      _leftAngle: 55
       _rightAngle: -35
       _minSpeed: 10
-      _maxSpeed: 14
+      _maxSpeed: 13
       _blockPrefab: {fileID: 7451329234354239626, guid: 2f51cb6d3b5579c4cbd086a900f43db0, type: 3}
-      _firstPoint: {x: -8.8932295, y: 0}
+      _firstPoint: {x: -8.8932295, y: -0.99999994}
       _lastPoint: {x: -8.8932295, y: -5}
   - ProbabilityWeight: 0.2
     spawnerAreaInfo:
-      _firstPointXPercents: 1
-      _firstPointYPercents: 0
-      _lastPointXPercents: 1
-      _lastPointYPercents: 0.5
+      _firstPointX: 1
+      _firstPointY: 0
+      _lastPointX: 1
+      _lastPointY: 0.4
       _leftAngle: -35
-      _rightAngle: 65
+      _rightAngle: 55
       _minSpeed: 10
-      _maxSpeed: 14
+      _maxSpeed: 13
       _blockPrefab: {fileID: 7451329234354239626, guid: 2f51cb6d3b5579c4cbd086a900f43db0, type: 3}
       _firstPoint: {x: 8.8932295, y: -5}
-      _lastPoint: {x: 8.8932295, y: 0}
+      _lastPoint: {x: 8.8932295, y: -0.99999994}
 --- !u!114 &703230316041955137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,3 +128,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawner: {fileID: 4306255980740806363}
+  _camera: {fileID: 0}

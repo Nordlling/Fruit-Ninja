@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: DifficultyConfig
   m_EditorClassIdentifier: 
   LevelsToIncreaseBlockCount: 3
-  LevelsToIncreaseFrequency: 3
+  LevelsToIncreaseFrequency: 2
   BlockCountProgression: 2
   FrequencyProgression: 0.1
-  InitialBlockCount: 3
-  InitialFrequency: 0.2
+  InitialBlockCount: 1
+  InitialFrequency: 1
   MaxBlockCount: 20
   MinFrequency: 0

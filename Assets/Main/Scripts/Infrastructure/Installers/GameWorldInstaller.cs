@@ -3,9 +3,12 @@ using Main.Scripts.Infrastructure.Factory;
 using Main.Scripts.Infrastructure.Services;
 using Main.Scripts.Infrastructure.Services.Collision;
 using Main.Scripts.Infrastructure.Services.Difficulty;
+using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.LivingZone;
+using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Logic.Spawn;
 using Main.Scripts.Logic.Swipe;
+using Main.Scripts.UI.Gameplay;
 using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Installers
@@ -14,21 +17,30 @@ namespace Main.Scripts.Infrastructure.Installers
     {
         [SerializeField] private DifficultyConfig _difficultyConfig;
         [SerializeField] private BlockConfig _blockConfig;
+        [SerializeField] private HealthConfig _healthConfig;
+        [SerializeField] private ScoreConfig _scoreConfig;
         [SerializeField] private LivingZone _livingZone;
         [SerializeField] private Spawner _spawner;
         [SerializeField] private Camera _camera;
         [SerializeField] private Swiper _swiperPrefab;
         [SerializeField] private CollisionService _collisionServicePrefab;
+        [SerializeField] private UIHealthView _uiHealthView;
+        [SerializeField] private UIScoreView _uiScoreView;
 
         public override void InstallBindings(ServiceContainer serviceContainer)
         {
             RegisterLivingZone(serviceContainer);
             RegisterDifficultyService(serviceContainer);
+            RegisterHealthService(serviceContainer);
+            RegisterScoreService(serviceContainer);
             RegisterSwiper(serviceContainer);
             
             RegisterCollisionService(serviceContainer);
             RegisterGameFactory(serviceContainer);
             RegisterSpawner(serviceContainer);
+            
+            InitHealthUI(serviceContainer);
+            InitScoreUI(serviceContainer);
         }
 
         private void RegisterLivingZone(ServiceContainer serviceContainer)
@@ -45,6 +57,16 @@ namespace Main.Scripts.Infrastructure.Installers
             };
             DifficultyService difficultyService = new DifficultyService(_difficultyConfig, difficultyLevel);
             serviceContainer.SetService<IDifficultyService, DifficultyService>(difficultyService);
+        }
+
+        private void RegisterHealthService(ServiceContainer serviceContainer)
+        {
+            serviceContainer.SetService<IHealthService, HealthService>(new HealthService(_healthConfig));
+        }
+
+        private void RegisterScoreService(ServiceContainer serviceContainer)
+        {
+            serviceContainer.SetService<IScoreService, ScoreService>(new ScoreService(_scoreConfig));
         }
 
         private void RegisterSwiper(ServiceContainer serviceContainer)
@@ -64,14 +86,32 @@ namespace Main.Scripts.Infrastructure.Installers
         private void RegisterGameFactory(ServiceContainer serviceContainer)
         {
             serviceContainer.SetService<IGameFactory, GameFactory>(
-                new GameFactory(serviceContainer.Get<ICollisionService>(),serviceContainer.Get<LivingZone>(), _blockConfig));
+                new GameFactory(
+                    serviceContainer.Get<ICollisionService>(),
+                    serviceContainer.Get<LivingZone>(), 
+                    serviceContainer.Get<IHealthService>(),
+                    serviceContainer.Get<IScoreService>(),
+                    _blockConfig));
         }
 
         private void RegisterSpawner(ServiceContainer serviceContainer)
         {
-            _spawner.Construct(serviceContainer.Get<IDifficultyService>(),
-                serviceContainer.Get<IGameFactory>());
+            _spawner.Construct(
+                serviceContainer.Get<IDifficultyService>(),
+                serviceContainer.Get<IGameFactory>(),
+                serviceContainer.Get<IHealthService>());
+            
             serviceContainer.SetServiceSelf(_spawner);
+        }
+
+        private void InitHealthUI(ServiceContainer serviceContainer)
+        {
+            _uiHealthView.Construct(serviceContainer.Get<IHealthService>());
+        }
+        
+        private void InitScoreUI(ServiceContainer serviceContainer)
+        {
+            _uiScoreView.Construct(serviceContainer.Get<IScoreService>());
         }
     }
 }

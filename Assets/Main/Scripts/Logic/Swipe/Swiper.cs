@@ -8,7 +8,7 @@ namespace Main.Scripts.Logic.Swipe
         public Vector2 Position => transform.position;
 
         [SerializeField] private float _minSpeedToSlice;
-        [SerializeField] private ParticleSystem _particleSystem;
+        [SerializeField] private TrailRenderer _trailRenderer;
 
         private Camera _camera;
         private Vector3 _lastPosition;
@@ -33,11 +33,12 @@ namespace Main.Scripts.Logic.Swipe
         {
             if (Input.GetMouseButton(0))
             {
-                SwitchEmission(Speed > 0f);
+                _trailRenderer.enabled = true;
                 Vector2 mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition);
                 transform.position = mousePosition;
                 if (!_touched)
                 {
+                    _trailRenderer.enabled = false;
                     _lastPosition = transform.position;
                 }
                 _touched = true;
@@ -48,12 +49,6 @@ namespace Main.Scripts.Logic.Swipe
             }
             Speed = Vector2.Distance(_lastPosition, transform.position) / Time.deltaTime;
             _lastPosition = transform.position;
-        }
-
-        private void SwitchEmission(bool enable)
-        {
-            var emission = _particleSystem.emission;
-            emission.enabled = enable;
         }
     }
 }

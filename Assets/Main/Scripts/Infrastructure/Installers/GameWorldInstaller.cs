@@ -5,10 +5,10 @@ using Main.Scripts.Infrastructure.Services.Collision;
 using Main.Scripts.Infrastructure.Services.Difficulty;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.LivingZone;
+using Main.Scripts.Infrastructure.Services.SaveLoad;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Logic.Spawn;
 using Main.Scripts.Logic.Swipe;
-using Main.Scripts.UI.Gameplay;
 using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Installers
@@ -24,23 +24,24 @@ namespace Main.Scripts.Infrastructure.Installers
         [SerializeField] private Camera _camera;
         [SerializeField] private Swiper _swiperPrefab;
         [SerializeField] private CollisionService _collisionServicePrefab;
-        [SerializeField] private UIHealthView _uiHealthView;
-        [SerializeField] private UIScoreView _uiScoreView;
 
         public override void InstallBindings(ServiceContainer serviceContainer)
         {
+            RegisterSaveLoadService(serviceContainer);
             RegisterLivingZone(serviceContainer);
             RegisterDifficultyService(serviceContainer);
             RegisterHealthService(serviceContainer);
             RegisterScoreService(serviceContainer);
             RegisterSwiper(serviceContainer);
-            
+
             RegisterCollisionService(serviceContainer);
             RegisterGameFactory(serviceContainer);
             RegisterSpawner(serviceContainer);
-            
-            InitHealthUI(serviceContainer);
-            InitScoreUI(serviceContainer);
+        }
+
+        private static void RegisterSaveLoadService(ServiceContainer serviceContainer)
+        {
+            serviceContainer.SetService<ISaveLoadService, SaveLoadService>(new SaveLoadService());
         }
 
         private void RegisterLivingZone(ServiceContainer serviceContainer)
@@ -66,7 +67,7 @@ namespace Main.Scripts.Infrastructure.Installers
 
         private void RegisterScoreService(ServiceContainer serviceContainer)
         {
-            serviceContainer.SetService<IScoreService, ScoreService>(new ScoreService(_scoreConfig));
+            serviceContainer.SetService<IScoreService, ScoreService>(new ScoreService(_scoreConfig, serviceContainer.Get<ISaveLoadService>()));
         }
 
         private void RegisterSwiper(ServiceContainer serviceContainer)
@@ -102,16 +103,6 @@ namespace Main.Scripts.Infrastructure.Installers
                 serviceContainer.Get<IHealthService>());
             
             serviceContainer.SetServiceSelf(_spawner);
-        }
-
-        private void InitHealthUI(ServiceContainer serviceContainer)
-        {
-            _uiHealthView.Construct(serviceContainer.Get<IHealthService>());
-        }
-        
-        private void InitScoreUI(ServiceContainer serviceContainer)
-        {
-            _uiScoreView.Construct(serviceContainer.Get<IScoreService>());
         }
     }
 }

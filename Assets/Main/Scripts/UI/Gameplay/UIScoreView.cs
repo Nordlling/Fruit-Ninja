@@ -7,10 +7,10 @@ namespace Main.Scripts.UI.Gameplay
 {
     public class UIScoreView : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI _scoreText;
-        [SerializeField] private float _scoreAnimationDuration;
+        [SerializeField] protected TextMeshProUGUI _scoreText;
+        [SerializeField] protected float _scoreAnimationDuration;
         
-        private IScoreService _scoreService;
+        protected IScoreService _scoreService;
         private int _currentScore;
         private Coroutine _currentCoroutine;
 
@@ -39,7 +39,7 @@ namespace Main.Scripts.UI.Gameplay
             _scoreService.OnScored -= AddScore;
         }
 
-        private void AddScore(int newScore)
+        protected void AddScore(int newScore)
         {
             if (_currentCoroutine != null)
             {

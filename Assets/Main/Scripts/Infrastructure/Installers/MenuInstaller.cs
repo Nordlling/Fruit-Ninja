@@ -1,6 +1,6 @@
 using Main.Scripts.Infrastructure.Services;
 using Main.Scripts.Infrastructure.States;
-using Main.Scripts.UI;
+using Main.Scripts.UI.Menu;
 using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Installers

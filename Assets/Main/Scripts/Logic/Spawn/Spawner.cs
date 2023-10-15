@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using Main.Scripts.Infrastructure.Factory;
 using Main.Scripts.Infrastructure.Services.Difficulty;
+using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Logic.Blocks;
 using Main.Scripts.Utils.RandomUtils;
 using UnityEngine;
@@ -23,15 +24,39 @@ namespace Main.Scripts.Logic.Spawn
 
         private IDifficultyService _difficultyService;
         private IGameFactory _gameFactory;
+        private IHealthService _healthService;
+        
         private float _leftTime;
         private float[] _spawnWeights;
 
         private bool _spawnPackBusy;
+        private bool _stop;
 
-        public void Construct(IDifficultyService difficultyService, IGameFactory gameFactory)
+        public void Construct(IDifficultyService difficultyService, IGameFactory gameFactory, IHealthService healthService)
         {
             _difficultyService = difficultyService;
             _gameFactory = gameFactory;
+            _healthService = healthService;
+        }
+
+        private void OnEnable()
+        {
+            _healthService.OnDied += StopSpawn;
+        }
+        
+        private void OnDisable()
+        {
+            _healthService.OnDied -= StopSpawn;
+        }
+
+        private void StopSpawn()
+        {
+            _stop = true;
+        }
+        
+        private void StartSpawn()
+        {
+            _stop = false;
         }
 
         private void Start()
@@ -43,7 +68,7 @@ namespace Main.Scripts.Logic.Spawn
 
         private void Update()
         {
-            if (_spawnPackBusy)
+            if (_spawnPackBusy || _stop)
             {
                 return;
             }

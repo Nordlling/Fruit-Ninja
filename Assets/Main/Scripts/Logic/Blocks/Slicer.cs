@@ -1,7 +1,11 @@
 using Main.Scripts.Infrastructure.Factory;
+using Main.Scripts.Infrastructure.Services.Score;
+using Main.Scripts.Logic.Score;
 using Main.Scripts.Logic.Splashing;
 using Main.Scripts.Utils.RectUtils;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Main.Scripts.Logic.Blocks
 {
@@ -14,16 +18,25 @@ namespace Main.Scripts.Logic.Blocks
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private Splash _splashPrefab;
         
+        [SerializeField] private ScoreLabel _scoreLabel;
+        
         private IGameFactory _gameFactory;
+        private IScoreService _scoreService;
         private Sprite _splashSprite;
 
-        public void Construct(IGameFactory gameFactory, Sprite splashSprite)
+        public void Construct(IGameFactory gameFactory, IScoreService scoreService, Sprite splashSprite)
         {
             _gameFactory = gameFactory;
+            _scoreService = scoreService;
             _splashSprite = splashSprite;
         }
         public void Slice(Vector2 swipePosition)
         {
+            int addedScore = _scoreService.AddScore();
+
+            ScoreLabel scoreLabel = Instantiate(_scoreLabel, transform.position, Quaternion.identity);
+            scoreLabel.Construct(addedScore.ToString());
+            
             Sprite originalSprite = _spriteRenderer.sprite;
             
             SlicedRect slicedRect = CreateSlicedRect(swipePosition, originalSprite);

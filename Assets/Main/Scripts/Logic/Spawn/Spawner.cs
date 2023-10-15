@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Linq;
 using Main.Scripts.Infrastructure.Factory;
 using Main.Scripts.Infrastructure.Services.Difficulty;
@@ -53,11 +54,8 @@ namespace Main.Scripts.Logic.Spawn
                 return;
             }
 
-            var randomIndex = GenerateRandomIndex();
-
             _difficultyService.IncreaseDifficulty();
-
-            SpawnPack(randomIndex);
+            StartCoroutine(SpawnPack(() => _spawnPackBusy = false));
 
             _leftTime = Random.Range(_minInterval, _maxInterval);
         }
@@ -72,6 +70,18 @@ namespace Main.Scripts.Logic.Spawn
             }
 
             return randomIndex;
+        }
+        
+        private IEnumerator SpawnPack(Action onPackSpawned = null)
+        {
+            _spawnPackBusy = true;
+            for (int i = 0; i < _difficultyService.GetDifficultyLevel().BlockCount; i++)
+            {
+                int randomIndex = GenerateRandomIndex();
+                _spawnAreas[randomIndex].SpawnArea.SpawnBlock();
+                yield return new WaitForSeconds(_difficultyService.GetDifficultyLevel().Frequency);
+            }
+            onPackSpawned?.Invoke();
         }
 
         private void SpawnPack(int randomIndex)

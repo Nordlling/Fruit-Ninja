@@ -8,14 +8,14 @@ namespace Main.Scripts.Logic.Spawn
     public class SpawnerAreaInfo
     {
         [Range(0, 1)]
-        public float _firstPointXPercents;
+        public float _firstPointX;
         [Range(0, 1)]
-        public float _firstPointYPercents;
+        public float _firstPointY;
 
         [Range(0, 1)]
-        public float _lastPointXPercents;
+        public float _lastPointX;
         [Range(0, 1)]
-        public float _lastPointYPercents;
+        public float _lastPointY;
 
         [Range(-180, 180)]
         public float _leftAngle;

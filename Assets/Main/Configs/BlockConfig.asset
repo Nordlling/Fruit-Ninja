@@ -28,4 +28,4 @@ MonoBehaviour:
   - BlockSprite: {fileID: 21300000, guid: 1a0fea3cda1fb034885f1fca0f9f6851, type: 3}
     SplashSprite: {fileID: 21300000, guid: 003798844a593dc458d4fc353875c688, type: 3}
   - BlockSprite: {fileID: 21300000, guid: 1782614f6a6462447a0b4f1289b68634, type: 3}
-    SplashSprite: {fileID: 21300000, guid: 8bd45a6e69dbac843bf63493f0256211, type: 3}
+    SplashSprite: {fileID: 21300000, guid: 003798844a593dc458d4fc353875c688, type: 3}

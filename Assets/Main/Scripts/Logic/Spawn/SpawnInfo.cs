@@ -8,7 +8,6 @@ namespace Main.Scripts.Logic.Spawn
     {
         public SpawnArea SpawnArea { get; set; }
         
-        [Range(0f, 100f)]
         public float ProbabilityWeight;
         public SpawnerAreaInfo spawnerAreaInfo;
     }

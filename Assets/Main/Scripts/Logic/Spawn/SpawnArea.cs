@@ -47,7 +47,7 @@ namespace Main.Scripts.Logic.Spawn
             GenerateNormal();
             Vector2 direction = GenerateDirection();
             OffsetPoint(direction);
-            float speed = Random.Range(_spawnerInfo._minSpeed,_spawnerInfo. _maxSpeed);
+            float speed = Random.Range(_spawnerInfo._minSpeed, _spawnerInfo. _maxSpeed);
             
             Block block = _gameFactory.CreateBlock(_spawnerInfo._blockPrefab, _newPointPosition);
             block.BlockMovement.Construct(direction, speed);

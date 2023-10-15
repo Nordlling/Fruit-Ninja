@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: ScoreConfig
   m_EditorClassIdentifier: 
   BasicScoreValue: 50
+  ComboMultiplier: 1
+  MaxIntervalForCombo: 0.1
+  MaxComboCount: 5

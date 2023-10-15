@@ -69,6 +69,7 @@ namespace Main.Scripts.Logic.Blocks
 
             BlockPiece blockPiece = _gameFactory.CreateBlockPiece(_blockPiecePrefab, transform.position);
             blockPiece.transform.rotation = transform.rotation;
+            blockPiece.transform.localScale = transform.localScale;
             blockPiece.BlockMovement.Construct(rectPartDirection, _departureSpeed);
             blockPiece.SpriteRenderer.sprite = part;
         }

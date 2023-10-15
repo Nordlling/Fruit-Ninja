@@ -2,7 +2,7 @@ using Main.Scripts.Infrastructure.States;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Main.Scripts.UI
+namespace Main.Scripts.UI.Menu
 {
     public class MenuWindow : MonoBehaviour
     {

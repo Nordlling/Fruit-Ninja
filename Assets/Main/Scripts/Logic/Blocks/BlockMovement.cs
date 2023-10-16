@@ -7,7 +7,7 @@ namespace Main.Scripts.Logic.Blocks
     {
         private Vector2 _startDirection;
         private float _speed;
-        private Vector2 _gravityVelocity;
+        private Vector2 _gravityDirection;
 
         private Vector2 _currentPosition;
 
@@ -31,9 +31,10 @@ namespace Main.Scripts.Logic.Blocks
 
         private void Move()
         {
-            _currentPosition += _startDirection * _speed * Time.deltaTime;
-            _gravityVelocity.y -= PhysicsConstants.Gravity * Time.deltaTime;
-            _currentPosition += _gravityVelocity * Time.deltaTime;
+            Vector2 direction = _startDirection * _speed;
+            _currentPosition += direction * Time.deltaTime;
+            _gravityDirection.y -= PhysicsConstants.Gravity * Time.deltaTime;
+            _currentPosition += _gravityDirection * Time.deltaTime;
             transform.position = _currentPosition;
         }
     }

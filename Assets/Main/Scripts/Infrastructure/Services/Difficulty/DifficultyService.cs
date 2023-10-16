@@ -1,5 +1,6 @@
 ﻿using System;
 using Main.Scripts.Infrastructure.Configs;
+using Main.Scripts.Infrastructure.Services.Restart;
 using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Services.Difficulty
@@ -7,26 +8,35 @@ namespace Main.Scripts.Infrastructure.Services.Difficulty
     public class DifficultyService : IDifficultyService
     {
         private readonly DifficultyConfig _difficultyConfig;
-        private readonly DifficultyLevel _difficultyLevel;
+        private readonly IRestartService _restartService;
 
         private readonly int _levelsToIncreaseBlockCount;
         private readonly int _levelsToIncreaseFrequency;
-        
+
         private int _leftLevelsToIncreaseBlockCount;
         private int _leftLevelsToIncreaseFrequency;
-        
-        public DifficultyService(DifficultyConfig difficultyConfig, DifficultyLevel difficultyLevel)
+
+        public DifficultyService(DifficultyConfig difficultyConfig, IRestartService restartService)
         {
             _difficultyConfig = difficultyConfig;
-            _difficultyLevel = difficultyLevel;
-            _leftLevelsToIncreaseBlockCount = difficultyConfig.LevelsToIncreaseBlockCount;
-            _leftLevelsToIncreaseFrequency = difficultyConfig.LevelsToIncreaseFrequency;
+            _restartService = restartService;
+
+            _restartService.OnRestarted += InitDifficultyLevel;
+            InitDifficultyLevel();
         }
 
-        public DifficultyLevel GetDifficultyLevel()
+        private void InitDifficultyLevel()
         {
-            return _difficultyLevel;
+            DifficultyLevel = new DifficultyLevel()
+            {
+                BlockCount = _difficultyConfig.InitialBlockCount,
+                Frequency = _difficultyConfig.InitialFrequency
+            };
+            _leftLevelsToIncreaseBlockCount = _difficultyConfig.LevelsToIncreaseBlockCount;
+            _leftLevelsToIncreaseFrequency = _difficultyConfig.LevelsToIncreaseFrequency;
         }
+
+        public DifficultyLevel DifficultyLevel { get; private set; }
 
         public void IncreaseDifficulty()
         {
@@ -36,7 +46,7 @@ namespace Main.Scripts.Infrastructure.Services.Difficulty
 
         private void IncreaseBlockCount()
         {
-            if (_difficultyLevel.BlockCount == _difficultyConfig.MaxBlockCount)
+            if (DifficultyLevel.BlockCount == _difficultyConfig.MaxBlockCount)
             {
                 return;
             }
@@ -47,14 +57,14 @@ namespace Main.Scripts.Infrastructure.Services.Difficulty
                 return;
             }
 
-            _difficultyLevel.BlockCount += _difficultyConfig.BlockCountProgression;
-            _difficultyLevel.BlockCount = Mathf.Min(_difficultyConfig.MaxBlockCount, _difficultyLevel.BlockCount);
+            DifficultyLevel.BlockCount += _difficultyConfig.BlockCountProgression;
+            DifficultyLevel.BlockCount = Mathf.Min(_difficultyConfig.MaxBlockCount, DifficultyLevel.BlockCount);
             _leftLevelsToIncreaseBlockCount = _difficultyConfig.LevelsToIncreaseBlockCount;
         }
 
         private void IncreaseFrequency()
         {
-            if (Math.Abs(_difficultyLevel.Frequency - _difficultyConfig.MinFrequency) < float.Epsilon)
+            if (Math.Abs(DifficultyLevel.Frequency - _difficultyConfig.MinFrequency) < float.Epsilon)
             {
                 return;
             }
@@ -65,8 +75,8 @@ namespace Main.Scripts.Infrastructure.Services.Difficulty
                 return;
             }
             
-            _difficultyLevel.Frequency -= _difficultyLevel.Frequency * _difficultyConfig.FrequencyProgression;
-            _difficultyLevel.Frequency = Mathf.Max(_difficultyConfig.MinFrequency, _difficultyLevel.Frequency);
+            DifficultyLevel.Frequency -= DifficultyLevel.Frequency * _difficultyConfig.FrequencyProgression;
+            DifficultyLevel.Frequency = Mathf.Max(_difficultyConfig.MinFrequency, DifficultyLevel.Frequency);
             _leftLevelsToIncreaseFrequency = _levelsToIncreaseFrequency;
         }
     }

@@ -26,17 +26,20 @@ namespace Main.Scripts.UI.Gameplay
 
         private void InitScore()
         {
-            _scoreText.text = 0.ToString();
+            _currentScore = 0;
+            _scoreText.text = _currentScore.ToString();
         }
 
         private void OnEnable()
         {
             _scoreService.OnScored += AddScore;
+            _scoreService.OnReset += InitScore;
         }
 
         private void OnDisable()
         {
             _scoreService.OnScored -= AddScore;
+            _scoreService.OnReset -= InitScore;
         }
 
         protected void AddScore(int newScore)

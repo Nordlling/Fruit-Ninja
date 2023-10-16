@@ -8,5 +8,6 @@ namespace Main.Scripts.Infrastructure.Services.Health
         void DecreaseHealth();
         event Action OnDamaged;
         event Action OnDied;
+        event Action OnReset;
     }
 }

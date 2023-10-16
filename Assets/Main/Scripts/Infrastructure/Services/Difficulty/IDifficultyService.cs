@@ -2,7 +2,7 @@ namespace Main.Scripts.Infrastructure.Services.Difficulty
 {
     public interface IDifficultyService : IService
     {
-        DifficultyLevel GetDifficultyLevel();
+        DifficultyLevel DifficultyLevel { get; }
         
         void IncreaseDifficulty();
     }

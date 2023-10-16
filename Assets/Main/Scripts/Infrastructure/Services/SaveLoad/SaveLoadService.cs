@@ -10,6 +10,7 @@ namespace Main.Scripts.Infrastructure.Services.SaveLoad
     public void SaveProgress(PlayerProgress playerProgress)
     {
       PlayerPrefs.SetString(ProgressKey, JsonUtility.ToJson(playerProgress));
+      PlayerPrefs.Save();
     }
 
     public PlayerProgress LoadProgress()

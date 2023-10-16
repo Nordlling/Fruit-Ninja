@@ -3,8 +3,10 @@ using Main.Scripts.Infrastructure.Factory;
 using Main.Scripts.Infrastructure.Services;
 using Main.Scripts.Infrastructure.Services.Collision;
 using Main.Scripts.Infrastructure.Services.Difficulty;
+using Main.Scripts.Infrastructure.Services.GameOver;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.LivingZone;
+using Main.Scripts.Infrastructure.Services.Restart;
 using Main.Scripts.Infrastructure.Services.SaveLoad;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Logic.Spawn;
@@ -28,13 +30,16 @@ namespace Main.Scripts.Infrastructure.Installers
         public override void InstallBindings(ServiceContainer serviceContainer)
         {
             RegisterSaveLoadService(serviceContainer);
+            RegisterGameOverService(serviceContainer);
+            RegisterRestartService(serviceContainer);
+            
             RegisterLivingZone(serviceContainer);
-            RegisterDifficultyService(serviceContainer);
-            RegisterHealthService(serviceContainer);
             RegisterScoreService(serviceContainer);
             RegisterSwiper(serviceContainer);
 
+            RegisterDifficultyService(serviceContainer);
             RegisterCollisionService(serviceContainer);
+            RegisterHealthService(serviceContainer);
             RegisterGameFactory(serviceContainer);
             RegisterSpawner(serviceContainer);
         }
@@ -43,31 +48,29 @@ namespace Main.Scripts.Infrastructure.Installers
         {
             serviceContainer.SetService<ISaveLoadService, SaveLoadService>(new SaveLoadService());
         }
+        
+        private static void RegisterGameOverService(ServiceContainer serviceContainer)
+        {
+            serviceContainer.SetService<IGameOverService, GameOverService>(new GameOverService());
+        }
 
+        private static void RegisterRestartService(ServiceContainer serviceContainer)
+        {
+            serviceContainer.SetService<IRestartService, RestartService>(new RestartService());
+        }
+        
+        
         private void RegisterLivingZone(ServiceContainer serviceContainer)
         {
             serviceContainer.SetServiceSelf(_livingZone);
         }
 
-        private void RegisterDifficultyService(ServiceContainer serviceContainer)
-        {
-            DifficultyLevel difficultyLevel = new DifficultyLevel()
-            {
-                BlockCount = _difficultyConfig.InitialBlockCount,
-                Frequency = _difficultyConfig.InitialFrequency
-            };
-            DifficultyService difficultyService = new DifficultyService(_difficultyConfig, difficultyLevel);
-            serviceContainer.SetService<IDifficultyService, DifficultyService>(difficultyService);
-        }
-
-        private void RegisterHealthService(ServiceContainer serviceContainer)
-        {
-            serviceContainer.SetService<IHealthService, HealthService>(new HealthService(_healthConfig));
-        }
-
         private void RegisterScoreService(ServiceContainer serviceContainer)
         {
-            serviceContainer.SetService<IScoreService, ScoreService>(new ScoreService(_scoreConfig, serviceContainer.Get<ISaveLoadService>()));
+            serviceContainer.SetService<IScoreService, ScoreService>(new ScoreService(
+                _scoreConfig, 
+                serviceContainer.Get<ISaveLoadService>(), 
+                serviceContainer.Get<IRestartService>()));
         }
 
         private void RegisterSwiper(ServiceContainer serviceContainer)
@@ -77,11 +80,28 @@ namespace Main.Scripts.Infrastructure.Installers
             serviceContainer.SetService<ISwiper, Swiper>(swiper);
         }
 
+        
+        private void RegisterDifficultyService(ServiceContainer serviceContainer)
+        {
+            DifficultyService difficultyService = new DifficultyService(_difficultyConfig, serviceContainer.Get<IRestartService>());
+            serviceContainer.SetService<IDifficultyService, DifficultyService>(difficultyService);
+        }
+
+
         private void RegisterCollisionService(ServiceContainer serviceContainer)
         {
             CollisionService collisionService = Instantiate(_collisionServicePrefab);
             collisionService.Construct(serviceContainer.Get<ISwiper>());
             serviceContainer.SetService<ICollisionService, CollisionService>(collisionService);
+        }
+
+        private void RegisterHealthService(ServiceContainer serviceContainer)
+        {
+            serviceContainer.SetService<IHealthService, HealthService>(new HealthService(
+                _healthConfig, 
+                serviceContainer.Get<IGameOverService>(),
+                serviceContainer.Get<ICollisionService>(),
+                serviceContainer.Get<IRestartService>()));
         }
 
         private void RegisterGameFactory(ServiceContainer serviceContainer)
@@ -100,7 +120,8 @@ namespace Main.Scripts.Infrastructure.Installers
             _spawner.Construct(
                 serviceContainer.Get<IDifficultyService>(),
                 serviceContainer.Get<IGameFactory>(),
-                serviceContainer.Get<IHealthService>());
+                serviceContainer.Get<IHealthService>(),
+                serviceContainer.Get<IRestartService>());
             
             serviceContainer.SetServiceSelf(_spawner);
         }

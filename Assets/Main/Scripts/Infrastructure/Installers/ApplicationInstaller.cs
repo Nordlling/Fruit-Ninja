@@ -27,6 +27,7 @@ namespace Main.Scripts.Infrastructure.Installers
         private void InitApplicationSettings()
         {
             Application.targetFrameRate = _applicationConfig.TargetFPS;
+            Screen.sleepTimeout = SleepTimeout.NeverSleep;
         }
     }
 }

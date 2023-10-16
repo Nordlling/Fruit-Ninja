@@ -6,6 +6,7 @@ namespace Main.Scripts.Infrastructure.Services.Score
     {
         event Action<int> OnScored;
         event Action<int> OnHighScored;
+        event Action OnReset;
         int CurrentScore { get; }
         int HighScore { get; }
         int AddScore();

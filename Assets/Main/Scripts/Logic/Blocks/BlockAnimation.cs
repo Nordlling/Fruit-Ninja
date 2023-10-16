@@ -70,10 +70,5 @@ namespace Main.Scripts.Logic.Blocks
                 .SetEase(Ease.Linear)
                 .SetLink(gameObject);
         }
-
-        private void Update()
-        {
-            
-        }
     }
 }

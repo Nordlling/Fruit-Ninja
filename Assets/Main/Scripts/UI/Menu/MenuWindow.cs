@@ -9,6 +9,7 @@ namespace Main.Scripts.UI.Menu
         [SerializeField] private string _transferSceneName;
         [SerializeField] private Button _startButton;
         [SerializeField] private Button _exitButton;
+        
         private IGameStateMachine _stateMachine;
 
         public void Construct(IGameStateMachine stateMachine)
@@ -35,8 +36,11 @@ namespace Main.Scripts.UI.Menu
 
         private void ExitGame()
         {
-            Debug.Log("Quit");
-            Application.Quit();
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+			Application.Quit();
+#endif
         }
     }
 }

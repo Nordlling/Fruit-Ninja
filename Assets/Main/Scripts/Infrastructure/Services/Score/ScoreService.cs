@@ -1,6 +1,7 @@
 ﻿using System;
 using Main.Scripts.Data;
 using Main.Scripts.Infrastructure.Configs;
+using Main.Scripts.Infrastructure.Services.Restart;
 using Main.Scripts.Infrastructure.Services.SaveLoad;
 using UnityEngine;
 
@@ -10,9 +11,11 @@ namespace Main.Scripts.Infrastructure.Services.Score
     {
         public event Action<int> OnScored;
         public event Action<int> OnHighScored;
+        public event Action OnReset;
 
         private readonly ScoreConfig _scoreConfig;
         private readonly ISaveLoadService _saveLoadService;
+        private readonly IRestartService _restartService;
 
         private const string _highScoreKey = "highScore";
 
@@ -20,11 +23,20 @@ namespace Main.Scripts.Infrastructure.Services.Score
         private float _lastScoredTime;
         private PlayerProgress _playerProgress;
 
-        public ScoreService(ScoreConfig scoreConfig, ISaveLoadService saveLoadService)
+        public ScoreService(ScoreConfig scoreConfig, ISaveLoadService saveLoadService, IRestartService restartService)
         {
             _scoreConfig = scoreConfig;
             _saveLoadService = saveLoadService;
+            _restartService = restartService;
             LoadHighScore();
+            
+            _restartService.OnRestarted += ResetScore;
+        }
+
+        private void ResetScore()
+        {
+            CurrentScore = 0;
+            OnReset?.Invoke();
         }
 
         public int CurrentScore { get; private set; }

@@ -1,3 +1,4 @@
+using System;
 using Main.Scripts.Logic.Blocks;
 
 namespace Main.Scripts.Infrastructure.Services.Collision
@@ -8,6 +9,6 @@ namespace Main.Scripts.Infrastructure.Services.Collision
 
         void RemoveBlock(Block blockCollider);
         
-        
+        void WaitFallBlocks(Action onBlocksFell);
     }
 }

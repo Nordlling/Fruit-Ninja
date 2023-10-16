@@ -29,7 +29,17 @@ namespace Main.Scripts.Infrastructure.Services.Score
             _saveLoadService = saveLoadService;
             _restartService = restartService;
             LoadHighScore();
-            
+            Subscribe();
+        }
+        
+        public ScoreService(ISaveLoadService saveLoadService)
+        {
+            _saveLoadService = saveLoadService;
+            LoadHighScore();
+        }
+
+        private void Subscribe()
+        {
             _restartService.OnRestarted += ResetScore;
         }
 

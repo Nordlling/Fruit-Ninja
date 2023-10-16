@@ -1,5 +1,6 @@
 using Main.Scripts.Infrastructure.Configs;
 using Main.Scripts.Infrastructure.Services;
+using Main.Scripts.Infrastructure.Services.SaveLoad;
 using UnityEngine.SceneManagement;
 
 namespace Main.Scripts.Infrastructure.States
@@ -31,6 +32,7 @@ namespace Main.Scripts.Infrastructure.States
         private void RegisterServices()
         {
             _serviceContainer.SetService<IGameStateMachine, GameStateMachine>(StateMachine);
+            _serviceContainer.SetService<ISaveLoadService, SaveLoadService>(new SaveLoadService());
         }
 
         public void Exit()

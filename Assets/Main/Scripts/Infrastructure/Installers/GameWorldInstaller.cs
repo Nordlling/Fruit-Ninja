@@ -29,7 +29,6 @@ namespace Main.Scripts.Infrastructure.Installers
 
         public override void InstallBindings(ServiceContainer serviceContainer)
         {
-            RegisterSaveLoadService(serviceContainer);
             RegisterGameOverService(serviceContainer);
             RegisterRestartService(serviceContainer);
             
@@ -42,11 +41,6 @@ namespace Main.Scripts.Infrastructure.Installers
             RegisterHealthService(serviceContainer);
             RegisterGameFactory(serviceContainer);
             RegisterSpawner(serviceContainer);
-        }
-
-        private static void RegisterSaveLoadService(ServiceContainer serviceContainer)
-        {
-            serviceContainer.SetService<ISaveLoadService, SaveLoadService>(new SaveLoadService());
         }
         
         private static void RegisterGameOverService(ServiceContainer serviceContainer)

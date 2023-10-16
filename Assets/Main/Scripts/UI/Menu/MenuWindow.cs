@@ -1,4 +1,6 @@
+using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Infrastructure.States;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,18 +11,22 @@ namespace Main.Scripts.UI.Menu
         [SerializeField] private string _transferSceneName;
         [SerializeField] private Button _startButton;
         [SerializeField] private Button _exitButton;
+        [SerializeField] private TextMeshProUGUI _highScoreText;
         
         private IGameStateMachine _stateMachine;
+        private IScoreService _scoreService;
 
-        public void Construct(IGameStateMachine stateMachine)
+        public void Construct(IGameStateMachine stateMachine, IScoreService scoreService)
         {
             _stateMachine = stateMachine;
+            _scoreService = scoreService;
         }
 
         private void OnEnable()
         {
             _startButton.onClick.AddListener(StartGame);
             _exitButton.onClick.AddListener(ExitGame);
+            _highScoreText.text = _scoreService.HighScore.ToString();
         }
 
         private void OnDisable()

@@ -30,7 +30,7 @@ namespace Main.Scripts.Logic.Blocks
             _scoreService = scoreService;
             _splashSprite = splashSprite;
         }
-        public void Slice(Vector2 swipePosition)
+        public void Slice(Vector2 swiperPosition, Vector2 swiperDirection)
         {
             int addedScore = _scoreService.AddScore();
 
@@ -39,7 +39,7 @@ namespace Main.Scripts.Logic.Blocks
             
             Sprite originalSprite = _spriteRenderer.sprite;
             
-            SlicedRect slicedRect = CreateSlicedRect(swipePosition, originalSprite);
+            SlicedRect slicedRect = CreateSlicedRect(swiperPosition, swiperDirection, originalSprite);
 
             CreateSpritePart(originalSprite, slicedRect.FirstRectPart, slicedRect.FirstRectPartDirection);
             CreateSpritePart(originalSprite, slicedRect.SecondRectPart, slicedRect.SecondRectPartDirection);
@@ -49,14 +49,14 @@ namespace Main.Scripts.Logic.Blocks
             Destroy(gameObject);
         }
 
-        private SlicedRect CreateSlicedRect(Vector2 swipePosition, Sprite originalSprite)
+        private SlicedRect CreateSlicedRect(Vector2 swiperPosition, Vector2 swiperDirection, Sprite originalSprite)
         {
             Rect rect = new Rect(0f, 0f, originalSprite.texture.width, originalSprite.texture.height);
-            Vector2 worldDirection = ((Vector2)transform.position - swipePosition);
-            Vector2 rectDirection = worldDirection *
-                                    new Vector2(rect.width / transform.localScale.x, rect.height / transform.localScale.y);
-            Vector2 rectPoint = rect.center - rectDirection;
-            SlicedRect slicedRect = rect.GetSlicedRect(rectPoint, _rectPieceDirectionAngle);
+            Vector2 worldDirection = swiperPosition - (Vector2)transform.position;
+            Vector2 rectDirection = worldDirection * (rect.size / _spriteRenderer.size);
+            Vector2 rectPoint = rect.center + rectDirection;
+            
+            SlicedRect slicedRect = rect.GetSlicedRect(rectPoint, swiperDirection, _rectPieceDirectionAngle);
             return slicedRect;
         }
 

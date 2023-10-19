@@ -57,7 +57,7 @@ namespace Main.Scripts.Infrastructure.Services.Collision
             {
                 if (_swiper.HasEnoughSpeed() && block.BlockCollider.SphereBounds.Contains(_swiper.Position))
                 {
-                    block.Slicer.Slice(_swiper.Position);
+                    block.Slicer.Slice(_swiper.Position, _swiper.Direction);
                 }
             }
         }

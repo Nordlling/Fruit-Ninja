@@ -1,4 +1,4 @@
-using Main.Scripts.Infrastructure.Services.Restart;
+using Main.Scripts.Infrastructure.GameplayStates;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Infrastructure.States;
 using TMPro;
@@ -22,13 +22,14 @@ namespace Main.Scripts.UI.Gameplay
 
 
         private IGameStateMachine _stateMachine;
-        private IRestartService _restartService;
+        private IGameplayStateMachine _gameplayStateMachine;
         private IScoreService _scoreService;
+        private bool isTouched;
 
-        public void Construct(IGameStateMachine stateMachine, IRestartService restartService, IScoreService scoreService)
+        public void Construct(IGameStateMachine stateMachine, IGameplayStateMachine gameplayStateMachine, IScoreService scoreService)
         {
             _stateMachine = stateMachine;
-            _restartService = restartService;
+            _gameplayStateMachine = gameplayStateMachine;
             _scoreService = scoreService;
         }
 
@@ -54,8 +55,15 @@ namespace Main.Scripts.UI.Gameplay
 
         private void RestartGame()
         {
+            if (isTouched)
+            {
+                return;
+            }
+
+            isTouched = true;
+            
             PlayAnimationFadeOut();
-            _restartService.Restart();
+            _gameplayStateMachine.Enter<RestartState>();
         }
 
         private void PlayAnimationFadeIn()
@@ -77,11 +85,19 @@ namespace Main.Scripts.UI.Gameplay
 
         private void Disable()
         {
+            isTouched = false;
             gameObject.SetActive(false);
         }
 
         private void ExitToMenu()
         {
+            if (isTouched)
+            {
+                return;
+            }
+            
+            isTouched = true;
+            
             _stateMachine.Enter<LoadSceneState, string>(_menuSceneName);
         }
     }

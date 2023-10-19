@@ -1,4 +1,5 @@
 using System.Collections;
+using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services.Score;
 using TMPro;
 using UnityEngine;
@@ -11,12 +12,15 @@ namespace Main.Scripts.UI.Gameplay
         [SerializeField] protected float _scoreAnimationDuration;
         
         protected IScoreService _scoreService;
+        private ITimeProvider _timeProvider;
+        
         private int _currentScore;
         private Coroutine _currentCoroutine;
 
-        public void Construct(IScoreService scoreService)
+        public void Construct(IScoreService scoreService, ITimeProvider timeProvider)
         {
             _scoreService = scoreService;
+            _timeProvider = timeProvider;
         }
 
         private void Start()
@@ -59,7 +63,12 @@ namespace Main.Scripts.UI.Gameplay
             for (int i = oldScore; i < newScore + 1; i++)
             {
                 _scoreText.text = i.ToString();
-                yield return new WaitForSeconds(speed);
+                float elapsedTime = 0f;
+                while (elapsedTime < speed)
+                {
+                    yield return null;
+                    elapsedTime += _timeProvider.GetDeltaTime();
+                }
             }
         }
     }

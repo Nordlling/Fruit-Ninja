@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using DG.Tweening;
+using Main.Scripts.Infrastructure.Provides;
 using TMPro;
 using UnityEngine;
 
@@ -13,19 +14,34 @@ namespace Main.Scripts.Logic.Score
         [SerializeField] private float _animationDuration;
         [SerializeField] private float _animationFadeSpeed;
         [SerializeField] private float _animationMoveOffset;
+        
+        private ITimeProvider _timeProvider;
+        private Sequence _sequence;
 
-        public void Construct(string value)
+        public void Construct(string value, ITimeProvider timeProvider)
         {
             _scoreValue.text = value;
+            _timeProvider = timeProvider;
         }
         private void Start()
         {
-            Invoke(nameof(PlayAnimation), _timeBeforeAnimation);
+            PlayAnimation();
+        }
+
+        private void Update()
+        {
+            _sequence.timeScale = _timeProvider.GetTimeScale();
         }
 
         private void PlayAnimation()
         {
-            transform.DOMoveY(transform.position.y + _animationMoveOffset, _animationDuration).OnComplete(() => Destroy(gameObject));;
+            _sequence = DOTween.Sequence()
+                .AppendInterval(_timeBeforeAnimation)
+                .Append(transform.DOMoveY(transform.position.y + _animationMoveOffset, _animationDuration))
+                .OnComplete(() => Destroy(gameObject));
+
+            _sequence.Play();
+            
             StartCoroutine(StartScoreAnimation(0f));
         }
 
@@ -33,7 +49,7 @@ namespace Main.Scripts.Logic.Score
         {
             while (Math.Abs(_scoreValue.alpha - to) > float.Epsilon)
             {
-                _scoreValue.alpha = Mathf.Lerp(_scoreValue.alpha, to, _animationFadeSpeed * Time.deltaTime);
+                _scoreValue.alpha = Mathf.Lerp(_scoreValue.alpha, to, _animationFadeSpeed * _timeProvider.GetDeltaTime());
                 yield return null;
             }
         }

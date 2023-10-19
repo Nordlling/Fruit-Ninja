@@ -187,6 +187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _blockMovement: {fileID: 5771690122018491101}
   _boundsChecker: {fileID: 7424125995122863148}
+  _blockAnimation: {fileID: 2376680573197571728}
   _spriteRenderer: {fileID: 4470419074529942447}
   _shadowSpriteRenderer: {fileID: 8924327364107621515}
 --- !u!114 &5771690122018491101

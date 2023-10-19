@@ -1,14 +1,14 @@
 ﻿using System;
 using Main.Scripts.Infrastructure.Configs;
-using Main.Scripts.Infrastructure.Services.Restart;
+using Main.Scripts.Infrastructure.GameplayStates;
 using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Services.Difficulty
 {
-    public class DifficultyService : IDifficultyService
+    public class DifficultyService : IDifficultyService, IRestartable
     {
         private readonly DifficultyConfig _difficultyConfig;
-        private readonly IRestartService _restartService;
+        private readonly IGameplayStateMachine _gameplayStateMachine;
 
         private readonly int _levelsToIncreaseBlockCount;
         private readonly int _levelsToIncreaseFrequency;
@@ -16,12 +16,23 @@ namespace Main.Scripts.Infrastructure.Services.Difficulty
         private int _leftLevelsToIncreaseBlockCount;
         private int _leftLevelsToIncreaseFrequency;
 
-        public DifficultyService(DifficultyConfig difficultyConfig, IRestartService restartService)
+        public DifficultyService(DifficultyConfig difficultyConfig)
         {
             _difficultyConfig = difficultyConfig;
-            _restartService = restartService;
 
-            _restartService.OnRestarted += InitDifficultyLevel;
+            InitDifficultyLevel();
+        }
+
+        public DifficultyLevel DifficultyLevel { get; private set; }
+
+        public void IncreaseDifficulty()
+        {
+            IncreaseBlockCount();
+            IncreaseFrequency();
+        }
+
+        public void Restart()
+        {
             InitDifficultyLevel();
         }
 
@@ -34,14 +45,6 @@ namespace Main.Scripts.Infrastructure.Services.Difficulty
             };
             _leftLevelsToIncreaseBlockCount = _difficultyConfig.LevelsToIncreaseBlockCount;
             _leftLevelsToIncreaseFrequency = _difficultyConfig.LevelsToIncreaseFrequency;
-        }
-
-        public DifficultyLevel DifficultyLevel { get; private set; }
-
-        public void IncreaseDifficulty()
-        {
-            IncreaseBlockCount();
-            IncreaseFrequency();
         }
 
         private void IncreaseBlockCount()

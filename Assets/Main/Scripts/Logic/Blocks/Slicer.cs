@@ -3,9 +3,7 @@ using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Logic.Score;
 using Main.Scripts.Logic.Splashing;
 using Main.Scripts.Utils.RectUtils;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Main.Scripts.Logic.Blocks
 {
@@ -34,8 +32,7 @@ namespace Main.Scripts.Logic.Blocks
         {
             int addedScore = _scoreService.AddScore();
 
-            ScoreLabel scoreLabel = Instantiate(_scoreLabel, transform.position, Quaternion.identity);
-            scoreLabel.Construct(addedScore.ToString());
+            _gameFactory.CreateScoreLabel(_scoreLabel, transform.position, addedScore.ToString());
             
             Sprite originalSprite = _spriteRenderer.sprite;
             
@@ -70,7 +67,7 @@ namespace Main.Scripts.Logic.Blocks
             BlockPiece blockPiece = _gameFactory.CreateBlockPiece(_blockPiecePrefab, transform.position);
             blockPiece.transform.rotation = transform.rotation;
             blockPiece.transform.localScale = transform.localScale;
-            blockPiece.BlockMovement.Construct(rectPartDirection, _departureSpeed);
+            blockPiece.BlockMovement.Construct(rectPartDirection, _departureSpeed, blockPiece.TimeProvider);
             blockPiece.SpriteRenderer.sprite = part;
         }
 

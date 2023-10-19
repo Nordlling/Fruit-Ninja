@@ -1,8 +1,6 @@
-using System;
-using System.Collections;
 using Main.Scripts.Infrastructure.Factory;
+using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services.Collision;
-using Main.Scripts.Infrastructure.Services.Difficulty;
 using Main.Scripts.Logic.Blocks;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -20,6 +18,7 @@ namespace Main.Scripts.Logic.Spawn
 
         private ICollisionService _collisionService;
         private IGameFactory _gameFactory;
+        private ITimeProvider _timeProvider;
 
         public void Construct(SpawnerAreaInfo spawnerInfo, IGameFactory gameFactory)
         {
@@ -35,7 +34,7 @@ namespace Main.Scripts.Logic.Spawn
             float speed = Random.Range(_spawnerInfo._minSpeed, _spawnerInfo. _maxSpeed);
             
             Block block = _gameFactory.CreateBlock(_spawnerInfo._blockPrefab, _newPointPosition);
-            block.BlockMovement.Construct(direction, speed);
+            block.BlockMovement.Construct(direction, speed, block.TimeProvider);
         }
 
         private void OffsetPoint(Vector2 direction)

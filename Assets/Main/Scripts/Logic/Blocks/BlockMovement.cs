@@ -1,4 +1,5 @@
 using Main.Scripts.Constants;
+using Main.Scripts.Infrastructure.Provides;
 using UnityEngine;
 
 namespace Main.Scripts.Logic.Blocks
@@ -7,16 +8,16 @@ namespace Main.Scripts.Logic.Blocks
     {
         private Vector2 _startDirection;
         private float _speed;
+        private ITimeProvider _timeProvider;
+        
         private Vector2 _gravityDirection;
-
         private Vector2 _currentPosition;
 
-        private Camera _camera;
-
-        public void Construct(Vector3 startDirection, float speed)
+        public void Construct(Vector3 startDirection, float speed, ITimeProvider timeProvider)
         {
             _startDirection = startDirection;
             _speed = speed;
+            _timeProvider = timeProvider;
         }
 
         private void Start()
@@ -32,9 +33,9 @@ namespace Main.Scripts.Logic.Blocks
         private void Move()
         {
             Vector2 direction = _startDirection * _speed;
-            _currentPosition += direction * Time.deltaTime;
-            _gravityDirection.y -= PhysicsConstants.Gravity * Time.deltaTime;
-            _currentPosition += _gravityDirection * Time.deltaTime;
+            _currentPosition += direction * _timeProvider.GetDeltaTime();
+            _gravityDirection.y -= PhysicsConstants.Gravity * _timeProvider.GetDeltaTime();
+            _currentPosition += _gravityDirection * _timeProvider.GetDeltaTime();
             transform.position = _currentPosition;
         }
     }

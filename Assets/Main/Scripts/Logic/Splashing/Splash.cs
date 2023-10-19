@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Main.Scripts.Infrastructure.Provides;
 using UnityEngine;
 
 namespace Main.Scripts.Logic.Splashing
@@ -14,18 +15,35 @@ namespace Main.Scripts.Logic.Splashing
         
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private ParticleSystem _splashEffect;
+        
+        private ITimeProvider _timeProvider;
+        private Sequence _sequence;
+
+        public void Construct(ITimeProvider timeProvider)
+        {
+            _timeProvider = timeProvider;
+        }
 
         private void Start()
         {
             PlaySplashEffect();
-            Invoke(nameof(PlayAnimation), _timeBeforeAnimation);
+            PlayAnimation();
+        }
+
+        private void Update()
+        {
+            _sequence.timeScale = _timeProvider.GetTimeScale();
         }
 
         private void PlayAnimation()
         {
-            transform.DOMoveY(transform.position.y - _animationMoveOffset, _animationDuration);
-            transform.DOScaleY(transform.localScale.y + _animationStretchOffset, _animationDuration);
-            _spriteRenderer.material.DOFade(0f, _animationDuration).OnComplete(() => Destroy(gameObject));
+            _sequence = DOTween.Sequence()
+                .AppendInterval(_timeBeforeAnimation)
+                .Append(transform.DOMoveY(transform.position.y - _animationMoveOffset, _animationDuration))
+                .Join(transform.DOScaleY(transform.localScale.y + _animationStretchOffset, _animationDuration))
+                .Join(_spriteRenderer.material.DOFade(0f, _animationDuration).OnComplete(() => Destroy(gameObject)));
+            
+            _sequence.Play();
         }
 
         private void PlaySplashEffect()

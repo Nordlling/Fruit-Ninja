@@ -1,13 +1,13 @@
 ﻿using System;
 using Main.Scripts.Data;
 using Main.Scripts.Infrastructure.Configs;
-using Main.Scripts.Infrastructure.Services.Restart;
+using Main.Scripts.Infrastructure.GameplayStates;
 using Main.Scripts.Infrastructure.Services.SaveLoad;
 using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Services.Score
 {
-    public class ScoreService : IScoreService
+    public class ScoreService : IScoreService, IRestartable
     {
         public event Action<int> OnScored;
         public event Action<int> OnHighScored;
@@ -15,38 +15,24 @@ namespace Main.Scripts.Infrastructure.Services.Score
 
         private readonly ScoreConfig _scoreConfig;
         private readonly ISaveLoadService _saveLoadService;
-        private readonly IRestartService _restartService;
-
-        private const string _highScoreKey = "highScore";
+        private readonly IGameplayStateMachine _gameplayStateMachine;
 
         private int _comboCounter = 1;
         private float _lastScoredTime;
         private PlayerScore _playerScore;
 
-        public ScoreService(ScoreConfig scoreConfig, ISaveLoadService saveLoadService, IRestartService restartService)
+        public ScoreService(ScoreConfig scoreConfig, ISaveLoadService saveLoadService, IGameplayStateMachine gameplayStateMachine)
         {
             _scoreConfig = scoreConfig;
             _saveLoadService = saveLoadService;
-            _restartService = restartService;
+            _gameplayStateMachine = gameplayStateMachine;
             LoadHighScore();
-            Subscribe();
         }
         
         public ScoreService(ISaveLoadService saveLoadService)
         {
             _saveLoadService = saveLoadService;
             LoadHighScore();
-        }
-
-        private void Subscribe()
-        {
-            _restartService.OnRestarted += ResetScore;
-        }
-
-        private void ResetScore()
-        {
-            CurrentScore = 0;
-            OnReset?.Invoke();
         }
 
         public int CurrentScore { get; private set; }
@@ -66,6 +52,12 @@ namespace Main.Scripts.Infrastructure.Services.Score
 
             _lastScoredTime = Time.time;
             return score;
+        }
+
+        public void Restart()
+        {
+            CurrentScore = 0;
+            OnReset?.Invoke();
         }
 
         private void LoadHighScore()

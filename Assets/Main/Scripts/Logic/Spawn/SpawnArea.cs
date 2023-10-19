@@ -26,21 +26,6 @@ namespace Main.Scripts.Logic.Spawn
             _gameFactory = gameFactory;
             _spawnerInfo = spawnerInfo;
         }
-        
-        public void SpawnPack(DifficultyLevel difficultyLevel, Action onPackSpawned)
-        {
-            StartCoroutine(StartSpawnPack(difficultyLevel, onPackSpawned));
-        }
-
-        private IEnumerator StartSpawnPack(DifficultyLevel difficultyLevel, Action onPackSpawned = null)
-        {
-            for (int i = 0; i < difficultyLevel.BlockCount; i++)
-            {
-                SpawnBlock();
-                yield return new WaitForSeconds(difficultyLevel.Frequency);
-            }
-            onPackSpawned?.Invoke();
-        }
 
         public void SpawnBlock()
         {

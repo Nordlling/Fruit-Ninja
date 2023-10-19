@@ -1,5 +1,6 @@
 using Main.Scripts.Infrastructure.Installers;
 using Main.Scripts.Infrastructure.Services;
+using Main.Scripts.UI.Loading;
 
 namespace Main.Scripts.Infrastructure.States
 {
@@ -8,14 +9,17 @@ namespace Main.Scripts.Infrastructure.States
         private readonly SceneLoader _sceneLoader;
         private readonly SceneContext _sceneContext;
         private readonly ServiceContainer _serviceContainer;
-        
+        private readonly UICurtainView _curtainView;
+
         public GameStateMachine StateMachine { get; set; }
 
-        public LoadSceneState(SceneLoader sceneLoader, SceneContext sceneContext, ServiceContainer serviceContainer)
+        public LoadSceneState(SceneLoader sceneLoader, SceneContext sceneContext, ServiceContainer serviceContainer,
+            UICurtainView curtainView)
         {
             _sceneLoader = sceneLoader;
             _sceneContext = sceneContext;
             _serviceContainer = serviceContainer;
+            _curtainView = curtainView;
         }
 
         public void Enter(string sceneName)
@@ -29,8 +33,9 @@ namespace Main.Scripts.Infrastructure.States
 
         private void OnLoaded()
         {
+            _curtainView.gameObject.SetActive(true);
+            _curtainView.FadeOutBackground(() => _curtainView.gameObject.SetActive(false));
             InitGameWorld();
-
             StateMachine.Enter<GameLoopState>();
         }
 

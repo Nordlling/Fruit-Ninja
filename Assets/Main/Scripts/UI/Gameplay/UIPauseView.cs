@@ -1,5 +1,7 @@
+using System;
 using Main.Scripts.Infrastructure.GameplayStates;
 using Main.Scripts.Infrastructure.States;
+using Main.Scripts.UI.Loading;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,10 +13,13 @@ namespace Main.Scripts.UI.Gameplay
         [SerializeField] private Button _continueButton;
         [SerializeField] private Button _menuButton;
 
+        [SerializeField] private UICurtainView _curtainView;
+
 
         private IGameStateMachine _stateMachine;
         private IGameplayStateMachine _gameplayStateMachine;
         private bool isTouched;
+        private Action OnFinished;
 
         public void Construct(IGameStateMachine stateMachine, IGameplayStateMachine gameplayStateMachine)
         {
@@ -24,7 +29,6 @@ namespace Main.Scripts.UI.Gameplay
 
         private void OnEnable()
         {
-            // PlayAnimationFadeIn();
             _continueButton.onClick.AddListener(ContinueGame);
             _menuButton.onClick.AddListener(ExitToMenu);
         }
@@ -49,8 +53,10 @@ namespace Main.Scripts.UI.Gameplay
             }
             
             isTouched = true;
-            
-            _stateMachine.Enter<LoadSceneState, string>(_menuSceneName);
+
+            _curtainView.gameObject.SetActive(true);
+            _curtainView.FadeInBackground(() => _stateMachine.Enter<LoadSceneState, string>(_menuSceneName));
         }
+        
     }
 }

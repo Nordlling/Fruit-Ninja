@@ -1,5 +1,6 @@
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Infrastructure.States;
+using Main.Scripts.UI.Loading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,8 @@ namespace Main.Scripts.UI.Menu
         [SerializeField] private Button _startButton;
         [SerializeField] private Button _exitButton;
         [SerializeField] private TextMeshProUGUI _highScoreText;
+
+        [SerializeField] private UICurtainView _curtainView;
         
         private IGameStateMachine _stateMachine;
         private IScoreService _scoreService;
@@ -37,7 +40,8 @@ namespace Main.Scripts.UI.Menu
 
         private void StartGame()
         {
-            _stateMachine.Enter<LoadSceneState, string>(_transferSceneName);
+            _curtainView.gameObject.SetActive(true);
+            _curtainView.FadeInBackground(() => _stateMachine.Enter<LoadSceneState, string>(_transferSceneName));
         }
 
         private void ExitGame()

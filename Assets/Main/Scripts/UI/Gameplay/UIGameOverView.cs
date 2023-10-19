@@ -1,6 +1,7 @@
 using Main.Scripts.Infrastructure.GameplayStates;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Infrastructure.States;
+using Main.Scripts.UI.Loading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +20,8 @@ namespace Main.Scripts.UI.Gameplay
         [SerializeField] private Animation _animation;
         [SerializeField] private AnimationClip _animationFadeIn;
         [SerializeField] private AnimationClip _animationFadeOut;
+        
+        [SerializeField] private UICurtainView _curtainView;
 
 
         private IGameStateMachine _stateMachine;
@@ -98,7 +101,8 @@ namespace Main.Scripts.UI.Gameplay
             
             isTouched = true;
             
-            _stateMachine.Enter<LoadSceneState, string>(_menuSceneName);
+            _curtainView.gameObject.SetActive(true);
+            _curtainView.FadeInBackground(() => _stateMachine.Enter<LoadSceneState, string>(_menuSceneName));
         }
     }
 }

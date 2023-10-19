@@ -21,7 +21,7 @@ namespace Main.Scripts.Infrastructure.Services.Score
 
         private int _comboCounter = 1;
         private float _lastScoredTime;
-        private PlayerProgress _playerProgress;
+        private PlayerScore _playerScore;
 
         public ScoreService(ScoreConfig scoreConfig, ISaveLoadService saveLoadService, IRestartService restartService)
         {
@@ -70,15 +70,15 @@ namespace Main.Scripts.Infrastructure.Services.Score
 
         private void LoadHighScore()
         {
-            _playerProgress = _saveLoadService.LoadProgress() ?? new PlayerProgress();
-            HighScore = _playerProgress.HighScore;
+            _playerScore = _saveLoadService.LoadProgress() ?? new PlayerScore();
+            HighScore = _playerScore.HighScore;
         }
 
         private void SaveHighScore()
         {
             HighScore = CurrentScore;
-            _playerProgress.HighScore = HighScore;
-            _saveLoadService.SaveProgress(_playerProgress);
+            _playerScore.HighScore = HighScore;
+            _saveLoadService.SaveProgress(_playerScore);
         }
 
         private int CalculateScore()

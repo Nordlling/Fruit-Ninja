@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Linq;
 using Main.Scripts.Infrastructure.Factory;
+using Main.Scripts.Infrastructure.GameplayStates;
+using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services.Difficulty;
-using Main.Scripts.Infrastructure.Services.Health;
-using Main.Scripts.Infrastructure.Services.Restart;
 using Main.Scripts.Logic.Blocks;
 using Main.Scripts.Utils.RandomUtils;
 using UnityEngine;
@@ -12,7 +12,7 @@ using Random = UnityEngine.Random;
 
 namespace Main.Scripts.Logic.Spawn
 {
-    public class Spawner : MonoBehaviour
+    public class Spawner : MonoBehaviour, IPlayable, ILoseable
     {
         public SpawnInfo[] SpawnAreas => _spawnAreas;
         
@@ -25,43 +25,31 @@ namespace Main.Scripts.Logic.Spawn
 
         private IDifficultyService _difficultyService;
         private IGameFactory _gameFactory;
-        private IHealthService _healthService;
-        private IRestartService _restartService;
 
         private float _leftTime;
         private float[] _spawnWeights;
 
         private bool _spawnPackBusy;
         private bool _stop;
+        private ITimeProvider _timeProvider;
 
-        public void Construct(IDifficultyService difficultyService, IGameFactory gameFactory, IHealthService healthService, IRestartService restartService)
+        public void Construct(IDifficultyService difficultyService, 
+            IGameFactory gameFactory,
+            ITimeProvider timeProvider)
         {
             _difficultyService = difficultyService;
             _gameFactory = gameFactory;
-            _healthService = healthService;
-            _restartService = restartService;
+            _timeProvider = timeProvider;
         }
 
-        private void OnEnable()
-        {
-            _healthService.OnDied += StopSpawn;
-            _restartService.OnRestarted += StartSpawn;
-        }
-        
-        private void OnDisable()
-        {
-            _healthService.OnDied -= StopSpawn;
-            _restartService.OnRestarted += StartSpawn;
-        }
-
-        private void StopSpawn()
-        {
-            _stop = true;
-        }
-        
-        private void StartSpawn()
+        public void Play()
         {
             _stop = false;
+        }
+
+        public void Lose()
+        {
+            _stop = true;
         }
 
         private void Start()
@@ -80,7 +68,7 @@ namespace Main.Scripts.Logic.Spawn
             
             if (_leftTime > 0f)
             {
-                _leftTime -= Time.deltaTime;
+                _leftTime -= _timeProvider.GetDeltaTime();
                 return;
             }
 
@@ -105,19 +93,20 @@ namespace Main.Scripts.Logic.Spawn
         private IEnumerator SpawnPack(Action onPackSpawned = null)
         {
             _spawnPackBusy = true;
+            float spawnFrequency = _difficultyService.DifficultyLevel.Frequency;
             for (int i = 0; i < _difficultyService.DifficultyLevel.BlockCount; i++)
             {
+                float elapsedTime = 0f;
                 int randomIndex = GenerateRandomIndex();
                 _spawnAreas[randomIndex].SpawnArea.SpawnBlock();
-                yield return new WaitForSeconds(_difficultyService.DifficultyLevel.Frequency);
+                
+                while (elapsedTime < spawnFrequency)
+                {
+                    yield return null;
+                    elapsedTime += _timeProvider.GetDeltaTime();
+                }
             }
             onPackSpawned?.Invoke();
-        }
-
-        private void SpawnPack(int randomIndex)
-        {
-            _spawnPackBusy = true;
-            _spawnAreas[randomIndex].SpawnArea.SpawnPack(_difficultyService.DifficultyLevel, () => _spawnPackBusy = false);
         }
 
         private void CreateSpawnAreas()

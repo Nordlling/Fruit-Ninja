@@ -1,39 +1,28 @@
-﻿using Main.Scripts.Infrastructure.Services.Collision;
+﻿using Main.Scripts.Infrastructure.Provides;
+using Main.Scripts.Infrastructure.Services.BlockContainer;
 using UnityEngine;
 
 namespace Main.Scripts.Logic.Blocks
 {
-    public class Block : MonoBehaviour
+    public class Block : BlockPiece
     {
-        public BlockMovement BlockMovement => _blockMovement;
-        public BoundsChecker BoundsChecker => _boundsChecker;
         public BlockCollider BlockCollider => _blockCollider;
-        public SpriteRenderer SpriteRenderer => _spriteRenderer;
         public Slicer Slicer => _slicer;
-
-        [SerializeField] private BlockMovement _blockMovement;
-        [SerializeField] private BoundsChecker _boundsChecker;
+        
         [SerializeField] private BlockCollider _blockCollider;
         [SerializeField] private Slicer _slicer;
-
-        [SerializeField] private SpriteRenderer _spriteRenderer;
-        [SerializeField] private SpriteRenderer _shadowSpriteRenderer;
         
-        private ICollisionService _collisionService;
+        private IBlockContainerService _blockContainerService;
         
-        public void Construct(ICollisionService collisionService)
+        public void Construct(IBlockContainerService blockContainerService, ITimeProvider timeProvider)
         {
-            _collisionService = collisionService;
-        }
-
-        private void Start()
-        {
-            _shadowSpriteRenderer.sprite = _spriteRenderer.sprite;
+            _blockContainerService = blockContainerService;
+            TimeProvider = timeProvider;
         }
 
         private void OnDestroy()
         {
-            _collisionService?.RemoveBlock(this);
+            _blockContainerService?.RemoveBlock(this);
         }
     }
 }

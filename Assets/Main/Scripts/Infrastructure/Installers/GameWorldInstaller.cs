@@ -1,12 +1,13 @@
 using Main.Scripts.Infrastructure.Configs;
 using Main.Scripts.Infrastructure.Factory;
+using Main.Scripts.Infrastructure.GameplayStates;
+using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services;
+using Main.Scripts.Infrastructure.Services.BlockContainer;
 using Main.Scripts.Infrastructure.Services.Collision;
 using Main.Scripts.Infrastructure.Services.Difficulty;
-using Main.Scripts.Infrastructure.Services.GameOver;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.LivingZone;
-using Main.Scripts.Infrastructure.Services.Restart;
 using Main.Scripts.Infrastructure.Services.SaveLoad;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Logic.Spawn;
@@ -29,9 +30,9 @@ namespace Main.Scripts.Infrastructure.Installers
 
         public override void InstallBindings(ServiceContainer serviceContainer)
         {
-            RegisterGameOverService(serviceContainer);
-            RegisterRestartService(serviceContainer);
-            
+            RegisterGameplayStateMachine(serviceContainer);
+            RegisterBlockContainerService(serviceContainer);
+
             RegisterLivingZone(serviceContainer);
             RegisterScoreService(serviceContainer);
             RegisterSwiper(serviceContainer);
@@ -42,18 +43,40 @@ namespace Main.Scripts.Infrastructure.Installers
             RegisterGameFactory(serviceContainer);
             RegisterSpawner(serviceContainer);
         }
-        
-        private static void RegisterGameOverService(ServiceContainer serviceContainer)
+
+        private void RegisterGameplayStateMachine(ServiceContainer serviceContainer)
         {
-            serviceContainer.SetService<IGameOverService, GameOverService>(new GameOverService());
+            SlowedTimeProvider slowedTimeProvider = RegisterTimeProvider(serviceContainer);
+
+            GameplayStateMachine gameplayStateMachine = new GameplayStateMachine();
+            
+            gameplayStateMachine.AddState(new PlayState());
+            gameplayStateMachine.AddState(new PauseState(slowedTimeProvider));
+            gameplayStateMachine.AddState(new LoseState());
+            gameplayStateMachine.AddState(new GameOverState());
+            gameplayStateMachine.AddState(new RestartState());
+            
+            serviceContainer.SetService<IGameplayStateMachine, GameplayStateMachine>(gameplayStateMachine);
         }
 
-        private static void RegisterRestartService(ServiceContainer serviceContainer)
+        private SlowedTimeProvider RegisterTimeProvider(ServiceContainer serviceContainer)
         {
-            serviceContainer.SetService<IRestartService, RestartService>(new RestartService());
+            SlowedTimeProvider slowedTimeProvider = new SlowedTimeProvider();
+            serviceContainer.SetService<ITimeProvider, SlowedTimeProvider>(slowedTimeProvider);
+            return slowedTimeProvider;
         }
-        
-        
+
+        private void RegisterBlockContainerService(ServiceContainer serviceContainer)
+        {
+            BlockContainerService blockContainerService =
+                new BlockContainerService(serviceContainer.Get<IGameplayStateMachine>());
+            
+            serviceContainer.SetService<IBlockContainerService, BlockContainerService>(blockContainerService);
+            
+            serviceContainer.Get<IGameplayStateMachine>().AddGameplayStatable(blockContainerService);
+        }
+
+
         private void RegisterLivingZone(ServiceContainer serviceContainer)
         {
             serviceContainer.SetServiceSelf(_livingZone);
@@ -61,51 +84,67 @@ namespace Main.Scripts.Infrastructure.Installers
 
         private void RegisterScoreService(ServiceContainer serviceContainer)
         {
-            serviceContainer.SetService<IScoreService, ScoreService>(new ScoreService(
-                _scoreConfig, 
-                serviceContainer.Get<ISaveLoadService>(), 
-                serviceContainer.Get<IRestartService>()));
+            ScoreService scoreService = new ScoreService(
+                _scoreConfig,
+                serviceContainer.Get<ISaveLoadService>(),
+                serviceContainer.Get<IGameplayStateMachine>());
+            
+            serviceContainer.SetService<IScoreService, ScoreService>(scoreService);
+            
+            serviceContainer.Get<IGameplayStateMachine>().AddGameplayStatable(scoreService);
         }
 
         private void RegisterSwiper(ServiceContainer serviceContainer)
         {
             Swiper swiper = Instantiate(_swiperPrefab);
-            swiper.Construct(_camera);
+            swiper.Construct(_camera, serviceContainer.Get<ITimeProvider>());
             serviceContainer.SetService<ISwiper, Swiper>(swiper);
+            
+            serviceContainer.Get<IGameplayStateMachine>().AddGameplayStatable(swiper);
         }
 
         
         private void RegisterDifficultyService(ServiceContainer serviceContainer)
         {
-            DifficultyService difficultyService = new DifficultyService(_difficultyConfig, serviceContainer.Get<IRestartService>());
+            DifficultyService difficultyService = new DifficultyService(_difficultyConfig);
             serviceContainer.SetService<IDifficultyService, DifficultyService>(difficultyService);
+            
+            serviceContainer.Get<IGameplayStateMachine>().AddGameplayStatable(difficultyService);
         }
 
 
         private void RegisterCollisionService(ServiceContainer serviceContainer)
         {
             CollisionService collisionService = Instantiate(_collisionServicePrefab);
-            collisionService.Construct(serviceContainer.Get<ISwiper>());
+            collisionService.Construct(
+                serviceContainer.Get<ISwiper>(),
+                serviceContainer.Get<IBlockContainerService>());
+            
             serviceContainer.SetService<ICollisionService, CollisionService>(collisionService);
+            
+            serviceContainer.Get<IGameplayStateMachine>().AddGameplayStatable(collisionService);
         }
 
         private void RegisterHealthService(ServiceContainer serviceContainer)
         {
-            serviceContainer.SetService<IHealthService, HealthService>(new HealthService(
-                _healthConfig, 
-                serviceContainer.Get<IGameOverService>(),
-                serviceContainer.Get<ICollisionService>(),
-                serviceContainer.Get<IRestartService>()));
+            HealthService healthService = new HealthService(
+                _healthConfig,
+                serviceContainer.Get<IGameplayStateMachine>());
+            
+            serviceContainer.SetService<IHealthService, HealthService>(healthService);
+            
+            serviceContainer.Get<IGameplayStateMachine>().AddGameplayStatable(healthService);
         }
 
         private void RegisterGameFactory(ServiceContainer serviceContainer)
         {
             serviceContainer.SetService<IGameFactory, GameFactory>(
                 new GameFactory(
-                    serviceContainer.Get<ICollisionService>(),
+                    serviceContainer.Get<IBlockContainerService>(),
                     serviceContainer.Get<LivingZone>(), 
                     serviceContainer.Get<IHealthService>(),
                     serviceContainer.Get<IScoreService>(),
+                    serviceContainer.Get<ITimeProvider>(),
                     _blockConfig));
         }
 
@@ -114,10 +153,11 @@ namespace Main.Scripts.Infrastructure.Installers
             _spawner.Construct(
                 serviceContainer.Get<IDifficultyService>(),
                 serviceContainer.Get<IGameFactory>(),
-                serviceContainer.Get<IHealthService>(),
-                serviceContainer.Get<IRestartService>());
+                serviceContainer.Get<ITimeProvider>());
             
             serviceContainer.SetServiceSelf(_spawner);
+            
+            serviceContainer.Get<IGameplayStateMachine>().AddGameplayStatable(_spawner);
         }
     }
 }

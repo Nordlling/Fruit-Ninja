@@ -1,6 +1,7 @@
-using Main.Scripts.Infrastructure.Services.Restart;
+using Main.Scripts.Infrastructure.GameplayStates;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Infrastructure.States;
+using Main.Scripts.UI.Loading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,16 +20,19 @@ namespace Main.Scripts.UI.Gameplay
         [SerializeField] private Animation _animation;
         [SerializeField] private AnimationClip _animationFadeIn;
         [SerializeField] private AnimationClip _animationFadeOut;
+        
+        [SerializeField] private UICurtainView _curtainView;
 
 
         private IGameStateMachine _stateMachine;
-        private IRestartService _restartService;
+        private IGameplayStateMachine _gameplayStateMachine;
         private IScoreService _scoreService;
+        private bool isTouched;
 
-        public void Construct(IGameStateMachine stateMachine, IRestartService restartService, IScoreService scoreService)
+        public void Construct(IGameStateMachine stateMachine, IGameplayStateMachine gameplayStateMachine, IScoreService scoreService)
         {
             _stateMachine = stateMachine;
-            _restartService = restartService;
+            _gameplayStateMachine = gameplayStateMachine;
             _scoreService = scoreService;
         }
 
@@ -54,8 +58,15 @@ namespace Main.Scripts.UI.Gameplay
 
         private void RestartGame()
         {
+            if (isTouched)
+            {
+                return;
+            }
+
+            isTouched = true;
+            
             PlayAnimationFadeOut();
-            _restartService.Restart();
+            _gameplayStateMachine.Enter<RestartState>();
         }
 
         private void PlayAnimationFadeIn()
@@ -77,12 +88,21 @@ namespace Main.Scripts.UI.Gameplay
 
         private void Disable()
         {
+            isTouched = false;
             gameObject.SetActive(false);
         }
 
         private void ExitToMenu()
         {
-            _stateMachine.Enter<LoadSceneState, string>(_menuSceneName);
+            if (isTouched)
+            {
+                return;
+            }
+            
+            isTouched = true;
+            
+            _curtainView.gameObject.SetActive(true);
+            _curtainView.FadeInBackground(() => _stateMachine.Enter<LoadSceneState, string>(_menuSceneName));
         }
     }
 }

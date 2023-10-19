@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Main.Scripts.Logic.Blocks
@@ -10,21 +9,8 @@ namespace Main.Scripts.Logic.Blocks
         public Bounds SphereBounds { get; private set; }
         private Vector3 _sphereCenter;
         private float _sphereRadius;
-
-        [SerializeField] private SpriteRenderer _spriteRenderer;
-        private Sprite _originalSprite;
-
-        public void Slice()
-        {
-            Debug.Log("Destroyed");
-            
-            Sprite leftSprite = Sprite.Create(_originalSprite.texture, new Rect(0, 0, _originalSprite.texture.width / 2, _originalSprite.texture.height), new Vector2(0.5f, 0.5f));
-            _spriteRenderer.sprite = leftSprite;
-            // Destroy(gameObject);
-        }
         private void Start()
         {
-            _originalSprite = _spriteRenderer.sprite;
             _sphereCenter = transform.position;
             _sphereRadius = transform.localScale.x * _sphereScale;
             SphereBounds = new Bounds(_sphereCenter, new Vector3(_sphereRadius, _sphereRadius, _sphereRadius));  

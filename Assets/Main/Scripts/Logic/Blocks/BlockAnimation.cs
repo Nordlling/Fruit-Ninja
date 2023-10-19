@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using Main.Scripts.Infrastructure.Provides;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Main.Scripts.Logic.Blocks
@@ -16,10 +15,10 @@ namespace Main.Scripts.Logic.Blocks
         [SerializeField] private float _maxScaleValue;
         [SerializeField] private float _minScaleSpeed;
         [SerializeField] private float _maxScaleSpeed;
+
+        private ITimeProvider _timeProvider;
         
-        private Action OnRotate;
-        private Action OnScale;
-        private readonly List<Action> _animations = new();
+        private readonly List<Tweener> _tweeners = new();
 
         private void Start()
         {
@@ -27,48 +26,61 @@ namespace Main.Scripts.Logic.Blocks
             ExecuteAnimations();
         }
 
+        private void Update()
+        {
+            foreach (Tweener tweener in _tweeners)
+            {
+                tweener.timeScale = _timeProvider.GetTimeScale();
+            }
+        }
+
+        public void Construct(ITimeProvider timeProvider)
+        {
+            _timeProvider = timeProvider;
+        } 
+
         private void FillAnimationList()
         {
-            OnRotate += RotateObject;
-            OnScale += ScaleObject;
-
-            _animations.Add(OnRotate);
-            _animations.Add(OnScale);
+            CreateRotateTweener();
+            CreateScaleTweener();
         }
 
         private void ExecuteAnimations()
         {
-            foreach (Action action in _animations)
+            foreach (Tweener tweener in _tweeners)
             {
                 if (Random.value > 0.5)
                 {
-                    action.Invoke();
+                    tweener.Play();
                 }
             }
         }
 
-        private void RotateObject()
+        private void CreateRotateTweener()
         {
             int randomSign = Random.value < 0.5 ? 1 : -1;
             Vector3 randomRotateValue = new Vector3(0f, 0f, 360f * randomSign);
             float randomRotateDuration = Random.Range(_minRotateSpeed, _maxRotateSpeed);
-
-
-            transform.DORotate(randomRotateValue, randomRotateDuration, RotateMode.FastBeyond360)
+            
+            Tweener tweener = transform.DORotate(randomRotateValue, randomRotateDuration, RotateMode.FastBeyond360)
                 .SetLoops(-1, LoopType.Restart)
                 .SetRelative()
                 .SetEase(Ease.Linear)
                 .SetLink(gameObject);
+            
+            _tweeners.Add(tweener);
         }
 
-        private void ScaleObject()
+        private void CreateScaleTweener()
         {
             float randomScaleValue = Random.Range(_minScaleValue, _maxScaleValue);
             float randomScaleDuration = Random.Range(_minScaleSpeed, _maxScaleSpeed);
 
-            transform.DOScale(randomScaleValue, randomScaleDuration)
+            Tweener tweener = transform.DOScale(randomScaleValue, randomScaleDuration)
                 .SetEase(Ease.Linear)
                 .SetLink(gameObject);
+            
+            _tweeners.Add(tweener);
         }
     }
 }

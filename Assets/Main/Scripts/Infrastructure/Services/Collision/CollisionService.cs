@@ -1,49 +1,37 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Main.Scripts.Infrastructure.GameplayStates;
+using Main.Scripts.Infrastructure.Services.BlockContainer;
 using Main.Scripts.Logic.Blocks;
 using Main.Scripts.Logic.Swipe;
 using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Services.Collision
 {
-    public class CollisionService : MonoBehaviour, ICollisionService
+    public class CollisionService : MonoBehaviour, ICollisionService, IPlayable, ILoseable, IPauseable
     {
         private ISwiper _swiper;
+        private IBlockContainerService _blockContainerService;
         
-        private readonly List<Block> _blocks = new();
         private bool _stop;
 
-        public void Construct(ISwiper swiper)
+        public void Construct(ISwiper swiper, IBlockContainerService blockContainerService)
         {
             _swiper = swiper;
+            _blockContainerService = blockContainerService;
         }
 
-        public void AddBlock(Block blockCollider)
+        public void Play()
         {
-            _blocks.Add(blockCollider);
-        }
-        
-        public void RemoveBlock(Block blockCollider)
-        {
-            _blocks.Remove(blockCollider);
+            _stop = false;
         }
 
-        public void WaitFallBlocks(Action onBlocksFell)
+        public void Pause()
         {
             _stop = true;
-            StartCoroutine(StartWaitFallBlocks(onBlocksFell));
         }
 
-        private IEnumerator StartWaitFallBlocks(Action onBlocksFell)
+        public void Lose()
         {
-            while (_blocks.Count > 0)
-            {
-                yield return null;
-            }
-            
-            onBlocksFell?.Invoke();
-            _stop = false;
+            _stop = true;
         }
 
         private void Update()
@@ -53,11 +41,11 @@ namespace Main.Scripts.Infrastructure.Services.Collision
                 return;
             }
             
-            foreach (Block block in _blocks)
+            foreach (Block block in _blockContainerService.Blocks)
             {
                 if (_swiper.HasEnoughSpeed() && block.BlockCollider.SphereBounds.Contains(_swiper.Position))
                 {
-                    block.Slicer.Slice(_swiper.Position);
+                    block.Slicer.Slice(_swiper.Position, _swiper.Direction);
                 }
             }
         }

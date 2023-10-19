@@ -3,9 +3,8 @@ using System;
 namespace Main.Scripts.Data
 {
   [Serializable]
-  public class PlayerProgress
+  public class PlayerScore
   {
     public int HighScore;
-
   }
 }

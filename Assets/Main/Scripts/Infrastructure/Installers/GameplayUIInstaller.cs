@@ -1,7 +1,7 @@
+using Main.Scripts.Infrastructure.GameplayStates;
+using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services;
-using Main.Scripts.Infrastructure.Services.GameOver;
 using Main.Scripts.Infrastructure.Services.Health;
-using Main.Scripts.Infrastructure.Services.Restart;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Infrastructure.States;
 using Main.Scripts.UI.Gameplay;
@@ -16,6 +16,7 @@ namespace Main.Scripts.Infrastructure.Installers
         [SerializeField] private UIScoreView _uiScoreView;
         [SerializeField] private UIHighScoreView _uiHighScoreView;
         [SerializeField] private UIGameOverView _uiGameOverView;
+        [SerializeField] private UIPauseView _uiPauseView;
 
         public override void InstallBindings(ServiceContainer serviceContainer)
         {
@@ -24,11 +25,14 @@ namespace Main.Scripts.Infrastructure.Installers
             InitScoreUI(serviceContainer);
             InitHighScoreUI(serviceContainer);
             InitGameOverUI(serviceContainer);
+            InitPauseUI(serviceContainer);
         }
         
         private void InitGameplayUI(ServiceContainer serviceContainer)
         {
-            _gameplayUI.Construct(serviceContainer.Get<IGameOverService>());
+            _gameplayUI.Construct(serviceContainer.Get<IGameplayStateMachine>());
+
+            serviceContainer.Get<IGameplayStateMachine>().AddGameplayStatable(_gameplayUI);
         }
 
         private void InitHealthUI(ServiceContainer serviceContainer)
@@ -38,20 +42,27 @@ namespace Main.Scripts.Infrastructure.Installers
         
         private void InitScoreUI(ServiceContainer serviceContainer)
         {
-            _uiScoreView.Construct(serviceContainer.Get<IScoreService>());
+            _uiScoreView.Construct(serviceContainer.Get<IScoreService>(), serviceContainer.Get<ITimeProvider>());
         }
         
         private void InitHighScoreUI(ServiceContainer serviceContainer)
         {
-            _uiHighScoreView.Construct(serviceContainer.Get<IScoreService>());
+            _uiHighScoreView.Construct(serviceContainer.Get<IScoreService>(), serviceContainer.Get<ITimeProvider>());
         }
         
         private void InitGameOverUI(ServiceContainer serviceContainer)
         {
             _uiGameOverView.Construct(
-                serviceContainer.Get<IGameStateMachine>(), 
-                serviceContainer.Get<IRestartService>(),
+                serviceContainer.Get<IGameStateMachine>(),
+                serviceContainer.Get<IGameplayStateMachine>(),
                 serviceContainer.Get<IScoreService>());
+        }
+        
+        private void InitPauseUI(ServiceContainer serviceContainer)
+        {
+            _uiPauseView.Construct(
+                serviceContainer.Get<IGameStateMachine>(),
+                serviceContainer.Get<IGameplayStateMachine>());
         }
     }
 }

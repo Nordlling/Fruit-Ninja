@@ -190,10 +190,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _blockMovement: {fileID: 5771690122018491101}
   _boundsChecker: {fileID: 7424125995122863148}
-  _blockCollider: {fileID: -6087787132124446531}
-  _slicer: {fileID: 5669168300266746617}
+  _blockAnimation: {fileID: 2376680573197571728}
   _spriteRenderer: {fileID: 4470419074529942447}
   _shadowSpriteRenderer: {fileID: 8924327364107621515}
+  _blockCollider: {fileID: -6087787132124446531}
+  _slicer: {fileID: 5669168300266746617}
 --- !u!114 &5771690122018491101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,7 +250,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sphereScale: 2
-  _spriteRenderer: {fileID: 4470419074529942447}
 --- !u!114 &5669168300266746617
 MonoBehaviour:
   m_ObjectHideFlags: 0

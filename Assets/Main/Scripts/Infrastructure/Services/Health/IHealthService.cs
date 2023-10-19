@@ -7,7 +7,6 @@ namespace Main.Scripts.Infrastructure.Services.Health
         int LeftHealths { get; }
         void DecreaseHealth();
         event Action OnDamaged;
-        event Action OnDied;
         event Action OnReset;
     }
 }

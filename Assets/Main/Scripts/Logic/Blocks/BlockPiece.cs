@@ -1,8 +1,5 @@
-﻿using System;
-using Main.Scripts.Infrastructure.Services;
-using Main.Scripts.Infrastructure.Services.LivingZone;
+﻿using Main.Scripts.Infrastructure.Provides;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Main.Scripts.Logic.Blocks
 {
@@ -10,10 +7,13 @@ namespace Main.Scripts.Logic.Blocks
     {
         public BlockMovement BlockMovement => _blockMovement;
         public BoundsChecker BoundsChecker => _boundsChecker;
+        public BlockAnimation BlockAnimation => _blockAnimation;
         public SpriteRenderer SpriteRenderer => _spriteRenderer;
+        public ITimeProvider TimeProvider { get; protected set; }
 
         [SerializeField] private BlockMovement _blockMovement;
         [SerializeField] private BoundsChecker _boundsChecker;
+        [SerializeField] private BlockAnimation _blockAnimation;
 
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private SpriteRenderer _shadowSpriteRenderer;
@@ -21,6 +21,11 @@ namespace Main.Scripts.Logic.Blocks
         private void Start()
         {
             _shadowSpriteRenderer.sprite = _spriteRenderer.sprite;
+        }
+
+        public void Construct(ITimeProvider timeProvider)
+        {
+            TimeProvider = timeProvider;
         }
     }
 }

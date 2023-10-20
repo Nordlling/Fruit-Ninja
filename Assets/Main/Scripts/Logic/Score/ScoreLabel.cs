@@ -37,21 +37,13 @@ namespace Main.Scripts.Logic.Score
         {
             _sequence = DOTween.Sequence()
                 .AppendInterval(_timeBeforeAnimation)
-                .Append(transform.DOMoveY(transform.position.y + _animationMoveOffset, _animationDuration))
-                .OnComplete(() => Destroy(gameObject));
+                .Append(
+                    transform.DOMoveY(transform.position.y + _animationMoveOffset, _animationDuration))
+                .Join(
+                    DOTween.To(() => _scoreValue.alpha, x => _scoreValue.alpha = x, 0f, _animationFadeSpeed)
+                        .OnComplete(() => Destroy(gameObject)));
 
             _sequence.Play();
-            
-            StartCoroutine(StartScoreAnimation(0f));
-        }
-
-        private IEnumerator StartScoreAnimation(float to)
-        {
-            while (Math.Abs(_scoreValue.alpha - to) > float.Epsilon)
-            {
-                _scoreValue.alpha = Mathf.Lerp(_scoreValue.alpha, to, _animationFadeSpeed * _timeProvider.GetDeltaTime());
-                yield return null;
-            }
         }
     }
 }

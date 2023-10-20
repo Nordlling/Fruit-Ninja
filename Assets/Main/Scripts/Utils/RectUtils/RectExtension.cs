@@ -5,67 +5,82 @@ namespace Main.Scripts.Utils.RectUtils
 {
     public static class RectUtils
     {
-        // TODO: will be optimized
-        public static SlicedRect GetSlicedRect(this Rect rect, Vector2 pointPosition, Vector2 pointDirection,
-            float rectPieceDirectionAngle)
+        
+        public static SlicedRect GetSlicedRect(this Rect rect, Vector2 pointPosition, Vector2 pointDirection)
         {
-            
-            Rect firstRect;
-            Rect secondRect;
-            Vector2 firstRectPartDirection;
-            Vector2 secondRectPartDirection;
-            
-            Vector2 offset = -pointDirection.normalized * 0.1f;
+            float offsetStep = 0.1f;
+            SlicedRect slicedRect = new SlicedRect();
+            Vector2 directionOffset = pointDirection.normalized * offsetStep;
+
+            if (!rect.Contains(pointPosition))
+            {
+                Debug.LogError("Incorrect point position");
+                CreateLeftSideSlicedRect(rect, slicedRect);
+                return slicedRect;
+            }
             
             while (true)
             {
-                pointPosition += offset;
-                if (Math.Abs(pointPosition.x - rect.xMin) < 0.1f)
+                pointPosition += directionOffset;
+                
+                if (Math.Abs(pointPosition.x - rect.xMin) <= offsetStep)
                 {
-                    firstRect = new Rect(0f, 0f, rect.width, rect.height / 2f);
-                    secondRect = new Rect(0f, rect.height / 2f, rect.width, rect.height / 2f);
-                    firstRectPartDirection = Quaternion.Euler(0, 0, -rectPieceDirectionAngle) * pointDirection;
-                    secondRectPartDirection = Quaternion.Euler(0, 0, rectPieceDirectionAngle) * pointDirection;
+                    CreateLeftSideSlicedRect(rect, slicedRect);
                     break;
                 } 
                 
-                if (Math.Abs(pointPosition.x - rect.xMax) < 0.1f)
+                if (Math.Abs(pointPosition.x - rect.xMax) <= offsetStep)
                 {
-                    firstRect = new Rect(0f, rect.height / 2f, rect.width, rect.height / 2f);
-                    secondRect = new Rect(0f, 0f, rect.width, rect.height / 2f);
-                    firstRectPartDirection = Quaternion.Euler(0, 0, -rectPieceDirectionAngle) * pointDirection;
-                    secondRectPartDirection = Quaternion.Euler(0, 0, rectPieceDirectionAngle) * pointDirection;
+                    CreateRightSideSlicedRect(rect, slicedRect);
                     break;
                 }
                 
-                if (Math.Abs(pointPosition.y - rect.yMin) < 0.1f)
+                if (Math.Abs(pointPosition.y - rect.yMin) <= offsetStep)
                 {
-                    firstRect = new Rect(0f, 0f, rect.width / 2f, rect.height);
-                    secondRect = new Rect(rect.width / 2f, 0f, rect.width / 2f, rect.height);
-                    firstRectPartDirection = Quaternion.Euler(0, 0, rectPieceDirectionAngle) * pointDirection;
-                    secondRectPartDirection = Quaternion.Euler(0, 0, -rectPieceDirectionAngle) * pointDirection;
+                    CreateBottomSideSlicedRect(rect, slicedRect);
                     break;
                 }
                 
-                if (Math.Abs(pointPosition.y - rect.yMax) < 0.1f)
+                if (Math.Abs(pointPosition.y - rect.yMax) <= offsetStep)
                 {
-                    firstRect = new Rect(rect.width / 2f, 0f, rect.width / 2f, rect.height);
-                    secondRect = new Rect(0f, 0f, rect.width / 2f, rect.height);
-                    firstRectPartDirection = Quaternion.Euler(0, 0, rectPieceDirectionAngle) * pointDirection;
-                    secondRectPartDirection = Quaternion.Euler(0, 0, -rectPieceDirectionAngle) * pointDirection;
+                    CreateUpperSideSlicedRect(rect, slicedRect);
                     break;
                 }
             }
-
-            SlicedRect slicedRect = new SlicedRect()
-            {
-                FirstRectPart = firstRect,
-                SecondRectPart = secondRect,
-                FirstRectPartDirection = firstRectPartDirection.normalized,
-                SecondRectPartDirection = secondRectPartDirection.normalized
-            };
             
             return slicedRect;
+        }
+
+        private static void CreateLeftSideSlicedRect(Rect rect, SlicedRect slicedRect)
+        {
+            slicedRect.FirstRectPart = new Rect(0f, rect.height / 2f, rect.width, rect.height / 2f);
+            slicedRect.SecondRectPart = new Rect(0f, 0f, rect.width, rect.height / 2f);
+            slicedRect.FirstPivot = new Vector2(0.5f, 0f);
+            slicedRect.SecondPivot = new Vector2(0.5f, 1f);
+        }
+        
+        private static void CreateRightSideSlicedRect(Rect rect, SlicedRect slicedRect)
+        {
+            slicedRect.FirstRectPart = new Rect(0f, 0f, rect.width, rect.height / 2f);
+            slicedRect.SecondRectPart = new Rect(0f, rect.height / 2f, rect.width, rect.height / 2f);
+            slicedRect.FirstPivot =  new Vector2(0.5f, 1f);
+            slicedRect.SecondPivot = new Vector2(0.5f, 0f);
+        }
+        
+        private static void CreateBottomSideSlicedRect(Rect rect, SlicedRect slicedRect)
+        {
+            slicedRect.FirstRectPart = new Rect(0f, 0f, rect.width / 2f, rect.height);
+            slicedRect.SecondRectPart = new Rect(rect.width / 2f, 0f, rect.width / 2f, rect.height);
+            slicedRect.FirstPivot = new Vector2(1f, 0.5f);
+            slicedRect.SecondPivot = new Vector2(0f, 0.5f);
+        }
+        
+        private static void CreateUpperSideSlicedRect(Rect rect, SlicedRect slicedRect)
+        {
+            slicedRect.FirstRectPart = new Rect(rect.width / 2f, 0f, rect.width / 2f, rect.height);
+            slicedRect.SecondRectPart = new Rect(0f, 0f, rect.width / 2f, rect.height);
+            slicedRect.FirstPivot =  new Vector2(0f, 0.5f);
+            slicedRect.SecondPivot = new Vector2(1f, 0.5f);
         }
     }
 
@@ -75,5 +90,7 @@ namespace Main.Scripts.Utils.RectUtils
         public Rect SecondRectPart;
         public Vector2 FirstRectPartDirection;
         public Vector2 SecondRectPartDirection;
+        public Vector2 FirstPivot;
+        public Vector2 SecondPivot;
     }
 }

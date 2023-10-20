@@ -37,9 +37,9 @@ namespace Main.Scripts.Logic.Blocks
             Sprite originalSprite = _spriteRenderer.sprite;
             
             SlicedRect slicedRect = CreateSlicedRect(swiperPosition, swiperDirection, originalSprite);
-
-            CreateSpritePart(originalSprite, slicedRect.FirstRectPart, slicedRect.FirstRectPartDirection);
-            CreateSpritePart(originalSprite, slicedRect.SecondRectPart, slicedRect.SecondRectPartDirection);
+            
+            CreateSpritePart(originalSprite, slicedRect.FirstRectPart, slicedRect.FirstRectPartDirection, slicedRect.FirstPivot);
+            CreateSpritePart(originalSprite, slicedRect.SecondRectPart, slicedRect.SecondRectPartDirection, slicedRect.SecondPivot);
 
             SpawnSplash();
 
@@ -49,20 +49,30 @@ namespace Main.Scripts.Logic.Blocks
         private SlicedRect CreateSlicedRect(Vector2 swiperPosition, Vector2 swiperDirection, Sprite originalSprite)
         {
             Rect rect = new Rect(0f, 0f, originalSprite.texture.width, originalSprite.texture.height);
-            Vector2 worldDirection = swiperPosition - (Vector2)transform.position;
-            Vector2 rectDirection = worldDirection * (rect.size / _spriteRenderer.size);
-            Vector2 rectPoint = rect.center + rectDirection;
             
-            SlicedRect slicedRect = rect.GetSlicedRect(rectPoint, swiperDirection, _rectPieceDirectionAngle);
+            Quaternion inversedRotation = Quaternion.Inverse(transform.rotation);
+
+            Vector2 worldDirectionFromCenter = swiperPosition - (Vector2)transform.position;
+            Vector2 rectDirectionFromCenter = worldDirectionFromCenter * (rect.size / _spriteRenderer.size);
+            Vector2 rectDirectionFromCenterRotated = inversedRotation * rectDirectionFromCenter;
+            Vector2 rectPoint = rect.center + rectDirectionFromCenterRotated;
+
+            Vector2 swiperDirectionInversedRotated = inversedRotation * swiperDirection;
+            
+            SlicedRect slicedRect = rect.GetSlicedRect(rectPoint, swiperDirectionInversedRotated);
+            
+            slicedRect.FirstRectPartDirection = Quaternion.Euler(0, 0, -_rectPieceDirectionAngle) * swiperDirection.normalized;
+            slicedRect.SecondRectPartDirection = Quaternion.Euler(0, 0, +_rectPieceDirectionAngle) * swiperDirection.normalized;
+            
             return slicedRect;
         }
 
-        private void CreateSpritePart(Sprite originalSprite, Rect rectPart, Vector2 rectPartDirection)
+        private void CreateSpritePart(Sprite originalSprite, Rect rectPart, Vector2 rectPartDirection, Vector2 pivot)
         {
             Sprite part = Sprite.Create(
                 originalSprite.texture,
                 rectPart,
-                new Vector2(0.5f, 0.5f));
+                pivot);
 
             BlockPiece blockPiece = _gameFactory.CreateBlockPiece(_blockPiecePrefab, transform.position);
             blockPiece.transform.rotation = transform.rotation;

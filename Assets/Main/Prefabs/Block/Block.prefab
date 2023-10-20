@@ -262,7 +262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dc9edc550ef4e3280958398c8f80e8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _departureSpeed: 10
+  _departureSpeed: 8
   _rectPieceDirectionAngle: 30
   _blockPiecePrefab: {fileID: 7858959051489891967, guid: 0fbc4c599fcaf8141871143e3957cf2a, type: 3}
   _spriteRenderer: {fileID: 4470419074529942447}

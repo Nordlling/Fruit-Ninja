@@ -3,7 +3,6 @@ using Main.Scripts.Data;
 using Main.Scripts.Infrastructure.Configs;
 using Main.Scripts.Infrastructure.GameplayStates;
 using Main.Scripts.Infrastructure.Services.SaveLoad;
-using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Services.Score
 {
@@ -15,17 +14,13 @@ namespace Main.Scripts.Infrastructure.Services.Score
 
         private readonly ScoreConfig _scoreConfig;
         private readonly ISaveLoadService _saveLoadService;
-        private readonly IGameplayStateMachine _gameplayStateMachine;
 
-        private int _comboCounter = 1;
-        private float _lastScoredTime;
         private PlayerScore _playerScore;
 
-        public ScoreService(ScoreConfig scoreConfig, ISaveLoadService saveLoadService, IGameplayStateMachine gameplayStateMachine)
+        public ScoreService(ScoreConfig scoreConfig, ISaveLoadService saveLoadService)
         {
             _scoreConfig = scoreConfig;
             _saveLoadService = saveLoadService;
-            _gameplayStateMachine = gameplayStateMachine;
             LoadHighScore();
         }
         
@@ -40,7 +35,11 @@ namespace Main.Scripts.Infrastructure.Services.Score
 
         public int AddScore()
         {
-            int score = CalculateScore();
+            return AddScore(_scoreConfig.BasicScoreValue);
+        }
+        
+        public int AddScore(int score)
+        {
             CurrentScore += score;
             OnScored?.Invoke(CurrentScore);
 
@@ -49,8 +48,7 @@ namespace Main.Scripts.Infrastructure.Services.Score
                 OnHighScored?.Invoke(CurrentScore);
                 SaveHighScore();
             }
-
-            _lastScoredTime = Time.time;
+            
             return score;
         }
 
@@ -71,22 +69,6 @@ namespace Main.Scripts.Infrastructure.Services.Score
             HighScore = CurrentScore;
             _playerScore.HighScore = HighScore;
             _saveLoadService.SaveProgress(_playerScore);
-        }
-
-        private int CalculateScore()
-        {
-            int score = _scoreConfig.BasicScoreValue;
-            if (_comboCounter < _scoreConfig.MaxComboCount && Time.time - _lastScoredTime < _scoreConfig.MaxIntervalForCombo)
-            {
-                _comboCounter++;
-                score *= _comboCounter * _scoreConfig.ComboMultiplier;
-            }
-            else
-            {
-                _comboCounter = 1;
-            }
-
-            return score;
         }
     }
 }

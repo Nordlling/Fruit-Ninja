@@ -5,11 +5,13 @@ using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
 using Main.Scripts.Infrastructure.Services.Collision;
+using Main.Scripts.Infrastructure.Services.Combo;
 using Main.Scripts.Infrastructure.Services.Difficulty;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.LivingZone;
 using Main.Scripts.Infrastructure.Services.SaveLoad;
 using Main.Scripts.Infrastructure.Services.Score;
+using Main.Scripts.Logic.Combo;
 using Main.Scripts.Logic.Spawn;
 using Main.Scripts.Logic.Swipe;
 using UnityEngine;
@@ -27,6 +29,7 @@ namespace Main.Scripts.Infrastructure.Installers
         [SerializeField] private Camera _camera;
         [SerializeField] private Swiper _swiperPrefab;
         [SerializeField] private CollisionService _collisionServicePrefab;
+        [SerializeField] private ComboLabel _comboLabelPrefab;
 
         public override void InstallBindings(ServiceContainer serviceContainer)
         {
@@ -40,6 +43,8 @@ namespace Main.Scripts.Infrastructure.Installers
             RegisterDifficultyService(serviceContainer);
             RegisterCollisionService(serviceContainer);
             RegisterHealthService(serviceContainer);
+            RegisterLabelFactory(serviceContainer);
+            RegisterComboService(serviceContainer);
             RegisterGameFactory(serviceContainer);
             RegisterSpawner(serviceContainer);
         }
@@ -86,8 +91,8 @@ namespace Main.Scripts.Infrastructure.Installers
         {
             ScoreService scoreService = new ScoreService(
                 _scoreConfig,
-                serviceContainer.Get<ISaveLoadService>(),
-                serviceContainer.Get<IGameplayStateMachine>());
+                serviceContainer.Get<ISaveLoadService>()
+                );
             
             serviceContainer.SetService<IScoreService, ScoreService>(scoreService);
             
@@ -135,6 +140,26 @@ namespace Main.Scripts.Infrastructure.Installers
             
             serviceContainer.Get<IGameplayStateMachine>().AddGameplayStatable(healthService);
         }
+        
+        private void RegisterLabelFactory(ServiceContainer serviceContainer)
+        {
+            serviceContainer.SetService<ILabelFactory, LabelFactory>(
+                new LabelFactory(
+                    serviceContainer.Get<ITimeProvider>(),
+                    serviceContainer.Get<LivingZone>())
+            );
+        }
+
+        private void RegisterComboService(ServiceContainer serviceContainer)
+        {
+            ComboService comboService = new ComboService(
+                _scoreConfig,
+                serviceContainer.Get<IScoreService>(),
+                serviceContainer.Get<ILabelFactory>(),
+                _comboLabelPrefab);
+
+            serviceContainer.SetService<IComboService, ComboService>(comboService);
+        }
 
         private void RegisterGameFactory(ServiceContainer serviceContainer)
         {
@@ -144,8 +169,11 @@ namespace Main.Scripts.Infrastructure.Installers
                     serviceContainer.Get<LivingZone>(), 
                     serviceContainer.Get<IHealthService>(),
                     serviceContainer.Get<IScoreService>(),
+                    serviceContainer.Get<IComboService>(),
                     serviceContainer.Get<ITimeProvider>(),
-                    _blockConfig));
+                    serviceContainer.Get<ILabelFactory>(),
+                    _blockConfig)
+                );
         }
 
         private void RegisterSpawner(ServiceContainer serviceContainer)

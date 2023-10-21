@@ -10,5 +10,6 @@ namespace Main.Scripts.Infrastructure.Services.Score
         int CurrentScore { get; }
         int HighScore { get; }
         int AddScore();
+        int AddScore(int score);
     }
 }

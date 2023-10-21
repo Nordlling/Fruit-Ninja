@@ -1,11 +1,11 @@
 using Main.Scripts.Infrastructure.Configs;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
+using Main.Scripts.Infrastructure.Services.Combo;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.LivingZone;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Logic.Blocks;
-using Main.Scripts.Logic.Score;
 using Main.Scripts.Logic.Splashing;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -19,25 +19,30 @@ namespace Main.Scripts.Infrastructure.Factory
         private readonly LivingZone _livingZone;
         private readonly IHealthService _healthService;
         private readonly IScoreService _scoreService;
-        private readonly BlockConfig _blockConfig;
-
+        private readonly IComboService _comboService;
         private readonly ITimeProvider _timeProvider;
+        private readonly ILabelFactory _labelFactory;
+        private readonly BlockConfig _blockConfig;
 
         public GameFactory(
             IBlockContainerService blockContainerService,
             LivingZone livingZone, 
             IHealthService healthService, 
             IScoreService scoreService,
+            IComboService comboService,
             ITimeProvider timeProvider,
+            ILabelFactory labelFactory,
             BlockConfig blockConfig
-            )
+        )
         {
             _blockContainerService = blockContainerService;
             _livingZone = livingZone;
             _healthService = healthService;
             _scoreService = scoreService;
+            _comboService = comboService;
             _timeProvider = timeProvider;
             _blockConfig = blockConfig;
+            _labelFactory = labelFactory;
         }
 
         public Block CreateBlock(Block blockPrefab, Vector2 position)
@@ -49,7 +54,7 @@ namespace Main.Scripts.Infrastructure.Factory
             block.SpriteRenderer.sprite = _blockConfig.BlockInfos[randomIndex].BlockSprite;
             block.BoundsChecker.Construct(_livingZone, _healthService, true);
             block.BlockAnimation.Construct(_timeProvider);
-            block.Slicer.Construct(this, _scoreService, _blockConfig.BlockInfos[randomIndex].SplashSprite);
+            block.Slicer.Construct(this, _labelFactory, _scoreService, _comboService, _blockConfig.BlockInfos[randomIndex].SplashSprite);
             _blockContainerService.AddBlock(block);
             return block;
         }
@@ -68,13 +73,6 @@ namespace Main.Scripts.Infrastructure.Factory
             Splash splash = Object.Instantiate(splashPrefab, position, Quaternion.identity);
             splash.Construct(_timeProvider);
             return splash;
-        }
-
-        public ScoreLabel CreateScoreLabel(ScoreLabel scoreLabelPrefab, Vector2 position, string value)
-        {
-            ScoreLabel scoreLabel = Object.Instantiate(scoreLabelPrefab, position, Quaternion.identity);
-            scoreLabel.Construct(value, _timeProvider);
-            return scoreLabel;
         }
 
         public void Cleanup()

@@ -1,4 +1,4 @@
-using System.Collections;
+using DG.Tweening;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services.Score;
 using TMPro;
@@ -16,6 +16,7 @@ namespace Main.Scripts.UI.Gameplay
         
         private int _currentScore;
         private Coroutine _currentCoroutine;
+        private Tweener _currentTweener;
 
         public void Construct(IScoreService scoreService, ITimeProvider timeProvider)
         {
@@ -26,6 +27,14 @@ namespace Main.Scripts.UI.Gameplay
         private void Start()
         {
             InitScore();
+        }
+
+        private void Update()
+        {
+            if (_currentTweener != null)
+            {
+                _currentTweener.timeScale = _timeProvider.GetTimeScale();
+            }
         }
 
         private void InitScore()
@@ -48,28 +57,18 @@ namespace Main.Scripts.UI.Gameplay
 
         protected void AddScore(int newScore)
         {
-            if (_currentCoroutine != null)
-            {
-                StopCoroutine(_currentCoroutine);
-            }
+            _currentTweener?.Kill();
             _scoreText.text = _currentScore.ToString();
-            _currentCoroutine = StartCoroutine(StartScoreAnimation(_currentScore, newScore));
+            _currentTweener = AnimateScoreChange(_currentScore, newScore);
             _currentScore = newScore;
         }
         
-        private IEnumerator StartScoreAnimation(int oldScore, int newScore)
+        private Tweener AnimateScoreChange(int oldScore, int newScore)
         {
-            float speed = _scoreAnimationDuration / (newScore - oldScore);
-            for (int i = oldScore; i < newScore + 1; i++)
-            {
-                _scoreText.text = i.ToString();
-                float elapsedTime = 0f;
-                while (elapsedTime < speed)
-                {
-                    yield return null;
-                    elapsedTime += _timeProvider.GetDeltaTime();
-                }
-            }
+            return DOTween
+                .To(() => oldScore, x => oldScore = x, newScore, _scoreAnimationDuration)
+                .OnUpdate(() => _scoreText.text = oldScore.ToString())
+                .Play();
         }
     }
 }

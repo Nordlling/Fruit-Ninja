@@ -1,4 +1,5 @@
 using Main.Scripts.Infrastructure.Factory;
+using Main.Scripts.Infrastructure.Services.Combo;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Logic.Score;
 using Main.Scripts.Logic.Splashing;
@@ -19,20 +20,25 @@ namespace Main.Scripts.Logic.Blocks
         [SerializeField] private ScoreLabel _scoreLabel;
         
         private IGameFactory _gameFactory;
+        private ILabelFactory _labelFactory;
         private IScoreService _scoreService;
+        private IComboService _comboService;
         private Sprite _splashSprite;
 
-        public void Construct(IGameFactory gameFactory, IScoreService scoreService, Sprite splashSprite)
+        public void Construct(IGameFactory gameFactory, ILabelFactory labelFactory, IScoreService scoreService, IComboService comboService, Sprite splashSprite)
         {
             _gameFactory = gameFactory;
+            _labelFactory = labelFactory;
             _scoreService = scoreService;
+            _comboService = comboService;
             _splashSprite = splashSprite;
         }
         public void Slice(Vector2 swiperPosition, Vector2 swiperDirection)
         {
             int addedScore = _scoreService.AddScore();
+            _comboService.AddComboScore(transform.position);
 
-            _gameFactory.CreateScoreLabel(_scoreLabel, transform.position, addedScore.ToString());
+            _labelFactory.CreateScoreLabel(_scoreLabel, transform.position, addedScore.ToString());
             
             Sprite originalSprite = _spriteRenderer.sprite;
             

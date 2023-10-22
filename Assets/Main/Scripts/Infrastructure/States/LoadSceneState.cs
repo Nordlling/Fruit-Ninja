@@ -1,5 +1,6 @@
 using Main.Scripts.Infrastructure.Installers;
 using Main.Scripts.Infrastructure.Services;
+using Main.Scripts.Infrastructure.Services.ButtonContainer;
 using Main.Scripts.UI.Loading;
 
 namespace Main.Scripts.Infrastructure.States
@@ -33,9 +34,10 @@ namespace Main.Scripts.Infrastructure.States
 
         private void OnLoaded()
         {
+            InitGameWorld();
+            _curtainView.Construct(_serviceContainer.Get<IButtonContainerService>());
             _curtainView.gameObject.SetActive(true);
             _curtainView.FadeOutBackground(() => _curtainView.gameObject.SetActive(false));
-            InitGameWorld();
             StateMachine.Enter<GameLoopState>();
         }
 

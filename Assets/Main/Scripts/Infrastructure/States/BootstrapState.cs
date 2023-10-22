@@ -1,5 +1,6 @@
 using Main.Scripts.Infrastructure.Configs;
 using Main.Scripts.Infrastructure.Services;
+using Main.Scripts.Infrastructure.Services.ButtonContainer;
 using Main.Scripts.Infrastructure.Services.SaveLoad;
 using UnityEngine.SceneManagement;
 
@@ -33,6 +34,8 @@ namespace Main.Scripts.Infrastructure.States
         {
             _serviceContainer.SetService<IGameStateMachine, GameStateMachine>(StateMachine);
             _serviceContainer.SetService<ISaveLoadService, SaveLoadService>(new SaveLoadService());
+            _serviceContainer.SetService<IButtonContainerService, ButtonContainerService>(new ButtonContainerService());
+            
         }
 
         public void Exit()

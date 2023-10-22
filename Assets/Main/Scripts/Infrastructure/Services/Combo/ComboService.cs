@@ -13,8 +13,6 @@ namespace Main.Scripts.Infrastructure.Services.Combo
     public class ComboService : IComboService
     {
         public Vector2 CurrentPosition { get; private set; }
-        
-        public event Action<ComboInfo> OnComboScored;
 
         private readonly ScoreConfig _scoreConfig;
         private readonly IScoreService _scoreService;

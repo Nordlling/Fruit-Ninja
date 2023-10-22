@@ -50,8 +50,8 @@ namespace Main.Scripts.Infrastructure.Installers
             RegisterLivingZone(serviceContainer);
             RegisterScoreService(serviceContainer);
             RegisterSwiper(serviceContainer);
-
             RegisterDifficultyService(serviceContainer);
+            
             RegisterCollisionService(serviceContainer);
             RegisterHealthService(serviceContainer);
             RegisterLabelFactory(serviceContainer);
@@ -60,6 +60,7 @@ namespace Main.Scripts.Infrastructure.Installers
             RegisterBlockFactory(serviceContainer);
             RegisterSpawner(serviceContainer);
         }
+        
 
         private void RegisterGameplayStateMachine(ServiceContainer serviceContainer)
         {
@@ -103,10 +104,11 @@ namespace Main.Scripts.Infrastructure.Installers
 
         private void RegisterScoreService(ServiceContainer serviceContainer)
         {
-            ScoreService scoreService = new ScoreService(
+            ScoreService scoreService = new ScoreService
+            (
                 _scoreConfig,
                 serviceContainer.Get<ISaveLoadService>()
-                );
+            );
             
             serviceContainer.SetService<IScoreService, ScoreService>(scoreService);
             
@@ -135,9 +137,7 @@ namespace Main.Scripts.Infrastructure.Installers
         private void RegisterCollisionService(ServiceContainer serviceContainer)
         {
             CollisionService collisionService = Instantiate(_collisionServicePrefab);
-            collisionService.Construct(
-                serviceContainer.Get<ISwiper>(),
-                serviceContainer.Get<IBlockContainerService>());
+            collisionService.Construct(serviceContainer.Get<ISwiper>(), serviceContainer.Get<IBlockContainerService>());
             
             serviceContainer.SetService<ICollisionService, CollisionService>(collisionService);
             
@@ -146,9 +146,11 @@ namespace Main.Scripts.Infrastructure.Installers
 
         private void RegisterHealthService(ServiceContainer serviceContainer)
         {
-            HealthService healthService = new HealthService(
+            HealthService healthService = new HealthService
+            (
                 _healthConfig,
-                serviceContainer.Get<IGameplayStateMachine>());
+                serviceContainer.Get<IGameplayStateMachine>()
+            );
             
             serviceContainer.SetService<IHealthService, HealthService>(healthService);
             

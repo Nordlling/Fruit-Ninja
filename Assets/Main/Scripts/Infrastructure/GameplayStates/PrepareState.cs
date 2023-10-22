@@ -3,29 +3,29 @@ using Main.Scripts.Infrastructure.Services.ButtonContainer;
 
 namespace Main.Scripts.Infrastructure.GameplayStates
 {
-    public class LoseState : IGameplayState
+    public class PrepareState : IGameplayState
     {
         private readonly IButtonContainerService _buttonContainerService;
-        private List<ILoseable> _loseables = new();
+        private List<IPreparable> _preparables = new();
 
-        public LoseState(IButtonContainerService buttonContainerService)
+        public PrepareState(IButtonContainerService buttonContainerService)
         {
             _buttonContainerService = buttonContainerService;
         }
 
         public void AddStatable(IGameplayStatable gameplayStatable)
         {
-            if (gameplayStatable is ILoseable loseable)
+            if (gameplayStatable is IPreparable preparable)
             {
-                _loseables.Add(loseable); 
+                _preparables.Add(preparable); 
             }
         }
 
         public void Enter()
         {
-            foreach (ILoseable loseable in _loseables)
+            foreach (IPreparable restartable in _preparables)
             {
-                loseable.Lose();
+                restartable.Prepare();
             }
             _buttonContainerService.DisableAllButtons();
         }
@@ -38,8 +38,8 @@ namespace Main.Scripts.Infrastructure.GameplayStates
         public GameplayStateMachine StateMachine { get; set; }
     }
 
-    public interface ILoseable : IGameplayStatable
+    public interface IPreparable : IGameplayStatable
     {
-        void Lose();
+        void Prepare();
     }
 }

@@ -69,11 +69,13 @@ namespace Main.Scripts.Infrastructure.Installers
             
             gameplayStateMachine.AddState(new PlayState());
             gameplayStateMachine.AddState(new PauseState(slowedTimeProvider));
-            gameplayStateMachine.AddState(new LoseState());
+            gameplayStateMachine.AddState(new LoseState(serviceContainer.Get<IButtonContainerService>()));
             gameplayStateMachine.AddState(new GameOverState());
             gameplayStateMachine.AddState(new RestartState());
+            gameplayStateMachine.AddState(new PrepareState(serviceContainer.Get<IButtonContainerService>()));
             
             serviceContainer.SetService<IGameplayStateMachine, GameplayStateMachine>(gameplayStateMachine);
+            gameplayStateMachine.Enter<PlayState>();
         }
 
         private SlowedTimeProvider RegisterTimeProvider(ServiceContainer serviceContainer)

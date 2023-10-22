@@ -5,14 +5,14 @@ namespace Main.Scripts.Logic.Blocks
     public class BlockCollider : MonoBehaviour
     {
         [SerializeField] private float _sphereScale;
+        [SerializeField] private Vector2 _sphereOffset;
         
         public Bounds SphereBounds { get; private set; }
         private Vector3 _sphereCenter;
         private float _sphereRadius;
         private void Start()
         {
-            _sphereCenter = transform.position;
-            _sphereRadius = transform.localScale.x * _sphereScale;
+            CalculateColliderTransform();
             SphereBounds = new Bounds(_sphereCenter, new Vector3(_sphereRadius, _sphereRadius, _sphereRadius));  
         }
 
@@ -28,10 +28,15 @@ namespace Main.Scripts.Logic.Blocks
             SphereBounds = sphereBounds;
         }
 
+        private void CalculateColliderTransform()
+        {
+            _sphereCenter = transform.position + (Vector3)_sphereOffset;
+            _sphereRadius = transform.localScale.x * _sphereScale;
+        }
+
         private void OnDrawGizmos()
         {
-            _sphereCenter = transform.position;
-            _sphereRadius = transform.localScale.x * _sphereScale;
+            CalculateColliderTransform();
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(_sphereCenter, _sphereRadius / 2f);
         }

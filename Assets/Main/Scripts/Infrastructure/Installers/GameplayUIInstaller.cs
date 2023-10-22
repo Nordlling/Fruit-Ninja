@@ -1,6 +1,7 @@
 using Main.Scripts.Infrastructure.GameplayStates;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services;
+using Main.Scripts.Infrastructure.Services.ButtonContainer;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Infrastructure.States;
@@ -30,7 +31,11 @@ namespace Main.Scripts.Infrastructure.Installers
         
         private void InitGameplayUI(ServiceContainer serviceContainer)
         {
-            _gameplayUI.Construct(serviceContainer.Get<IGameplayStateMachine>());
+            _gameplayUI.Construct
+            (
+                serviceContainer.Get<IGameplayStateMachine>(), 
+                serviceContainer.Get<IButtonContainerService>()
+            );
 
             serviceContainer.Get<IGameplayStateMachine>().AddGameplayStatable(_gameplayUI);
         }
@@ -52,17 +57,23 @@ namespace Main.Scripts.Infrastructure.Installers
         
         private void InitGameOverUI(ServiceContainer serviceContainer)
         {
-            _uiGameOverView.Construct(
+            _uiGameOverView.Construct
+            (
                 serviceContainer.Get<IGameStateMachine>(),
                 serviceContainer.Get<IGameplayStateMachine>(),
-                serviceContainer.Get<IScoreService>());
+                serviceContainer.Get<IScoreService>(),
+                serviceContainer.Get<IButtonContainerService>()
+            );
         }
-        
+
         private void InitPauseUI(ServiceContainer serviceContainer)
         {
-            _uiPauseView.Construct(
+            _uiPauseView.Construct
+            (
                 serviceContainer.Get<IGameStateMachine>(),
-                serviceContainer.Get<IGameplayStateMachine>());
+                serviceContainer.Get<IGameplayStateMachine>(),
+                serviceContainer.Get<IButtonContainerService>()
+            );
         }
     }
 }

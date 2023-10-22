@@ -1,3 +1,4 @@
+using Main.Scripts.Infrastructure.Services.ButtonContainer;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Infrastructure.States;
 using Main.Scripts.UI.Loading;
@@ -18,11 +19,14 @@ namespace Main.Scripts.UI.Menu
         
         private IGameStateMachine _stateMachine;
         private IScoreService _scoreService;
+        private IButtonContainerService _buttonContainerService;
 
-        public void Construct(IGameStateMachine stateMachine, IScoreService scoreService)
+        public void Construct(IGameStateMachine stateMachine, IScoreService scoreService, IButtonContainerService buttonContainerService)
         {
             _stateMachine = stateMachine;
             _scoreService = scoreService;
+            _buttonContainerService = buttonContainerService;
+            AddButtonsToContainer();
         }
 
         private void OnEnable()
@@ -32,15 +36,27 @@ namespace Main.Scripts.UI.Menu
             _highScoreText.text = _scoreService.HighScore.ToString();
         }
 
+        private void En()
+        {
+            _startButton.interactable = false;
+        }
+
         private void OnDisable()
         {
             _startButton.onClick.RemoveListener(StartGame);
             _exitButton.onClick.RemoveListener(ExitGame);
         }
 
+        private void AddButtonsToContainer()
+        {
+            _buttonContainerService.AddButton(_startButton);
+            _buttonContainerService.AddButton(_exitButton);
+        }
+
         private void StartGame()
         {
             _curtainView.gameObject.SetActive(true);
+            _buttonContainerService.DisableAllButtons();
             _curtainView.FadeInBackground(() => _stateMachine.Enter<LoadSceneState, string>(_transferSceneName));
         }
 

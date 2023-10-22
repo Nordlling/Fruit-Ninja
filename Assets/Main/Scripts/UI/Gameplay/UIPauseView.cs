@@ -1,5 +1,6 @@
 using System;
 using Main.Scripts.Infrastructure.GameplayStates;
+using Main.Scripts.Infrastructure.Services.ButtonContainer;
 using Main.Scripts.Infrastructure.States;
 using Main.Scripts.UI.Loading;
 using UnityEngine;
@@ -19,16 +20,19 @@ namespace Main.Scripts.UI.Gameplay
 
         private IGameStateMachine _stateMachine;
         private IGameplayStateMachine _gameplayStateMachine;
-        private bool isTouched;
+        private IButtonContainerService _buttonContainerService;
         private Action OnFinished;
 
         public void Construct(
             IGameStateMachine stateMachine, 
-            IGameplayStateMachine gameplayStateMachine)
+            IGameplayStateMachine gameplayStateMachine, 
+            IButtonContainerService buttonContainerService)
         {
             _stateMachine = stateMachine;
             _gameplayStateMachine = gameplayStateMachine;
+            _buttonContainerService = buttonContainerService;
             
+            AddButtonsToContainer();
             OnFinished += ChangeToPlayState;
         }
 
@@ -45,6 +49,12 @@ namespace Main.Scripts.UI.Gameplay
             _continueButton.onClick.RemoveListener(ContinueGame);
             _menuButton.onClick.RemoveListener(ExitToMenu);
         }
+        
+        private void AddButtonsToContainer()
+        {
+            _buttonContainerService.AddButton(_continueButton);
+            _buttonContainerService.AddButton(_menuButton);
+        }
 
         private void ContinueGame()
         {
@@ -59,13 +69,6 @@ namespace Main.Scripts.UI.Gameplay
 
         private void ExitToMenu()
         {
-            if (isTouched)
-            {
-                return;
-            }
-            
-            isTouched = true;
-
             _curtainView.gameObject.SetActive(true);
             _curtainView.FadeInBackground(() => _stateMachine.Enter<LoadSceneState, string>(_menuSceneName));
         }

@@ -1,4 +1,5 @@
 using Main.Scripts.Infrastructure.Services;
+using Main.Scripts.Infrastructure.Services.ButtonContainer;
 using Main.Scripts.Infrastructure.Services.SaveLoad;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Infrastructure.States;
@@ -25,7 +26,7 @@ namespace Main.Scripts.Infrastructure.Installers
 
         private void InitMenuWindow(ServiceContainer serviceContainer)
         {
-            _menuWindow.Construct(serviceContainer.Get<IGameStateMachine>(), serviceContainer.Get<IScoreService>());
+            _menuWindow.Construct(serviceContainer.Get<IGameStateMachine>(), serviceContainer.Get<IScoreService>(), serviceContainer.Get<IButtonContainerService>());
         }
     }
 }

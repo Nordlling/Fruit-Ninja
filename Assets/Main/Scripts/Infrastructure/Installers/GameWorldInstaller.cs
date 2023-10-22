@@ -24,9 +24,9 @@ namespace Main.Scripts.Infrastructure.Installers
     {
         [Header("Configs")]
         [SerializeField] private DifficultyConfig _difficultyConfig;
-        [SerializeField] private BlockConfig _blockConfig;
         [SerializeField] private HealthConfig _healthConfig;
         [SerializeField] private ScoreConfig _scoreConfig;
+        [SerializeField] private BlockTypesConfig _blockTypesConfig;
         [SerializeField] private WordEndingsConfig _wordEndingsConfig;
         
         [Header("Prefabs")]

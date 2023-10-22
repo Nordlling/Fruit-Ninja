@@ -10,24 +10,20 @@ namespace Main.Scripts.Logic.Blocks
 {
     public class Slicer : MonoBehaviour, ISlicer
     {
+        [SerializeField] private SpriteRenderer _spriteRenderer;
+        [SerializeField] private ScoreLabel _scoreLabel;
         [SerializeField] private float _departureSpeed;
         [SerializeField] private float _rectPieceDirectionAngle;
-        
-        [SerializeField] private BlockPiece _blockPiecePrefab;
-        [SerializeField] private SpriteRenderer _spriteRenderer;
-        [SerializeField] private Splash _splashPrefab;
-        
-        [SerializeField] private ScoreLabel _scoreLabel;
-        
-        private IGameFactory _gameFactory;
+
+        private IBlockFactory _blockFactory;
         private ILabelFactory _labelFactory;
         private IScoreService _scoreService;
         private IComboService _comboService;
         private Sprite _splashSprite;
 
-        public void Construct(IGameFactory gameFactory, ILabelFactory labelFactory, IScoreService scoreService, IComboService comboService, Sprite splashSprite)
+        public void Construct(IBlockFactory blockFactory, ILabelFactory labelFactory, IScoreService scoreService, IComboService comboService, Sprite splashSprite)
         {
-            _gameFactory = gameFactory;
+            _blockFactory = blockFactory;
             _labelFactory = labelFactory;
             _scoreService = scoreService;
             _comboService = comboService;
@@ -80,7 +76,7 @@ namespace Main.Scripts.Logic.Blocks
                 rectPart,
                 pivot);
 
-            BlockPiece blockPiece = _gameFactory.CreateBlockPiece(_blockPiecePrefab, transform.position);
+            BlockPiece blockPiece = _blockFactory.CreateBlockPiece(transform.position);
             blockPiece.transform.rotation = transform.rotation;
             blockPiece.transform.localScale = transform.localScale;
             blockPiece.BlockMovement.Construct(rectPartDirection, _departureSpeed, blockPiece.TimeProvider);
@@ -89,7 +85,7 @@ namespace Main.Scripts.Logic.Blocks
 
         private void SpawnSplash()
         {
-            Splash splash = _gameFactory.CreateSplash(_splashPrefab, transform.position);
+            Splash splash = _blockFactory.CreateSplash(transform.position);
             splash.SpriteRenderer.sprite = _splashSprite;
         }
     }

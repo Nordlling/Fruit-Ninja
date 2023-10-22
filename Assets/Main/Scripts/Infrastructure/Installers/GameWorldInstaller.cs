@@ -4,6 +4,7 @@ using Main.Scripts.Infrastructure.GameplayStates;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
+using Main.Scripts.Infrastructure.Services.ButtonContainer;
 using Main.Scripts.Infrastructure.Services.Collision;
 using Main.Scripts.Infrastructure.Services.Combo;
 using Main.Scripts.Infrastructure.Services.Difficulty;
@@ -13,6 +14,7 @@ using Main.Scripts.Infrastructure.Services.SaveLoad;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Logic.Combo;
 using Main.Scripts.Logic.Spawn;
+using Main.Scripts.Logic.Splashing;
 using Main.Scripts.Logic.Swipe;
 using UnityEngine;
 
@@ -20,16 +22,25 @@ namespace Main.Scripts.Infrastructure.Installers
 {
     public class GameWorldInstaller : MonoInstaller
     {
+        [Header("Configs")]
         [SerializeField] private DifficultyConfig _difficultyConfig;
         [SerializeField] private BlockConfig _blockConfig;
         [SerializeField] private HealthConfig _healthConfig;
         [SerializeField] private ScoreConfig _scoreConfig;
-        [SerializeField] private LivingZone _livingZone;
-        [SerializeField] private Spawner _spawner;
-        [SerializeField] private Camera _camera;
+        [SerializeField] private BlockPrefabsConfig _blockPrefabsConfig;
+        
+        [Header("Prefabs")]
         [SerializeField] private Swiper _swiperPrefab;
         [SerializeField] private CollisionService _collisionServicePrefab;
         [SerializeField] private ComboLabel _comboLabelPrefab;
+        [SerializeField] private Splash _splashPrefab;
+        [SerializeField] private SpawnArea _spawnAreaPrefab;
+        
+        [Header("Scene Objects")]
+        [SerializeField] private Camera _camera;
+        [SerializeField] private LivingZone _livingZone;
+        [SerializeField] private Spawner _spawner;
+
 
         public override void InstallBindings(ServiceContainer serviceContainer)
         {
@@ -44,8 +55,9 @@ namespace Main.Scripts.Infrastructure.Installers
             RegisterCollisionService(serviceContainer);
             RegisterHealthService(serviceContainer);
             RegisterLabelFactory(serviceContainer);
+            RegisterSpawnFactory(serviceContainer);
             RegisterComboService(serviceContainer);
-            RegisterGameFactory(serviceContainer);
+            RegisterBlockFactory(serviceContainer);
             RegisterSpawner(serviceContainer);
         }
 
@@ -140,14 +152,21 @@ namespace Main.Scripts.Infrastructure.Installers
             
             serviceContainer.Get<IGameplayStateMachine>().AddGameplayStatable(healthService);
         }
-        
+
+        private void RegisterSpawnFactory(ServiceContainer serviceContainer)
+        {
+            SpawnFactory spawnFactory = new SpawnFactory(_spawnAreaPrefab);
+            serviceContainer.SetService<ISpawnFactory, SpawnFactory>(spawnFactory);
+        }
+
         private void RegisterLabelFactory(ServiceContainer serviceContainer)
         {
-            serviceContainer.SetService<ILabelFactory, LabelFactory>(
-                new LabelFactory(
+            LabelFactory labelFactory = new LabelFactory
+                (
                     serviceContainer.Get<ITimeProvider>(),
-                    serviceContainer.Get<LivingZone>())
-            );
+                    serviceContainer.Get<LivingZone>()
+                );
+            serviceContainer.SetService<ILabelFactory, LabelFactory>(labelFactory);
         }
 
         private void RegisterComboService(ServiceContainer serviceContainer)
@@ -161,10 +180,10 @@ namespace Main.Scripts.Infrastructure.Installers
             serviceContainer.SetService<IComboService, ComboService>(comboService);
         }
 
-        private void RegisterGameFactory(ServiceContainer serviceContainer)
+        private void RegisterBlockFactory(ServiceContainer serviceContainer)
         {
-            serviceContainer.SetService<IGameFactory, GameFactory>(
-                new GameFactory(
+            serviceContainer.SetService<IBlockFactory, BlockFactory>(
+                new BlockFactory(
                     serviceContainer.Get<IBlockContainerService>(),
                     serviceContainer.Get<LivingZone>(), 
                     serviceContainer.Get<IHealthService>(),
@@ -172,16 +191,22 @@ namespace Main.Scripts.Infrastructure.Installers
                     serviceContainer.Get<IComboService>(),
                     serviceContainer.Get<ITimeProvider>(),
                     serviceContainer.Get<ILabelFactory>(),
-                    _blockConfig)
+                    _blockConfig,
+                    _blockPrefabsConfig,
+                    _splashPrefab
+                    )
                 );
         }
 
         private void RegisterSpawner(ServiceContainer serviceContainer)
         {
-            _spawner.Construct(
+            _spawner.Construct
+            (
                 serviceContainer.Get<IDifficultyService>(),
-                serviceContainer.Get<IGameFactory>(),
-                serviceContainer.Get<ITimeProvider>());
+                serviceContainer.Get<IBlockFactory>(),
+                serviceContainer.Get<ISpawnFactory>(),
+                serviceContainer.Get<ITimeProvider>()
+            );
             
             serviceContainer.SetServiceSelf(_spawner);
             

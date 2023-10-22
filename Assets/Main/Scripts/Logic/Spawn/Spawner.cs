@@ -5,7 +5,6 @@ using Main.Scripts.Infrastructure.Factory;
 using Main.Scripts.Infrastructure.GameplayStates;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services.Difficulty;
-using Main.Scripts.Logic.Blocks;
 using Main.Scripts.Utils.RandomUtils;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -16,7 +15,6 @@ namespace Main.Scripts.Logic.Spawn
     {
         public SpawnInfo[] SpawnAreas => _spawnAreas;
         
-        [SerializeField] private Block _blockPrefab;
         [SerializeField] private SpawnArea _spawnerAreaPrefab;
 
         [SerializeField] private float _minInterval;
@@ -24,21 +22,25 @@ namespace Main.Scripts.Logic.Spawn
         [SerializeField] private SpawnInfo[] _spawnAreas;
 
         private IDifficultyService _difficultyService;
-        private IGameFactory _gameFactory;
+        private IBlockFactory _blockFactory;
+        private ITimeProvider _timeProvider;
+        private ISpawnFactory _spawnFactory;
 
         private float _leftTime;
         private float[] _spawnWeights;
 
         private bool _spawnPackBusy;
         private bool _stop;
-        private ITimeProvider _timeProvider;
+       
 
         public void Construct(IDifficultyService difficultyService, 
-            IGameFactory gameFactory,
+            IBlockFactory blockFactory,
+            ISpawnFactory spawnFactory,
             ITimeProvider timeProvider)
         {
             _difficultyService = difficultyService;
-            _gameFactory = gameFactory;
+            _blockFactory = blockFactory;
+            _spawnFactory = spawnFactory;
             _timeProvider = timeProvider;
         }
 
@@ -113,9 +115,8 @@ namespace Main.Scripts.Logic.Spawn
         {
             foreach (SpawnInfo spawnAreaInfo in _spawnAreas)
             {
-                SpawnArea spawnArea = Instantiate(_spawnerAreaPrefab);
-                spawnAreaInfo.spawnerAreaInfo._blockPrefab = _blockPrefab;
-                spawnArea.Construct(spawnAreaInfo.spawnerAreaInfo, _gameFactory);
+                SpawnArea spawnArea = _spawnFactory.CreateSpawnArea();
+                spawnArea.Construct(spawnAreaInfo.spawnerAreaInfo, _blockFactory);
                 spawnAreaInfo.SpawnArea = spawnArea;
             }
         }

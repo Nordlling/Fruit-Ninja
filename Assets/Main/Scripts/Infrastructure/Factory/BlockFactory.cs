@@ -13,7 +13,7 @@ using Random = UnityEngine.Random;
 
 namespace Main.Scripts.Infrastructure.Factory
 {
-    public class GameFactory : IGameFactory
+    public class BlockFactory : IBlockFactory
     {
         private readonly IBlockContainerService _blockContainerService;
         private readonly LivingZone _livingZone;
@@ -23,8 +23,10 @@ namespace Main.Scripts.Infrastructure.Factory
         private readonly ITimeProvider _timeProvider;
         private readonly ILabelFactory _labelFactory;
         private readonly BlockConfig _blockConfig;
+        private readonly BlockPrefabsConfig _blockPrefabsConfig;
+        private readonly Splash _splashPrefab;
 
-        public GameFactory(
+        public BlockFactory(
             IBlockContainerService blockContainerService,
             LivingZone livingZone, 
             IHealthService healthService, 
@@ -32,7 +34,9 @@ namespace Main.Scripts.Infrastructure.Factory
             IComboService comboService,
             ITimeProvider timeProvider,
             ILabelFactory labelFactory,
-            BlockConfig blockConfig
+            BlockConfig blockConfig,
+            BlockPrefabsConfig blockPrefabsConfig,
+            Splash splashPrefab
         )
         {
             _blockContainerService = blockContainerService;
@@ -41,13 +45,15 @@ namespace Main.Scripts.Infrastructure.Factory
             _scoreService = scoreService;
             _comboService = comboService;
             _timeProvider = timeProvider;
-            _blockConfig = blockConfig;
             _labelFactory = labelFactory;
+            _blockConfig = blockConfig;
+            _blockPrefabsConfig = blockPrefabsConfig;
+            _splashPrefab = splashPrefab;
         }
 
-        public Block CreateBlock(Block blockPrefab, Vector2 position)
+        public Block CreateBlock(Vector2 position)
         {
-            Block block = Object.Instantiate(blockPrefab, position, Quaternion.identity);
+            Block block = Object.Instantiate(_blockPrefabsConfig.BlockPrefab, position, Quaternion.identity);
             block.Construct(_blockContainerService, _timeProvider);
             
             int randomIndex = Random.Range(0, _blockConfig.BlockInfos.Length);
@@ -59,18 +65,18 @@ namespace Main.Scripts.Infrastructure.Factory
             return block;
         }
         
-        public BlockPiece CreateBlockPiece(BlockPiece blockPrefab, Vector2 position)
+        public BlockPiece CreateBlockPiece(Vector2 position)
         {
-            BlockPiece block = Object.Instantiate(blockPrefab, position, Quaternion.identity);
+            BlockPiece block = Object.Instantiate(_blockPrefabsConfig.BlockPiecePrefab, position, Quaternion.identity);
             block.Construct(_timeProvider);
             block.BoundsChecker.Construct(_livingZone, _healthService, false);
             block.BlockAnimation.Construct(_timeProvider);
             return block;
         }
         
-        public Splash CreateSplash(Splash splashPrefab, Vector2 position)
+        public Splash CreateSplash(Vector2 position)
         {
-            Splash splash = Object.Instantiate(splashPrefab, position, Quaternion.identity);
+            Splash splash = Object.Instantiate(_splashPrefab, position, Quaternion.identity);
             splash.Construct(_timeProvider);
             return splash;
         }

@@ -1,5 +1,4 @@
 using System;
-using Main.Scripts.Logic.Blocks;
 using UnityEngine;
 
 namespace Main.Scripts.Logic.Spawn
@@ -25,8 +24,6 @@ namespace Main.Scripts.Logic.Spawn
         public float _minSpeed;
         public float _maxSpeed;
         
-        [HideInInspector]
-        public Block _blockPrefab;
         [HideInInspector]
         public Vector2 _firstPoint;
         [HideInInspector]

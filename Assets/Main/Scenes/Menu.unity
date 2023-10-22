@@ -675,6 +675,34 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1898665592288595068, guid: ef7ceb8dfeee0a94d95c9c95da0b8a01, type: 3}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1898665592549247848, guid: ef7ceb8dfeee0a94d95c9c95da0b8a01, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1898665592549247848, guid: ef7ceb8dfeee0a94d95c9c95da0b8a01, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1898665592549247848, guid: ef7ceb8dfeee0a94d95c9c95da0b8a01, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1898665592549247848, guid: ef7ceb8dfeee0a94d95c9c95da0b8a01, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: aafa65ae4027398458516ac03e4a3d10, type: 2}
+    - target: {fileID: 1898665592549247848, guid: ef7ceb8dfeee0a94d95c9c95da0b8a01, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 1898665592549247848, guid: ef7ceb8dfeee0a94d95c9c95da0b8a01, type: 3}
+      propertyPath: m_enableVertexGradient
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef7ceb8dfeee0a94d95c9c95da0b8a01, type: 3}
 --- !u!114 &8694810403537219085 stripped

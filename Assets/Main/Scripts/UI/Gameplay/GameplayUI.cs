@@ -1,4 +1,5 @@
 using Main.Scripts.Infrastructure.GameplayStates;
+using Main.Scripts.Infrastructure.Services.ButtonContainer;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,11 +12,14 @@ namespace Main.Scripts.UI.Gameplay
         [SerializeField] private Button _pauseButton;
 
         private IGameplayStateMachine _gameplayStateMachine;
+        private IButtonContainerService _buttonContainerService;
         private bool _canPause = true;
 
-        public void Construct(IGameplayStateMachine gameplayStateMachine)
+        public void Construct(IGameplayStateMachine gameplayStateMachine, IButtonContainerService buttonContainerService)
         {
             _gameplayStateMachine = gameplayStateMachine;
+            _buttonContainerService = buttonContainerService;
+            AddButtonsToContainer();
         }
 
         public void GameOver()
@@ -35,13 +39,17 @@ namespace Main.Scripts.UI.Gameplay
 
         private void OnEnable()
         {
-            
             _pauseButton.onClick.AddListener(PauseGame);
         }
 
         private void OnDisable()
         {
             _pauseButton.onClick.RemoveListener(PauseGame);
+        }
+
+        private void AddButtonsToContainer()
+        {
+            _buttonContainerService.AddButton(_pauseButton);
         }
 
         private void PauseGame()

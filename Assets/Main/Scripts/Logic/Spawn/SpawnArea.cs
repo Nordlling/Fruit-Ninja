@@ -17,12 +17,12 @@ namespace Main.Scripts.Logic.Spawn
         private Vector2 _newPointPosition;
 
         private ICollisionService _collisionService;
-        private IGameFactory _gameFactory;
+        private IBlockFactory _blockFactory;
         private ITimeProvider _timeProvider;
 
-        public void Construct(SpawnerAreaInfo spawnerInfo, IGameFactory gameFactory)
+        public void Construct(SpawnerAreaInfo spawnerInfo, IBlockFactory blockFactory)
         {
-            _gameFactory = gameFactory;
+            _blockFactory = blockFactory;
             _spawnerInfo = spawnerInfo;
         }
 
@@ -33,7 +33,7 @@ namespace Main.Scripts.Logic.Spawn
             OffsetPoint(direction);
             float speed = Random.Range(_spawnerInfo._minSpeed, _spawnerInfo. _maxSpeed);
             
-            Block block = _gameFactory.CreateBlock(_spawnerInfo._blockPrefab, _newPointPosition);
+            Block block = _blockFactory.CreateBlock(_newPointPosition);
             block.BlockMovement.Construct(direction, speed, block.TimeProvider);
         }
 

@@ -9,7 +9,7 @@ namespace Main.Scripts.UI.Gameplay
 
         private void InitScore()
         {
-            _scoreText.text = _scoreService.HighScore.ToString();
+            _scoreValue.text = _scoreService.HighScore.ToString();
         }
 
         private void OnEnable()

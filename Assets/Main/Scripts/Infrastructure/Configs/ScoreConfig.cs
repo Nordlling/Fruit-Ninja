@@ -6,9 +6,6 @@ namespace Main.Scripts.Infrastructure.Configs
     public class ScoreConfig : ScriptableObject
     {
         public int BasicScoreValue = 50;
-        
-        [Range(0, 10)] 
-        public int ComboMultiplier;
 
         public float MaxIntervalForCombo;
 

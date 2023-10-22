@@ -1,4 +1,3 @@
-using DG.Tweening;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services.Score;
 using TMPro;
@@ -8,39 +7,22 @@ namespace Main.Scripts.UI.Gameplay
 {
     public class UIScoreView : MonoBehaviour
     {
-        [SerializeField] protected TextMeshProUGUI _scoreText;
-        [SerializeField] protected float _scoreAnimationDuration;
+        [SerializeField] protected ScoreAnimation _scoreAnimation;
+        [SerializeField] protected TextMeshProUGUI _scoreValue;
         
         protected IScoreService _scoreService;
-        private ITimeProvider _timeProvider;
         
         private int _currentScore;
-        private Coroutine _currentCoroutine;
-        private Tweener _currentTweener;
 
         public void Construct(IScoreService scoreService, ITimeProvider timeProvider)
         {
             _scoreService = scoreService;
-            _timeProvider = timeProvider;
+            _scoreAnimation.Construct(timeProvider);
         }
 
         private void Start()
         {
             InitScore();
-        }
-
-        private void Update()
-        {
-            if (_currentTweener != null)
-            {
-                _currentTweener.timeScale = _timeProvider.GetTimeScale();
-            }
-        }
-
-        private void InitScore()
-        {
-            _currentScore = 0;
-            _scoreText.text = _currentScore.ToString();
         }
 
         private void OnEnable()
@@ -55,20 +37,15 @@ namespace Main.Scripts.UI.Gameplay
             _scoreService.OnReset -= InitScore;
         }
 
+        private void InitScore()
+        {
+            _currentScore = 0;
+            _scoreValue.text = _currentScore.ToString();
+        }
+
         protected void AddScore(int newScore)
         {
-            _currentTweener?.Kill();
-            _scoreText.text = _currentScore.ToString();
-            _currentTweener = AnimateScoreChange(_currentScore, newScore);
-            _currentScore = newScore;
-        }
-        
-        private Tweener AnimateScoreChange(int oldScore, int newScore)
-        {
-            return DOTween
-                .To(() => oldScore, x => oldScore = x, newScore, _scoreAnimationDuration)
-                .OnUpdate(() => _scoreText.text = oldScore.ToString())
-                .Play();
+            _scoreAnimation.AddScoreAnimation(newScore);
         }
     }
 }

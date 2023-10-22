@@ -20,7 +20,7 @@ namespace Main.Scripts.Infrastructure.GameplayStates
             {
                 restartable.Restart();
             }
-            StateMachine.Enter<PlayState>();
+            StateMachine.Enter<PrepareState>();
         }
 
         public void Exit()

@@ -245,7 +245,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1254374629747582066}
-  - component: {fileID: 8269617706673289826}
+  - component: {fileID: 4165134587965873310}
   m_Layer: 0
   m_Name: BombLabel
   m_TagString: Untagged
@@ -269,7 +269,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8269617706673289826
+--- !u!114 &4165134587965873310
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -278,11 +278,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7111102281295386791}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 497d818580c943f48f3d697606cc0874, type: 3}
+  m_Script: {fileID: 11500000, guid: 535bbc20b9fd42f4afc6c463529c43ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scoreValue: {fileID: 0}
-  _timeBeforeAnimation: 0.2
-  _animationDuration: 2
-  _animationFadeSpeed: 2
-  _animationMoveOffset: 3
+  _explosionText: {fileID: 6991028512786140937}
+  _timeBeforeAnimation: 1
+  _animationDuration: 1
+  _animationFadeSpeed: 1
+  _animationMoveOffset: 2

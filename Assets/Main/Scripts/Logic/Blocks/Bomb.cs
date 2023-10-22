@@ -1,16 +1,17 @@
 ﻿using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Main.Scripts.Logic.Blocks
 {
-    public class Block : BlockPiece
+    public class Bomb : BlockPiece
     {
         public BlockCollider BlockCollider => _blockCollider;
-        public BlockSlicer BlockSlicer => blockSlicer;
+        public BombSlicer BombSlicer => bombSlicer;
         
         [SerializeField] private BlockCollider _blockCollider;
-        [SerializeField] private BlockSlicer blockSlicer;
+        [SerializeField] private BombSlicer bombSlicer;
         
         private IBlockContainerService _blockContainerService;
         
@@ -22,7 +23,7 @@ namespace Main.Scripts.Logic.Blocks
 
         private void OnDestroy()
         {
-            _blockContainerService?.RemoveBlock(this);
+            _blockContainerService?.RemoveBomb(this);
         }
     }
 }

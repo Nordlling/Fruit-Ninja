@@ -100,7 +100,14 @@ namespace Main.Scripts.Logic.Spawn
             {
                 float elapsedTime = 0f;
                 int randomIndex = GenerateRandomIndex();
-                _spawnAreas[randomIndex].SpawnArea.SpawnBlock();
+                
+                if (Random.Range(0, 3) == 2)
+                {
+                    _spawnAreas[randomIndex].SpawnArea.SpawnBomb();
+                } else
+                {
+                    _spawnAreas[randomIndex].SpawnArea.SpawnBlock();
+                }
                 
                 while (elapsedTime < spawnFrequency)
                 {

@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections;
-using DG.Tweening;
+﻿using DG.Tweening;
 using Main.Scripts.Infrastructure.Provides;
 using TMPro;
 using UnityEngine;
 
-namespace Main.Scripts.Logic.Score
+namespace Main.Scripts.Logic.Label
 {
-    public class ScoreLabel : MonoBehaviour
+    public class ExplosionLabel : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI _scoreValue;
+        [SerializeField] private TextMeshProUGUI _explosionText;
         [SerializeField] private float _timeBeforeAnimation;
         [SerializeField] private float _animationDuration;
         [SerializeField] private float _animationFadeSpeed;
@@ -18,9 +16,8 @@ namespace Main.Scripts.Logic.Score
         private ITimeProvider _timeProvider;
         private Sequence _sequence;
 
-        public void Construct(string value, ITimeProvider timeProvider)
+        public void Construct(ITimeProvider timeProvider)
         {
-            _scoreValue.text = value;
             _timeProvider = timeProvider;
         }
         private void Start()
@@ -40,7 +37,7 @@ namespace Main.Scripts.Logic.Score
                 .Append(
                     transform.DOMoveY(transform.position.y + _animationMoveOffset, _animationDuration))
                 .Join(
-                    DOTween.To(() => _scoreValue.alpha, x => _scoreValue.alpha = x, 0f, _animationFadeSpeed)
+                    DOTween.To(() => _explosionText.alpha, x => _explosionText.alpha = x, 0f, _animationFadeSpeed)
                         .OnComplete(() => Destroy(gameObject)));
 
             _sequence.Play();

@@ -56,6 +56,7 @@ namespace Main.Scripts.Infrastructure.Installers
             RegisterHealthService(serviceContainer);
             RegisterLabelFactory(serviceContainer);
             RegisterSpawnFactory(serviceContainer);
+            RegisterSliceEffectFactory(serviceContainer);
             RegisterComboService(serviceContainer);
             RegisterBlockFactory(serviceContainer);
             RegisterSpawner(serviceContainer);
@@ -173,6 +174,17 @@ namespace Main.Scripts.Infrastructure.Installers
                 );
             serviceContainer.SetService<ILabelFactory, LabelFactory>(labelFactory);
         }
+        
+        private void RegisterSliceEffectFactory(ServiceContainer serviceContainer)
+        {
+            SliceEffectFactory sliceEffectFactory = new SliceEffectFactory(
+                serviceContainer.Get<ITimeProvider>(),
+                _blockTypesConfig,
+                _splashPrefab
+            );
+            
+            serviceContainer.SetService<ISliceEffectFactory, SliceEffectFactory>(sliceEffectFactory);
+        }
 
         private void RegisterComboService(ServiceContainer serviceContainer)
         {
@@ -187,20 +199,19 @@ namespace Main.Scripts.Infrastructure.Installers
 
         private void RegisterBlockFactory(ServiceContainer serviceContainer)
         {
-            serviceContainer.SetService<IBlockFactory, BlockFactory>(
-                new BlockFactory(
-                    serviceContainer.Get<IBlockContainerService>(),
-                    serviceContainer.Get<LivingZone>(), 
-                    serviceContainer.Get<IHealthService>(),
-                    serviceContainer.Get<IScoreService>(),
-                    serviceContainer.Get<IComboService>(),
-                    serviceContainer.Get<ITimeProvider>(),
-                    serviceContainer.Get<ILabelFactory>(),
-                    _blockConfig,
-                    _blockPrefabsConfig,
-                    _splashPrefab
-                    )
-                );
+            BlockFactory blockFactory = new BlockFactory(
+                serviceContainer.Get<IBlockContainerService>(),
+                serviceContainer.Get<LivingZone>(),
+                serviceContainer.Get<IHealthService>(),
+                serviceContainer.Get<IScoreService>(),
+                serviceContainer.Get<IComboService>(),
+                serviceContainer.Get<ITimeProvider>(),
+                serviceContainer.Get<ILabelFactory>(),
+                serviceContainer.Get<ISliceEffectFactory>(),
+                _blockTypesConfig
+            );
+            
+            serviceContainer.SetService<IBlockFactory, BlockFactory>(blockFactory);
         }
 
         private void RegisterSpawner(ServiceContainer serviceContainer)

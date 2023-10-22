@@ -5,7 +5,7 @@ using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services.Combo;
 using Main.Scripts.Infrastructure.Services.LivingZone;
 using Main.Scripts.Logic.Combo;
-using Main.Scripts.Logic.Score;
+using Main.Scripts.Logic.Label;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -37,6 +37,13 @@ namespace Main.Scripts.Infrastructure.Factory
             Dictionary<int, string> fruitDictionary = _wordEndingsConfig.FruitDictionary.ToDictionary(key => key.Number, value => value.Word);
             comboLabel.Construct(comboInfo.ComboCount, _timeProvider, _livingZone, fruitDictionary);
             return comboLabel;
+        }
+
+        public ExplosionLabel CreateExplosionLabel(ExplosionLabel explosionLabelPrefab, Vector2 position)
+        {
+            ExplosionLabel explosionLabel = Object.Instantiate(explosionLabelPrefab, position, Quaternion.identity);
+            explosionLabel.Construct(_timeProvider);
+            return explosionLabel;
         }
 
         public void Cleanup()

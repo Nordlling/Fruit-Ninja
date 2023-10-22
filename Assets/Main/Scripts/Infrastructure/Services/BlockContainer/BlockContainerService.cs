@@ -8,8 +8,10 @@ namespace Main.Scripts.Infrastructure.Services.BlockContainer
     {
         public List<Block> Blocks { get; private set; } = new();
 
+        public List<Bomb> Bombs { get; private set; } = new();
+
         private readonly IGameplayStateMachine _gameplayStateMachine;
-        
+
         private bool _lose;
 
         public BlockContainerService(IGameplayStateMachine gameplayStateMachine)
@@ -21,10 +23,21 @@ namespace Main.Scripts.Infrastructure.Services.BlockContainer
         {
             Blocks.Add(blockCollider);
         }
-        
+
         public void RemoveBlock(Block blockCollider)
         {
             Blocks.Remove(blockCollider);
+            CheckBocksFell();
+        }
+
+        public void AddBomb(Bomb bombCollider)
+        {
+            Bombs.Add(bombCollider);
+        }
+
+        public void RemoveBomb(Bomb bombCollider)
+        {
+            Bombs.Remove(bombCollider);
             CheckBocksFell();
         }
 
@@ -35,7 +48,7 @@ namespace Main.Scripts.Infrastructure.Services.BlockContainer
         
         private void CheckBocksFell()
         {
-            if (_lose && Blocks.Count == 0)
+            if (_lose && Blocks.Count == 0 && Bombs.Count == 0)
             {
                 _gameplayStateMachine.Enter<GameOverState>();
                 _lose = false;

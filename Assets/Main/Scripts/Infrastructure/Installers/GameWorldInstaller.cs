@@ -27,7 +27,7 @@ namespace Main.Scripts.Infrastructure.Installers
         [SerializeField] private BlockConfig _blockConfig;
         [SerializeField] private HealthConfig _healthConfig;
         [SerializeField] private ScoreConfig _scoreConfig;
-        [SerializeField] private BlockPrefabsConfig _blockPrefabsConfig;
+        [SerializeField] private WordEndingsConfig _wordEndingsConfig;
         
         [Header("Prefabs")]
         [SerializeField] private Swiper _swiperPrefab;
@@ -168,7 +168,8 @@ namespace Main.Scripts.Infrastructure.Installers
             LabelFactory labelFactory = new LabelFactory
                 (
                     serviceContainer.Get<ITimeProvider>(),
-                    serviceContainer.Get<LivingZone>()
+                    serviceContainer.Get<LivingZone>(),
+                    _wordEndingsConfig
                 );
             serviceContainer.SetService<ILabelFactory, LabelFactory>(labelFactory);
         }

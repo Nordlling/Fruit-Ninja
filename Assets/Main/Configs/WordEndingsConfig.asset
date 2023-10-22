@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50d757a2aa174de6b20427efea58fac1, type: 3}
+  m_Name: WordEndingsConfig
+  m_EditorClassIdentifier: 
+  FruitDictionary:
+  - Number: 0
+    Word: "\u0444\u0440\u0443\u043A\u0442\u043E\u0432"
+  - Number: 1
+    Word: "\u0444\u0440\u0443\u043A\u0442"
+  - Number: 2
+    Word: "\u0444\u0440\u0443\u043A\u0442\u0430"
+  - Number: 3
+    Word: "\u0444\u0440\u0443\u043A\u0442\u0430"
+  - Number: 4
+    Word: "\u0444\u0440\u0443\u043A\u0442\u0430"
+  - Number: 5
+    Word: "\u0444\u0440\u0443\u043A\u0442\u043E\u0432"
+  - Number: 6
+    Word: "\u0444\u0440\u0443\u043A\u0442\u043E\u0432"
+  - Number: 7
+    Word: "\u0444\u0440\u0443\u043A\u0442\u043E\u0432"
+  - Number: 8
+    Word: "\u0444\u0440\u0443\u043A\u0442\u043E\u0432"
+  - Number: 9
+    Word: "\u0444\u0440\u0443\u043A\u0442\u043E\u0432"
+  - Number: 10
+    Word: "\u0444\u0440\u0443\u043A\u0442\u043E\u0432"

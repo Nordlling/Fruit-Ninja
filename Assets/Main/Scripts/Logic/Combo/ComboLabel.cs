@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using DG.Tweening;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services.LivingZone;
@@ -13,8 +13,6 @@ namespace Main.Scripts.Logic.Combo
         [SerializeField] private TextMeshProUGUI _seriesValue;
         [SerializeField] private Transform _panelTransform;
         [SerializeField] private RectTransform _panelRectTransform;
-        [SerializeField] private string _basicCounterText;
-        [SerializeField] private bool _generateWordEnding;
         [SerializeField] private float _timeBeforeAnimation;
         [SerializeField] private float _animationDuration;
 
@@ -22,9 +20,9 @@ namespace Main.Scripts.Logic.Combo
         private LivingZone _livingZone;
         private Sequence _sequence;
 
-        public void Construct(int multiplier, ITimeProvider timeProvider, LivingZone livingZone)
+        public void Construct(int multiplier, ITimeProvider timeProvider, LivingZone livingZone, Dictionary<int, string> fruitDictionary)
         {
-            _counterValue.text = GenerateCounterText(multiplier);
+            _counterValue.text = CreateCounterValue(multiplier, fruitDictionary);
             _seriesValue.text = multiplier.ToString();
             _timeProvider = timeProvider;
             _livingZone = livingZone;
@@ -45,9 +43,14 @@ namespace Main.Scripts.Logic.Combo
             _sequence.timeScale = _timeProvider.GetTimeScale();
         }
 
+        private string CreateCounterValue(int multiplier, Dictionary<int, string> fruitDictionary)
+        {
+            return !fruitDictionary.TryGetValue(multiplier, out string value) ? 
+                multiplier.ToString() : $"{multiplier} {value}";
+        }
+
         private void PlayAnimation()
         {
-
             _sequence = DOTween.Sequence()
 
                 .Append(transform.DOScale(Vector3.one, _animationDuration))
@@ -56,45 +59,6 @@ namespace Main.Scripts.Logic.Combo
                 .OnComplete(() => Destroy(gameObject));
 
             _sequence.Play();
-            
-            // DOTween.To(() => _scoreValue.alpha, x => _scoreValue.alpha = x, 0f, _animationFadeSpeed).OnKill(() => Debug.Log("End"));
-            
-        }
-
-        private string GenerateCounterText(int multiplier)
-        {
-            string counterText = $"{multiplier} {_basicCounterText}";
-            
-            if (_generateWordEnding)
-            {
-                counterText += GenerateWordEnding(multiplier);
-            }
-
-            return counterText;
-        }
-        
-        private string GenerateWordEnding(int multiplier)
-        {
-            int[] first = { 0, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
-            int[] second = { 1 };
-            int[] third = { 2, 3, 4 };
-
-            if (first.Contains(multiplier))
-            {
-                return "ов";
-            }
-            
-            if (second.Contains(multiplier))
-            {
-                return "";
-            }
-            
-            if (third.Contains(multiplier))
-            {
-                return "а";
-            }
-
-            return "";
         }
     }
 }

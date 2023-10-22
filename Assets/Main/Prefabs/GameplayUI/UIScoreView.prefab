@@ -115,7 +115,7 @@ MonoBehaviour:
   m_text: 5000
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 00d0b69e68eb4f848a38f75a68317786, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 6f2453ce45d48f340af3d771debc789a, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: bed42b69f56f0d141b698adf3cfd54d6, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -123,7 +123,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 1
+  m_enableVertexGradient: 0
   m_colorMode: 2
   m_fontColorGradient:
     topLeft: {r: 0.98039216, g: 0.9411765, b: 0.5058824, a: 1}
@@ -192,6 +192,7 @@ GameObject:
   - component: {fileID: 3703920113018260644}
   - component: {fileID: 3703920113018260646}
   - component: {fileID: 3703920113018260645}
+  - component: {fileID: 782496471}
   m_Layer: 5
   m_Name: UIScoreView
   m_TagString: Untagged
@@ -240,5 +241,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a90e13c80ab340d48a925cd065a04f85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scoreText: {fileID: 3703920112154224035}
+  _scoreAnimation: {fileID: 782496471}
+  _scoreValue: {fileID: 3703920112154224035}
+--- !u!114 &782496471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3703920113018260643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 904babf350c04ab7b599840e20628c83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scoreValue: {fileID: 3703920112154224035}
   _scoreAnimationDuration: 1

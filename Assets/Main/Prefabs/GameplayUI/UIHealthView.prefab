@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3807286312022480155}
   - component: {fileID: 3807286312022480156}
+  - component: {fileID: 8911449145598575142}
   m_Layer: 5
   m_Name: UIHealthView
   m_TagString: Untagged
@@ -50,9 +51,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10f630c369ce41cc824bf5a9ddf5b80d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _healthAnimation: {fileID: 8911449145598575142}
   _healthPanel: {fileID: 3807286313010990924}
   _healthImagePrefab: {fileID: 7681712284005586267, guid: 340a23dc18471874588acb19762f6a1b, type: 3}
-  _healthAnimationSpeed: 5
+--- !u!114 &8911449145598575142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3807286312022480154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d5663ab2f4347e0ac86910aff22cd9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthAnimationSpeed: 1.5
 --- !u!1 &3807286313010990924
 GameObject:
   m_ObjectHideFlags: 0

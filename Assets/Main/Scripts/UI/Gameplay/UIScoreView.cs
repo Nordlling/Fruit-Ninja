@@ -8,7 +8,7 @@ namespace Main.Scripts.UI.Gameplay
     public class UIScoreView : MonoBehaviour
     {
         [SerializeField] protected ScoreAnimation _scoreAnimation;
-        [SerializeField] protected TextMeshProUGUI _scoreText;
+        [SerializeField] protected TextMeshProUGUI _scoreValue;
         
         protected IScoreService _scoreService;
         
@@ -40,7 +40,7 @@ namespace Main.Scripts.UI.Gameplay
         private void InitScore()
         {
             _currentScore = 0;
-            _scoreText.text = _currentScore.ToString();
+            _scoreValue.text = _currentScore.ToString();
         }
 
         protected void AddScore(int newScore)

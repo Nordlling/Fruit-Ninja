@@ -58,6 +58,7 @@ GameObject:
   - component: {fileID: 762083603096917761}
   - component: {fileID: 762083603096917763}
   - component: {fileID: 762083603096917760}
+  - component: {fileID: 3463949749096338481}
   m_Layer: 5
   m_Name: UIHighScoreView
   m_TagString: Untagged
@@ -106,7 +107,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b38bd19516f049d5b6d382ba9c02f6bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scoreText: {fileID: 4215682673749721515}
+  _scoreAnimation: {fileID: 3463949749096338481}
+  _scoreValue: {fileID: 4215682673749721515}
+--- !u!114 &3463949749096338481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 762083603096917766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 904babf350c04ab7b599840e20628c83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scoreValue: {fileID: 4215682673749721515}
   _scoreAnimationDuration: 1
 --- !u!1 &762083603407289860
 GameObject:
@@ -177,7 +192,7 @@ MonoBehaviour:
   m_text: "\u041B\u0443\u0447\u0448\u0438\u0439:"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 00d0b69e68eb4f848a38f75a68317786, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 6e8d96f6f40e4c143a318d37df649473, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 39304bf63ad79bd4cb2040696d92bfa0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -185,7 +200,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 1
+  m_enableVertexGradient: 0
   m_colorMode: 2
   m_fontColorGradient:
     topLeft: {r: 0.19215687, g: 0.5882353, b: 0.12941177, a: 1}
@@ -312,7 +327,7 @@ MonoBehaviour:
   m_text: 5000
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 00d0b69e68eb4f848a38f75a68317786, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 6e8d96f6f40e4c143a318d37df649473, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 39304bf63ad79bd4cb2040696d92bfa0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -320,7 +335,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 1
+  m_enableVertexGradient: 0
   m_colorMode: 2
   m_fontColorGradient:
     topLeft: {r: 0.19215687, g: 0.5882353, b: 0.12941177, a: 1}

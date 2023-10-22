@@ -7,7 +7,7 @@ namespace Main.Scripts.UI.Gameplay
 {
     public class ScoreAnimation : MonoBehaviour
     {
-        [SerializeField] protected TextMeshProUGUI _scoreText;
+        [SerializeField] protected TextMeshProUGUI _scoreValue;
         [SerializeField] protected float _scoreAnimationDuration;
         
         private ITimeProvider _timeProvider;
@@ -31,7 +31,7 @@ namespace Main.Scripts.UI.Gameplay
         public void AddScoreAnimation(int newScore)
         {
             _currentTweener?.Kill();
-            _scoreText.text = _currentScore.ToString();
+            _scoreValue.text = _currentScore.ToString();
             _currentTweener = AnimateScoreChange(_currentScore, newScore);
             _currentScore = newScore;
         }
@@ -40,7 +40,7 @@ namespace Main.Scripts.UI.Gameplay
         {
             return DOTween
                 .To(() => oldScore, x => oldScore = x, newScore, _scoreAnimationDuration)
-                .OnUpdate(() => _scoreText.text = oldScore.ToString())
+                .OnUpdate(() => _scoreValue.text = oldScore.ToString())
                 .Play();
         }
     }

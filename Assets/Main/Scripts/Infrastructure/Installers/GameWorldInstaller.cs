@@ -8,6 +8,7 @@ using Main.Scripts.Infrastructure.Services.ButtonContainer;
 using Main.Scripts.Infrastructure.Services.Collision;
 using Main.Scripts.Infrastructure.Services.Combo;
 using Main.Scripts.Infrastructure.Services.Difficulty;
+using Main.Scripts.Infrastructure.Services.Explosion;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.LivingZone;
 using Main.Scripts.Infrastructure.Services.SaveLoad;
@@ -28,6 +29,7 @@ namespace Main.Scripts.Infrastructure.Installers
         [SerializeField] private ScoreConfig _scoreConfig;
         [SerializeField] private BlockTypesConfig _blockTypesConfig;
         [SerializeField] private WordEndingsConfig _wordEndingsConfig;
+        [SerializeField] private BoostersConfig _boostersConfig;
         
         [Header("Prefabs")]
         [SerializeField] private Swiper _swiperPrefab;
@@ -51,7 +53,8 @@ namespace Main.Scripts.Infrastructure.Installers
             RegisterScoreService(serviceContainer);
             RegisterSwiper(serviceContainer);
             RegisterDifficultyService(serviceContainer);
-            
+
+            RegisterExplosionService(serviceContainer);
             RegisterCollisionService(serviceContainer);
             RegisterHealthService(serviceContainer);
             RegisterLabelFactory(serviceContainer);
@@ -135,6 +138,12 @@ namespace Main.Scripts.Infrastructure.Installers
         }
 
 
+        private void RegisterExplosionService(ServiceContainer serviceContainer)
+        {
+            ExplosionService explosionService = new ExplosionService(serviceContainer.Get<IBlockContainerService>());
+            serviceContainer.SetService<IExplosionService, ExplosionService>(explosionService);
+        }
+
         private void RegisterCollisionService(ServiceContainer serviceContainer)
         {
             CollisionService collisionService = Instantiate(_collisionServicePrefab);
@@ -201,6 +210,7 @@ namespace Main.Scripts.Infrastructure.Installers
         {
             BlockFactory blockFactory = new BlockFactory(
                 serviceContainer.Get<IBlockContainerService>(),
+                serviceContainer.Get<IExplosionService>(),
                 serviceContainer.Get<LivingZone>(),
                 serviceContainer.Get<IHealthService>(),
                 serviceContainer.Get<IScoreService>(),
@@ -221,7 +231,8 @@ namespace Main.Scripts.Infrastructure.Installers
                 serviceContainer.Get<IDifficultyService>(),
                 serviceContainer.Get<IBlockFactory>(),
                 serviceContainer.Get<ISpawnFactory>(),
-                serviceContainer.Get<ITimeProvider>()
+                serviceContainer.Get<ITimeProvider>(),
+                _boostersConfig
             );
             
             serviceContainer.SetServiceSelf(_spawner);

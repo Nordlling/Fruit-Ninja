@@ -401,6 +401,7 @@ MonoBehaviour:
   _scoreConfig: {fileID: 11400000, guid: 4a6b62b958498ab42b13e4cac27d5ad4, type: 2}
   _blockTypesConfig: {fileID: 11400000, guid: 9260d6572f7d05442bbdd4bd0d9d2075, type: 2}
   _wordEndingsConfig: {fileID: 11400000, guid: eac58b6b84da1134eb281016a8b17c04, type: 2}
+  _boostersConfig: {fileID: 11400000, guid: 5d743c669cdf6a4488afa222c3107224, type: 2}
   _swiperPrefab: {fileID: 1525716950435999003, guid: 45cf2639433e82249b5f9735ac7a24a8, type: 3}
   _collisionServicePrefab: {fileID: 8882956281239512359, guid: 4cb81bb26e1272649bf4a4f867b661c4, type: 3}
   _comboLabelPrefab: {fileID: 5436899917071665924, guid: 1604aeb51f28e2047a1f9ad5b144d97f, type: 3}
@@ -1194,6 +1195,14 @@ PrefabInstance:
       value: Spawner
       objectReference: {fileID: 0}
     - target: {fileID: 4306255980740806363, guid: eea91158ec36cc4489541e959d94b03e, type: 3}
+      propertyPath: _bombMaxCountInPack
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4306255980740806363, guid: eea91158ec36cc4489541e959d94b03e, type: 3}
+      propertyPath: _bombProbabilityWeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4306255980740806363, guid: eea91158ec36cc4489541e959d94b03e, type: 3}
       propertyPath: _spawnAreas.Array.data[3].ProbabilityWeight
       value: 0.2
       objectReference: {fileID: 0}
@@ -1485,6 +1494,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 748513199}
     m_Modifications:
+    - target: {fileID: 3703920112154224034, guid: 3b036f68e365cc849954ed9870d00c2c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 595.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703920112154224034, guid: 3b036f68e365cc849954ed9870d00c2c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 133.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703920112154224035, guid: 3b036f68e365cc849954ed9870d00c2c, type: 3}
+      propertyPath: m_text
+      value: 5000
+      objectReference: {fileID: 0}
     - target: {fileID: 3703920113018260643, guid: 3b036f68e365cc849954ed9870d00c2c, type: 3}
       propertyPath: m_Name
       value: UIScoreView
@@ -1616,7 +1637,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3807286312022480155, guid: c8fa561f5682b774a9ab7e5178d9d679, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 653
+      value: 593.35
       objectReference: {fileID: 0}
     - target: {fileID: 3807286312022480155, guid: c8fa561f5682b774a9ab7e5178d9d679, type: 3}
       propertyPath: m_SizeDelta.y
@@ -1652,7 +1673,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3807286312022480155, guid: c8fa561f5682b774a9ab7e5178d9d679, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -356.50006
+      value: -326.67
       objectReference: {fileID: 0}
     - target: {fileID: 3807286312022480155, guid: c8fa561f5682b774a9ab7e5178d9d679, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1670,12 +1691,28 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3807286313010990925, guid: c8fa561f5682b774a9ab7e5178d9d679, type: 3}
+      propertyPath: m_ChildControlWidth
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3807286313010990927, guid: c8fa561f5682b774a9ab7e5178d9d679, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 593.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 3807286313010990927, guid: c8fa561f5682b774a9ab7e5178d9d679, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.0000019073
+      objectReference: {fileID: 0}
     - target: {fileID: 6795050190578750317, guid: c8fa561f5682b774a9ab7e5178d9d679, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6795050190578750317, guid: c8fa561f5682b774a9ab7e5178d9d679, type: 3}
       propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6795050190578750317, guid: c8fa561f5682b774a9ab7e5178d9d679, type: 3}
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6795050190578750317, guid: c8fa561f5682b774a9ab7e5178d9d679, type: 3}
@@ -1695,6 +1732,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6795050192360138478, guid: c8fa561f5682b774a9ab7e5178d9d679, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6795050192360138478, guid: c8fa561f5682b774a9ab7e5178d9d679, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -1702,12 +1743,24 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6795050192360138479, guid: c8fa561f5682b774a9ab7e5178d9d679, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6795050192535790394, guid: c8fa561f5682b774a9ab7e5178d9d679, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795050192535790395, guid: c8fa561f5682b774a9ab7e5178d9d679, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6795050192535790395, guid: c8fa561f5682b774a9ab7e5178d9d679, type: 3}
       propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6795050192535790395, guid: c8fa561f5682b774a9ab7e5178d9d679, type: 3}
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6795050192535790395, guid: c8fa561f5682b774a9ab7e5178d9d679, type: 3}
@@ -1919,6 +1972,18 @@ PrefabInstance:
     - target: {fileID: 762083603096917766, guid: f122203351250dc46825eb0cd28c6bd1, type: 3}
       propertyPath: m_Name
       value: UIHighScoreView
+      objectReference: {fileID: 0}
+    - target: {fileID: 4215682673749721515, guid: f122203351250dc46825eb0cd28c6bd1, type: 3}
+      propertyPath: m_text
+      value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 4215682673749721516, guid: f122203351250dc46825eb0cd28c6bd1, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 411.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 4215682673749721516, guid: f122203351250dc46825eb0cd28c6bd1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 217.53
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f122203351250dc46825eb0cd28c6bd1, type: 3}

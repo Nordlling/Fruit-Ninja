@@ -11,7 +11,8 @@ namespace Main.Scripts.Infrastructure.Services.BlockContainer
         
         void AddBomb(Bomb bombCollider);
         void RemoveBomb(Bomb bombCollider);
-        
+
+        List<BlockPiece> AllBlocks { get; }
         List<Block> Blocks { get; }
         List<Bomb> Bombs { get; }
     }

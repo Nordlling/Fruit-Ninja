@@ -15,25 +15,29 @@ namespace Main.Scripts.Logic.Blocks
         private ISliceEffectFactory _sliceEffectFactory;
         private IHealthService _healthService;
         private IComboService _comboService;
+        private BombExplosion _bombExplosion;
         private Sprite _splashSprite;
 
         public void Construct
             (
                 ILabelFactory labelFactory,
                 ISliceEffectFactory sliceEffectFactory,
-                IHealthService healthService, 
+                IHealthService healthService,
+                BombExplosion bombExplosion,
                 Sprite splashSprite
             )
         {
             _labelFactory = labelFactory;
             _sliceEffectFactory = sliceEffectFactory;
             _healthService = healthService;
+            _bombExplosion = bombExplosion;
             _splashSprite = splashSprite;
         }
         
         public void Slice(Vector2 swiperPosition, Vector2 swiperDirection)
         {
             _healthService.DecreaseHealth();
+            _bombExplosion.Explode();
             
             SpawnLabel();
             SpawnSplash();

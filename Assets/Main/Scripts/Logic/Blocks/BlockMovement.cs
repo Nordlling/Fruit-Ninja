@@ -20,6 +20,11 @@ namespace Main.Scripts.Logic.Blocks
             _timeProvider = timeProvider;
         }
 
+        public void AddExplodeForce(Vector2 forcedExplosionDirection)
+        {
+            _startDirection += forcedExplosionDirection;
+        }
+
         private void Start()
         {
             _currentPosition = transform.position;

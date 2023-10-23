@@ -2,11 +2,11 @@ using Main.Scripts.Infrastructure.Configs;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
 using Main.Scripts.Infrastructure.Services.Combo;
+using Main.Scripts.Infrastructure.Services.Explosion;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.LivingZone;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Logic.Blocks;
-using Main.Scripts.Logic.Splashing;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
@@ -16,6 +16,7 @@ namespace Main.Scripts.Infrastructure.Factory
     public class BlockFactory : IBlockFactory
     {
         private readonly IBlockContainerService _blockContainerService;
+        private readonly IExplosionService _explosionService;
         private readonly LivingZone _livingZone;
         private readonly IHealthService _healthService;
         private readonly IScoreService _scoreService;
@@ -25,7 +26,9 @@ namespace Main.Scripts.Infrastructure.Factory
         private readonly ISliceEffectFactory _sliceEffectFactory;
         private readonly BlockTypesConfig _blockTypesConfig;
 
-        public BlockFactory(IBlockContainerService blockContainerService,
+        public BlockFactory(
+            IBlockContainerService blockContainerService,
+            IExplosionService explosionService,
             LivingZone livingZone,
             IHealthService healthService,
             IScoreService scoreService,
@@ -36,6 +39,7 @@ namespace Main.Scripts.Infrastructure.Factory
             BlockTypesConfig blockTypesConfig)
         {
             _blockContainerService = blockContainerService;
+            _explosionService = explosionService;
             _livingZone = livingZone;
             _healthService = healthService;
             _scoreService = scoreService;
@@ -81,7 +85,13 @@ namespace Main.Scripts.Infrastructure.Factory
             bomb.SpriteRenderer.sprite = blockInfo.VisualSprites[randomIndex].BlockSprite;
             bomb.BoundsChecker.Construct(_livingZone, _healthService, false);
             bomb.BlockAnimation.Construct(_timeProvider);
-            bomb.BombSlicer.Construct(_labelFactory, _sliceEffectFactory, _healthService, blockInfo.VisualSprites[randomIndex].SplashSprite);
+            bomb.BombExplosion.Construct(_explosionService);
+            bomb.BombSlicer.Construct(
+                _labelFactory, 
+                _sliceEffectFactory, 
+                _healthService,
+                bomb.BombExplosion,
+                blockInfo.VisualSprites[randomIndex].SplashSprite);
             _blockContainerService.AddBomb(bomb);
             return bomb;
         }

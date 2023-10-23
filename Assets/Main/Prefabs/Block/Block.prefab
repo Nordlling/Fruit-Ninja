@@ -194,7 +194,7 @@ MonoBehaviour:
   _spriteRenderer: {fileID: 4470419074529942447}
   _shadowSpriteRenderer: {fileID: 8924327364107621515}
   _blockCollider: {fileID: -6087787132124446531}
-  _slicer: {fileID: 5669168300266746617}
+  blockSlicer: {fileID: 5669168300266746617}
 --- !u!114 &5771690122018491101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,6 +250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sphereScale: 2
+  _sphereOffset: {x: 0, y: 0}
 --- !u!114 &5669168300266746617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,12 +263,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dc9edc550ef4e3280958398c8f80e8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spriteRenderer: {fileID: 4470419074529942447}
+  _scoreLabel: {fileID: 8269617706673289826, guid: d4737f85690c3d24591fb2597e9ecc95, type: 3}
   _departureSpeed: 8
   _rectPieceDirectionAngle: 30
-  _blockPiecePrefab: {fileID: 7858959051489891967, guid: 0fbc4c599fcaf8141871143e3957cf2a, type: 3}
-  _spriteRenderer: {fileID: 4470419074529942447}
-  _splashPrefab: {fileID: 1884454342092968996, guid: 50c9b4fe4133a82478ce213e6eb5e424, type: 3}
-  _scoreLabel: {fileID: 8269617706673289826, guid: d4737f85690c3d24591fb2597e9ecc95, type: 3}
 --- !u!1001 &1274545018418038497
 PrefabInstance:
   m_ObjectHideFlags: 0

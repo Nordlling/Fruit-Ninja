@@ -1,7 +1,6 @@
 ﻿using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Main.Scripts.Logic.Blocks
 {
@@ -9,9 +8,11 @@ namespace Main.Scripts.Logic.Blocks
     {
         public BlockCollider BlockCollider => _blockCollider;
         public BombSlicer BombSlicer => bombSlicer;
+        public BombExplosion BombExplosion => _bombExplosion;
         
         [SerializeField] private BlockCollider _blockCollider;
         [SerializeField] private BombSlicer bombSlicer;
+        [SerializeField] private BombExplosion _bombExplosion;
         
         private IBlockContainerService _blockContainerService;
         

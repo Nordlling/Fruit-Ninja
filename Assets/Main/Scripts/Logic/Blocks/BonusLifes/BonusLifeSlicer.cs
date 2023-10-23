@@ -14,7 +14,6 @@ namespace Main.Scripts.Logic.Blocks.BonusLifes
         private ISliceEffectFactory _sliceEffectFactory;
         private IHealthService _healthService;
         private IComboService _comboService;
-        private HealthAdder _healthAdder;
         private int _visualIndex;
 
         public void Construct

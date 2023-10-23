@@ -53,7 +53,7 @@ namespace Main.Scripts.Logic.Spawn
             GenerateBlockParameters();
             
             BonusLife bonusLife = _blockFactory.CreateBonusLife(_newPointPosition);
-            bonusLife.BlockMovement.Construct(_newStartDirection, _newSpeed, bonusLife.TimeProvider);
+            bonusLife.BlockMovement.Construct(_newStartDirection, _newSpeed * bonusLife.SpeedMultiplier, bonusLife.TimeProvider);
         }
 
         private void GenerateBlockParameters()

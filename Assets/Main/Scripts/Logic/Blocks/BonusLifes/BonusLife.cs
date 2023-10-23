@@ -7,10 +7,10 @@ namespace Main.Scripts.Logic.Blocks.BonusLifes
     public class BonusLife : BlockPiece, ISliceable
     {
         public BonusLifeSlicer BonusLifeSlicer => _bonusLifeSlicer;
-        public HealthAdder HealthAdder => _healthAdder;
+        public float SpeedMultiplier => _speedMultiplier;
         
         [SerializeField] private BonusLifeSlicer _bonusLifeSlicer;
-        [SerializeField] private HealthAdder _healthAdder;
+        [SerializeField] private float _speedMultiplier;
         
         private IBlockContainerService _blockContainerService;
         

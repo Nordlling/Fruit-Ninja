@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Scripts.Infrastructure.Configs;
 using Main.Scripts.Infrastructure.Provides;
+using Main.Scripts.Infrastructure.Services.AnimationTargetContainer;
 using Main.Scripts.Infrastructure.Services.Combo;
 using Main.Scripts.Infrastructure.Services.LivingZone;
 using Main.Scripts.Logic.Combo;
@@ -15,12 +16,15 @@ namespace Main.Scripts.Infrastructure.Factory
     {
         private readonly ITimeProvider _timeProvider;
         private readonly LivingZone _livingZone;
+        private readonly IAnimationTargetContainer _animationTargetContainer;
         private readonly WordEndingsConfig _wordEndingsConfig;
 
-        public LabelFactory(ITimeProvider timeProvider, LivingZone livingZone, WordEndingsConfig wordEndingsConfig)
+        public LabelFactory(ITimeProvider timeProvider, LivingZone livingZone,
+            IAnimationTargetContainer animationTargetContainer, WordEndingsConfig wordEndingsConfig)
         {
             _timeProvider = timeProvider;
             _livingZone = livingZone;
+            _animationTargetContainer = animationTargetContainer;
             _wordEndingsConfig = wordEndingsConfig;
         }
 
@@ -44,6 +48,13 @@ namespace Main.Scripts.Infrastructure.Factory
             ExplosionLabel explosionLabel = Object.Instantiate(explosionLabelPrefab, position, Quaternion.identity);
             explosionLabel.Construct(_timeProvider);
             return explosionLabel;
+        }
+        
+        public HealthLabel CreateHealthLabel(HealthLabel healthLabelPrefab, Vector2 position)
+        {
+            HealthLabel healthLabel = Object.Instantiate(healthLabelPrefab, position, Quaternion.identity);
+            healthLabel.Construct(_timeProvider, _animationTargetContainer.HealthTarget);
+            return healthLabel;
         }
 
         public void Cleanup()

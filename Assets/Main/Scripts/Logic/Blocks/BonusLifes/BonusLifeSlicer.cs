@@ -4,18 +4,19 @@ using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Logic.Label;
 using Main.Scripts.Logic.Splashing;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace Main.Scripts.Logic.Blocks
+namespace Main.Scripts.Logic.Blocks.BonusLifes
 {
-    public class BombSlicer : MonoBehaviour, ISlicer
+    public class BonusLifeSlicer : MonoBehaviour, ISlicer
     {
-        [SerializeField] private ExplosionLabel _explosionLabelPrefab;
+        [SerializeField] private HealthLabel _labelPrefab;
 
         private ILabelFactory _labelFactory;
         private ISliceEffectFactory _sliceEffectFactory;
         private IHealthService _healthService;
         private IComboService _comboService;
-        private BombExplosion _bombExplosion;
+        private HealthAdder _healthAdder;
         private Sprite _splashSprite;
 
         public void Construct
@@ -23,23 +24,25 @@ namespace Main.Scripts.Logic.Blocks
                 ILabelFactory labelFactory,
                 ISliceEffectFactory sliceEffectFactory,
                 IHealthService healthService,
-                BombExplosion bombExplosion,
+                HealthAdder healthAdder,
                 Sprite splashSprite
             )
         {
             _labelFactory = labelFactory;
             _sliceEffectFactory = sliceEffectFactory;
             _healthService = healthService;
-            _bombExplosion = bombExplosion;
+            _healthAdder = healthAdder;
             _splashSprite = splashSprite;
         }
         
         public void Slice(Vector2 swiperPosition, Vector2 swiperDirection)
         {
-            _healthService.DecreaseHealth();
-            _bombExplosion.Explode();
+            if (!_healthService.IsMaxHealth())
+            {
+                _healthService.IncreaseHealth();
+                SpawnLabel();
+            }
             
-            SpawnLabel();
             SpawnSplash();
 
             Destroy(gameObject);
@@ -47,12 +50,12 @@ namespace Main.Scripts.Logic.Blocks
 
         private void SpawnLabel()
         {
-            _labelFactory.CreateExplosionLabel(_explosionLabelPrefab, transform.position);
+            _labelFactory.CreateHealthLabel(_labelPrefab, transform.position);
         }
 
         private void SpawnSplash()
         {
-            Splash splash = _sliceEffectFactory.CreateBombSplash(transform.position);
+            Splash splash = _sliceEffectFactory.CreateBonusLifeSplash(transform.position);
             splash.SpriteRenderer.sprite = _splashSprite;
         }
     }

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Main.Scripts.Infrastructure.GameplayStates;
 using Main.Scripts.Logic.Blocks;
+using Main.Scripts.Logic.Blocks.Bombs;
+using Main.Scripts.Logic.Blocks.BonusLifes;
 
 namespace Main.Scripts.Infrastructure.Services.BlockContainer
 {
@@ -9,6 +11,7 @@ namespace Main.Scripts.Infrastructure.Services.BlockContainer
         public List<BlockPiece> AllBlocks { get; private set; } = new();
         public List<Block> Blocks { get; private set; } = new();
         public List<Bomb> Bombs { get; private set; } = new();
+        public List<BonusLife> BonusLifes { get; private set; } = new();
 
         private readonly IGameplayStateMachine _gameplayStateMachine;
 
@@ -42,6 +45,19 @@ namespace Main.Scripts.Infrastructure.Services.BlockContainer
         {
             Bombs.Remove(bombCollider);
             AllBlocks.Remove(bombCollider);
+            CheckBocksFell();
+        }
+        
+        public void AddBonusLife(BonusLife bonusLifeCollider)
+        {
+            BonusLifes.Add(bonusLifeCollider);
+            AllBlocks.Add(bonusLifeCollider);
+        }
+
+        public void RemoveBonusLife(BonusLife bonusLifeCollider)
+        {
+            BonusLifes.Remove(bonusLifeCollider);
+            AllBlocks.Remove(bonusLifeCollider);
             CheckBocksFell();
         }
 

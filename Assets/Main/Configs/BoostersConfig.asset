@@ -12,52 +12,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9181529b59b4e8a845f39c4166ec5a4, type: 3}
   m_Name: BoostersConfig
   m_EditorClassIdentifier: 
+  MaxFractionInPack: 0.34
   Boosters:
   - BoosterType: 0
     BoosterSpawnInfo:
       DropoutRate: 0.5
-      MaxFractionInPack: 0.2
-      MaxNumberInPack: -1
+      MaxFractionInBoostPack: 0.4
+      MaxNumberInBoostPack: -1
       MaxNumberOnScreen: -1
   - BoosterType: 1
     BoosterSpawnInfo:
-      DropoutRate: 0
-      MaxFractionInPack: 0.2
-      MaxNumberInPack: -1
+      DropoutRate: 0.1
+      MaxFractionInBoostPack: 0.2
+      MaxNumberInBoostPack: -1
       MaxNumberOnScreen: -1
   - BoosterType: 2
     BoosterSpawnInfo:
       DropoutRate: 0
-      MaxFractionInPack: 0.2
-      MaxNumberInPack: -1
-      MaxNumberOnScreen: -1
+      MaxFractionInBoostPack: 0
+      MaxNumberInBoostPack: 0
+      MaxNumberOnScreen: 0
   - BoosterType: 3
     BoosterSpawnInfo:
-      DropoutRate: 0.1
-      MaxFractionInPack: 0.2
-      MaxNumberInPack: -1
-      MaxNumberOnScreen: -1
+      DropoutRate: 0
+      MaxFractionInBoostPack: 0
+      MaxNumberInBoostPack: 0
+      MaxNumberOnScreen: 0
   - BoosterType: 4
     BoosterSpawnInfo:
       DropoutRate: 0
-      MaxFractionInPack: 0.2
-      MaxNumberInPack: -1
-      MaxNumberOnScreen: -1
+      MaxFractionInBoostPack: 0
+      MaxNumberInBoostPack: 0
+      MaxNumberOnScreen: 0
   - BoosterType: 5
     BoosterSpawnInfo:
       DropoutRate: 0
-      MaxFractionInPack: 1
-      MaxNumberInPack: 1
+      MaxFractionInBoostPack: 0
+      MaxNumberInBoostPack: 0
       MaxNumberOnScreen: 1
   - BoosterType: 6
     BoosterSpawnInfo:
-      DropoutRate: 0.1
-      MaxFractionInPack: 1
-      MaxNumberInPack: 1
-      MaxNumberOnScreen: 1
+      DropoutRate: 0
+      MaxFractionInBoostPack: 0
+      MaxNumberInBoostPack: 0
+      MaxNumberOnScreen: 0
   - BoosterType: 7
     BoosterSpawnInfo:
       DropoutRate: 0
-      MaxFractionInPack: 0.2
-      MaxNumberInPack: -1
-      MaxNumberOnScreen: -1
+      MaxFractionInBoostPack: 0
+      MaxNumberInBoostPack: 0
+      MaxNumberOnScreen: 0

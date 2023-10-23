@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 5771690122018491101}
   - component: {fileID: 7424125995122863148}
   - component: {fileID: 2376680573197571728}
+  - component: {fileID: -4589413931567206605}
   m_Layer: 0
   m_Name: BlockPiece
   m_TagString: Untagged
@@ -188,6 +189,7 @@ MonoBehaviour:
   _blockMovement: {fileID: 5771690122018491101}
   _boundsChecker: {fileID: 7424125995122863148}
   _blockAnimation: {fileID: 2376680573197571728}
+  _blockCollider: {fileID: -4589413931567206605}
   _spriteRenderer: {fileID: 4470419074529942447}
   _shadowSpriteRenderer: {fileID: 8924327364107621515}
 --- !u!114 &5771690122018491101
@@ -232,3 +234,17 @@ MonoBehaviour:
   _maxScaleValue: 1.5
   _minScaleSpeed: 3
   _maxScaleSpeed: 5
+--- !u!114 &-4589413931567206605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5610820514440195092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22ab8128a6f04097bdf7b63779dc2e56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sphereScale: 0
+  _sphereOffset: {x: 0, y: 0}

@@ -66,7 +66,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d5663ab2f4347e0ac86910aff22cd9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _healthAnimationSpeed: 1.5
+  _animationDuration: 1.5
+  _increaseHealthAnimationDuration: 0.1
+  _increaseHealthPauseDuration: 1.1
 --- !u!1 &3807286313010990924
 GameObject:
   m_ObjectHideFlags: 0

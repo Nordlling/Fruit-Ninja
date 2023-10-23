@@ -6,7 +6,8 @@ namespace Main.Scripts.Infrastructure.Services.Health
 {
     public class HealthService : IHealthService, IRestartable
     {
-        public event Action OnDamaged;
+        public event Action OnDecreased;
+        public event Action OnIncreased;
         public event Action OnReset;
         
         private readonly HealthConfig _healthConfig;
@@ -21,16 +22,27 @@ namespace Main.Scripts.Infrastructure.Services.Health
             
             InitHealth(healthConfig);
         }
+        
+        public bool IsMaxHealth()
+        {
+            return LeftHealths == _healthConfig.HealthCount;
+        }
 
         public void DecreaseHealth()
         {
             LeftHealths--;
-            OnDamaged?.Invoke();
+            OnDecreased?.Invoke();
             
             if (LeftHealths <= 0)
             {
                 _gameplayStateMachine.Enter<LoseState>();
             }
+        }
+        
+        public void IncreaseHealth()
+        {
+            LeftHealths++;
+            OnIncreased?.Invoke();
         }
 
         public void Restart()

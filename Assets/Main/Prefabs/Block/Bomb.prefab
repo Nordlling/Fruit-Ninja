@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2737741789987030967}
   - component: {fileID: 4470419074529942447}
-  - component: {fileID: 5921778475364844782}
+  - component: {fileID: 1374269080090768582}
   - component: {fileID: 5771690122018491101}
   - component: {fileID: 7424125995122863148}
   - component: {fileID: 2376680573197571728}
@@ -177,7 +177,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5921778475364844782
+--- !u!114 &1374269080090768582
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -186,16 +186,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 5610820514440195092}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6b96fad2d6447e29fa22ddf8e8fed61, type: 3}
+  m_Script: {fileID: 11500000, guid: 69ee54f662a73d64dad2ef627bf7300f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _blockMovement: {fileID: 5771690122018491101}
   _boundsChecker: {fileID: 7424125995122863148}
   _blockAnimation: {fileID: 2376680573197571728}
+  _blockCollider: {fileID: -6087787132124446531}
   _spriteRenderer: {fileID: 4470419074529942447}
   _shadowSpriteRenderer: {fileID: 8924327364107621515}
-  _blockCollider: {fileID: -6087787132124446531}
-  bombSlicer: {fileID: 3421804011777213725}
+  _bombSlicer: {fileID: 3421804011777213725}
   _bombExplosion: {fileID: -8742835793158696049}
 --- !u!114 &5771690122018491101
 MonoBehaviour:
@@ -278,8 +278,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36fa93dd8a054fcf8cfe5ba0dba9805c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _explosionForce: 2
-  _explosionRadius: 7
+  _explosionForce: 1
+  _explosionRadius: 8
 --- !u!1001 &5953936049003004142
 PrefabInstance:
   m_ObjectHideFlags: 0

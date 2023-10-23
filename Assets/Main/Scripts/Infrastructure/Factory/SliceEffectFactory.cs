@@ -9,27 +9,32 @@ namespace Main.Scripts.Infrastructure.Factory
     public class SliceEffectFactory : ISliceEffectFactory
     {
         private readonly ITimeProvider _timeProvider;
-        private readonly BlockTypesConfig _blockTypesConfig;
         private readonly Splash _splashPrefab;
 
-        public SliceEffectFactory(ITimeProvider timeProvider, BlockTypesConfig blockTypesConfig, Splash splashPrefab)
+        public SliceEffectFactory(ITimeProvider timeProvider, Splash splashPrefab)
         {
             _timeProvider = timeProvider;
-            _blockTypesConfig = blockTypesConfig;
             _splashPrefab = splashPrefab;
         }
 
         public Splash CreateBlockSplash(Vector2 position)
         {
             Splash splash = Object.Instantiate(_splashPrefab, position, Quaternion.identity);
-            splash.Construct(_timeProvider);
+            splash.Construct(_timeProvider, true);
             return splash;
         }
         
         public Splash CreateBombSplash(Vector2 position)
         {
             Splash splash = Object.Instantiate(_splashPrefab, position, Quaternion.identity);
-            splash.Construct(_timeProvider);
+            splash.Construct(_timeProvider, false);
+            return splash;
+        }
+        
+        public Splash CreateBonusLifeSplash(Vector2 position)
+        {
+            Splash splash = Object.Instantiate(_splashPrefab, position, Quaternion.identity);
+            splash.Construct(_timeProvider, false);
             return splash;
         }
 

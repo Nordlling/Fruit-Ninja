@@ -2,16 +2,14 @@
 using Main.Scripts.Infrastructure.Services.BlockContainer;
 using UnityEngine;
 
-namespace Main.Scripts.Logic.Blocks
+namespace Main.Scripts.Logic.Blocks.Bombs
 {
-    public class Bomb : BlockPiece
+    public class Bomb : BlockPiece, ISliceable
     {
-        public BlockCollider BlockCollider => _blockCollider;
-        public BombSlicer BombSlicer => bombSlicer;
+        public BombSlicer BombSlicer => _bombSlicer;
         public BombExplosion BombExplosion => _bombExplosion;
         
-        [SerializeField] private BlockCollider _blockCollider;
-        [SerializeField] private BombSlicer bombSlicer;
+        [SerializeField] private BombSlicer _bombSlicer;
         [SerializeField] private BombExplosion _bombExplosion;
         
         private IBlockContainerService _blockContainerService;
@@ -20,6 +18,11 @@ namespace Main.Scripts.Logic.Blocks
         {
             _blockContainerService = blockContainerService;
             TimeProvider = timeProvider;
+        }
+        
+        public void Slice(Vector2 swiperPosition, Vector2 swiperDirection)
+        {
+            _bombSlicer.Slice(swiperPosition, swiperDirection);
         }
 
         private void OnDestroy()

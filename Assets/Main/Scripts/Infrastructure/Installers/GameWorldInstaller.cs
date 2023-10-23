@@ -3,7 +3,9 @@ using Main.Scripts.Infrastructure.Factory;
 using Main.Scripts.Infrastructure.GameplayStates;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services;
+using Main.Scripts.Infrastructure.Services.AnimationTargetContainer;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
+using Main.Scripts.Infrastructure.Services.Boosters;
 using Main.Scripts.Infrastructure.Services.ButtonContainer;
 using Main.Scripts.Infrastructure.Services.Collision;
 using Main.Scripts.Infrastructure.Services.Combo;
@@ -48,6 +50,7 @@ namespace Main.Scripts.Infrastructure.Installers
         {
             RegisterGameplayStateMachine(serviceContainer);
             RegisterBlockContainerService(serviceContainer);
+            RegisterAnimationTargetContainer(serviceContainer);
 
             RegisterLivingZone(serviceContainer);
             RegisterScoreService(serviceContainer);
@@ -57,6 +60,7 @@ namespace Main.Scripts.Infrastructure.Installers
             RegisterExplosionService(serviceContainer);
             RegisterCollisionService(serviceContainer);
             RegisterHealthService(serviceContainer);
+            RegisterBoostersCheckerService(serviceContainer);
             RegisterLabelFactory(serviceContainer);
             RegisterSpawnFactory(serviceContainer);
             RegisterSliceEffectFactory(serviceContainer);
@@ -98,6 +102,13 @@ namespace Main.Scripts.Infrastructure.Installers
             serviceContainer.SetService<IBlockContainerService, BlockContainerService>(blockContainerService);
             
             serviceContainer.Get<IGameplayStateMachine>().AddGameplayStatable(blockContainerService);
+        }
+        
+        private void RegisterAnimationTargetContainer(ServiceContainer serviceContainer)
+        {
+            AnimationTargetContainer animationTargetContainer = new AnimationTargetContainer();
+            
+            serviceContainer.SetService<IAnimationTargetContainer, AnimationTargetContainer>(animationTargetContainer);
         }
 
 
@@ -166,6 +177,18 @@ namespace Main.Scripts.Infrastructure.Installers
             
             serviceContainer.Get<IGameplayStateMachine>().AddGameplayStatable(healthService);
         }
+        
+        private void RegisterBoostersCheckerService(ServiceContainer serviceContainer)
+        {
+            BoostersCheckerService boostersCheckerService = new BoostersCheckerService
+            (
+                _boostersConfig,
+                serviceContainer.Get<IBlockContainerService>(),
+                serviceContainer.Get<IHealthService>()
+            );
+            
+            serviceContainer.SetService<IBoostersCheckerService, BoostersCheckerService>(boostersCheckerService);
+        }
 
         private void RegisterSpawnFactory(ServiceContainer serviceContainer)
         {
@@ -179,6 +202,7 @@ namespace Main.Scripts.Infrastructure.Installers
                 (
                     serviceContainer.Get<ITimeProvider>(),
                     serviceContainer.Get<LivingZone>(),
+                    serviceContainer.Get<IAnimationTargetContainer>(),
                     _wordEndingsConfig
                 );
             serviceContainer.SetService<ILabelFactory, LabelFactory>(labelFactory);
@@ -188,7 +212,6 @@ namespace Main.Scripts.Infrastructure.Installers
         {
             SliceEffectFactory sliceEffectFactory = new SliceEffectFactory(
                 serviceContainer.Get<ITimeProvider>(),
-                _blockTypesConfig,
                 _splashPrefab
             );
             
@@ -232,6 +255,7 @@ namespace Main.Scripts.Infrastructure.Installers
                 serviceContainer.Get<IBlockFactory>(),
                 serviceContainer.Get<ISpawnFactory>(),
                 serviceContainer.Get<ITimeProvider>(),
+                serviceContainer.Get<IBoostersCheckerService>(),
                 _boostersConfig
             );
             

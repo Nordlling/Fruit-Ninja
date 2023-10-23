@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2737741789987030967}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8924327364107621515
 SpriteRenderer:
@@ -84,7 +84,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &5610820514440195092
+--- !u!1 &1477058810338788366
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,46 +92,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2737741789987030967}
-  - component: {fileID: 4470419074529942447}
-  - component: {fileID: 1374269080090768582}
-  - component: {fileID: 5771690122018491101}
-  - component: {fileID: 7424125995122863148}
-  - component: {fileID: 2376680573197571728}
-  - component: {fileID: -6087787132124446531}
-  - component: {fileID: 3421804011777213725}
-  - component: {fileID: -8742835793158696049}
+  - component: {fileID: 6106962325545749571}
+  - component: {fileID: 7982387797311696906}
   m_Layer: 0
-  m_Name: Bomb
+  m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2737741789987030967
+--- !u!4 &6106962325545749571
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5610820514440195092}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_GameObject: {fileID: 1477058810338788366}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6930445702698453139}
-  - {fileID: 4884380703257158812}
-  m_Father: {fileID: 0}
+  m_Children: []
+  m_Father: {fileID: 2737741789987030967}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &4470419074529942447
+--- !u!212 &7982387797311696906
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5610820514440195092}
+  m_GameObject: {fileID: 1477058810338788366}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -177,6 +168,46 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &5610820514440195092
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2737741789987030967}
+  - component: {fileID: 1374269080090768582}
+  - component: {fileID: 5771690122018491101}
+  - component: {fileID: 7424125995122863148}
+  - component: {fileID: 2376680573197571728}
+  - component: {fileID: -6087787132124446531}
+  - component: {fileID: 3421804011777213725}
+  - component: {fileID: -8742835793158696049}
+  m_Layer: 0
+  m_Name: Bomb
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2737741789987030967
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5610820514440195092}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6106962325545749571}
+  - {fileID: 6930445702698453139}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1374269080090768582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,7 +224,7 @@ MonoBehaviour:
   _boundsChecker: {fileID: 7424125995122863148}
   _blockAnimation: {fileID: 2376680573197571728}
   _blockCollider: {fileID: -6087787132124446531}
-  _spriteRenderer: {fileID: 4470419074529942447}
+  _spriteRenderer: {fileID: 7982387797311696906}
   _shadowSpriteRenderer: {fileID: 8924327364107621515}
   _bombSlicer: {fileID: 3421804011777213725}
   _bombExplosion: {fileID: -8742835793158696049}
@@ -280,69 +311,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _explosionForce: 1
   _explosionRadius: 8
---- !u!1001 &5953936049003004142
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 2737741789987030967}
-    m_Modifications:
-    - target: {fileID: 1254374629747582066, guid: d567cf8759fa10c42ab77b98d6cd3016, type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1254374629747582066, guid: d567cf8759fa10c42ab77b98d6cd3016, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 3.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1254374629747582066, guid: d567cf8759fa10c42ab77b98d6cd3016, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1254374629747582066, guid: d567cf8759fa10c42ab77b98d6cd3016, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1254374629747582066, guid: d567cf8759fa10c42ab77b98d6cd3016, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1254374629747582066, guid: d567cf8759fa10c42ab77b98d6cd3016, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1254374629747582066, guid: d567cf8759fa10c42ab77b98d6cd3016, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1254374629747582066, guid: d567cf8759fa10c42ab77b98d6cd3016, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1254374629747582066, guid: d567cf8759fa10c42ab77b98d6cd3016, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1254374629747582066, guid: d567cf8759fa10c42ab77b98d6cd3016, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1254374629747582066, guid: d567cf8759fa10c42ab77b98d6cd3016, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7111102281295386791, guid: d567cf8759fa10c42ab77b98d6cd3016, type: 3}
-      propertyPath: m_Name
-      value: BombLabel
-      objectReference: {fileID: 0}
-    - target: {fileID: 7111102281295386791, guid: d567cf8759fa10c42ab77b98d6cd3016, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d567cf8759fa10c42ab77b98d6cd3016, type: 3}
---- !u!4 &4884380703257158812 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1254374629747582066, guid: d567cf8759fa10c42ab77b98d6cd3016, type: 3}
-  m_PrefabInstance: {fileID: 5953936049003004142}
-  m_PrefabAsset: {fileID: 0}

@@ -18,6 +18,7 @@ namespace Main.Scripts.UI.Gameplay
         [SerializeField] private Button _menuButton;
         [SerializeField] private TextMeshProUGUI _scoreValue;
         [SerializeField] private TextMeshProUGUI _highScoreValue;
+        [SerializeField] private string _highScoreText;
         
         [SerializeField] private UICurtainView _curtainView;
         
@@ -67,7 +68,7 @@ namespace Main.Scripts.UI.Gameplay
         private void InitScore()
         {
             _scoreValue.text = _scoreService.CurrentScore.ToString();
-            _highScoreValue.text = _scoreService.HighScore.ToString();
+            _highScoreValue.text = _highScoreText + _scoreService.HighScore;
         }
 
         private void RestartGame()

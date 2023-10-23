@@ -9,6 +9,7 @@ namespace Main.Scripts.UI.Gameplay
     public class ButtonAnimation : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
     {
         [SerializeField] private Button _button;
+        [SerializeField] private Image _image;
         [SerializeField] private Color _pressedColor;
         [SerializeField] private float _animationDuration;
         [SerializeField] private float _buttonPressedScale;
@@ -48,7 +49,7 @@ namespace Main.Scripts.UI.Gameplay
 
         private void Start()
         {
-            _originalColor = _button.image.color;
+            _originalColor = _image.color;
             _originalScale = 1f;
         }
 
@@ -56,16 +57,16 @@ namespace Main.Scripts.UI.Gameplay
         {
             return DOTween
                 .Sequence()
-                .Join(transform.DOScale(_buttonPressedScale, _animationDuration))
-                .Join(_button.image.DOColor(_pressedColor, _animationDuration));
+                .Join(_image.transform.DOScale(_buttonPressedScale, _animationDuration))
+                .Join(_image.DOColor(_pressedColor, _animationDuration));
         }
 
         private Sequence AnimateUnpressedButton()
         {
             return DOTween
                 .Sequence()
-                .Join(transform.DOScale(_originalScale, _animationDuration))
-                .Join(_button.image.DOColor(_originalColor, _animationDuration));
+                .Join(_image.transform.DOScale(_originalScale, _animationDuration))
+                .Join(_image.DOColor(_originalColor, _animationDuration));
         }
     }
 }

@@ -1,7 +1,7 @@
 using Main.Scripts.Infrastructure.Services.Explosion;
 using UnityEngine;
 
-namespace Main.Scripts.Logic.Blocks
+namespace Main.Scripts.Logic.Blocks.Bombs
 {
     public class BombExplosion : MonoBehaviour
     {

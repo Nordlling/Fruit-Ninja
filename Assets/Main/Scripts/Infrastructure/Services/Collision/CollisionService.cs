@@ -41,19 +41,14 @@ namespace Main.Scripts.Infrastructure.Services.Collision
                 return;
             }
             
-            foreach (Block block in _blockContainerService.Blocks)
+            foreach (BlockPiece blockPiece in _blockContainerService.AllBlocks)
             {
-                if (_swiper.HasEnoughSpeed() && block.BlockCollider.SphereBounds.Contains(_swiper.Position))
+                if (_swiper.HasEnoughSpeed() && blockPiece.BlockCollider.SphereBounds.Contains(_swiper.Position))
                 {
-                    block.BlockSlicer.Slice(_swiper.Position, _swiper.Direction);
-                }
-            }
-            
-            foreach (Bomb bomb in _blockContainerService.Bombs)
-            {
-                if (_swiper.HasEnoughSpeed() && bomb.BlockCollider.SphereBounds.Contains(_swiper.Position))
-                {
-                    bomb.BombSlicer.Slice(_swiper.Position, _swiper.Direction);
+                    if (blockPiece is ISliceable slicer)
+                    {
+                        slicer.Slice(_swiper.Position, _swiper.Direction);
+                    }
                 }
             }
         }

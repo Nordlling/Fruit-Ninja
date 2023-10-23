@@ -15,13 +15,15 @@ namespace Main.Scripts.Logic.Splashing
         
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private ParticleSystem _splashEffect;
+        private bool _setColorFromSprite;
         
         private ITimeProvider _timeProvider;
         private Sequence _sequence;
 
-        public void Construct(ITimeProvider timeProvider)
+        public void Construct(ITimeProvider timeProvider, bool setColorFromSprite)
         {
             _timeProvider = timeProvider;
+            _setColorFromSprite = setColorFromSprite;
         }
 
         private void Start()
@@ -48,7 +50,10 @@ namespace Main.Scripts.Logic.Splashing
 
         private void PlaySplashEffect()
         {
-            SetColorToSplashEffect();
+            if (_setColorFromSprite)
+            {
+                SetColorToSplashEffect();
+            }
             _splashEffect.Play();
         }
 

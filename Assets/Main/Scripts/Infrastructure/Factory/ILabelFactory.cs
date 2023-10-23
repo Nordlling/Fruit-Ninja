@@ -10,6 +10,7 @@ namespace Main.Scripts.Infrastructure.Factory
         ScoreLabel CreateScoreLabel(ScoreLabel scoreLabelPrefab, Vector2 position, string value);
         ComboLabel CreateComboLabel(ComboLabel comboLabelPrefab, ComboInfo comboInfo);
         ExplosionLabel CreateExplosionLabel(ExplosionLabel explosionLabelPrefab, Vector2 position);
+        HealthLabel CreateHealthLabel(HealthLabel healthLabelPrefab, Vector2 position);
         void Cleanup();
     }
 }

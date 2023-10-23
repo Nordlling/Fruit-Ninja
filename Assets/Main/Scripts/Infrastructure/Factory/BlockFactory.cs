@@ -7,6 +7,8 @@ using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.LivingZone;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Logic.Blocks;
+using Main.Scripts.Logic.Blocks.Bombs;
+using Main.Scripts.Logic.Blocks.BonusLifes;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
@@ -94,6 +96,27 @@ namespace Main.Scripts.Infrastructure.Factory
                 blockInfo.VisualSprites[randomIndex].SplashSprite);
             _blockContainerService.AddBomb(bomb);
             return bomb;
+        }
+        
+        public BonusLife CreateBonusLife(Vector2 position)
+        {
+            BlockInfo blockInfo = _blockTypesConfig.BonusLife;
+            BonusLife bonusLife = (BonusLife)Object.Instantiate(blockInfo.BlockPrefab, position, Quaternion.identity);
+            bonusLife.Construct(_blockContainerService, _timeProvider);
+            
+            int randomIndex = Random.Range(0, blockInfo.VisualSprites.Length);
+            bonusLife.SpriteRenderer.sprite = blockInfo.VisualSprites[randomIndex].BlockSprite;
+            bonusLife.BoundsChecker.Construct(_livingZone, _healthService, false);
+            bonusLife.BlockAnimation.Construct(_timeProvider);
+            bonusLife.BonusLifeSlicer.Construct(
+                _labelFactory, 
+                _sliceEffectFactory, 
+                _healthService,
+                bonusLife.HealthAdder,
+                blockInfo.VisualSprites[randomIndex].SplashSprite);
+           
+            _blockContainerService.AddBonusLife(bonusLife);
+            return bonusLife;
         }
 
         public void Cleanup()

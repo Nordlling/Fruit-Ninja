@@ -1,4 +1,3 @@
-using Main.Scripts.Infrastructure.Services;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.LivingZone;
 using UnityEngine;

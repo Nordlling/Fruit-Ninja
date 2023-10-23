@@ -2,6 +2,8 @@ using Main.Scripts.Infrastructure.Factory;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services.Collision;
 using Main.Scripts.Logic.Blocks;
+using Main.Scripts.Logic.Blocks.Bombs;
+using Main.Scripts.Logic.Blocks.BonusLifes;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -14,9 +16,11 @@ namespace Main.Scripts.Logic.Spawn
         private SpawnerAreaInfo _spawnerInfo;
 
         private Vector2 _normal;
+        
         private Vector2 _newPointPosition;
+        private Vector2 _newStartDirection;
+        private float _newSpeed;
 
-        private ICollisionService _collisionService;
         private IBlockFactory _blockFactory;
         private ITimeProvider _timeProvider;
 
@@ -24,41 +28,52 @@ namespace Main.Scripts.Logic.Spawn
         {
             _blockFactory = blockFactory;
             _spawnerInfo = spawnerInfo;
+
+            CalculateNormal();
         }
 
         public void SpawnBlock()
         {
-            GenerateNormal();
-            Vector2 direction = GenerateDirection();
-            OffsetPoint(direction);
-            float speed = Random.Range(_spawnerInfo._minSpeed, _spawnerInfo. _maxSpeed);
+            GenerateBlockParameters();
             
             Block block = _blockFactory.CreateBlock(_newPointPosition);
-            block.BlockMovement.Construct(direction, speed, block.TimeProvider);
+            block.BlockMovement.Construct(_newStartDirection, _newSpeed, block.TimeProvider);
         }
         
         public void SpawnBomb()
         {
-            GenerateNormal();
-            Vector2 direction = GenerateDirection();
-            OffsetPoint(direction);
-            float speed = Random.Range(_spawnerInfo._minSpeed, _spawnerInfo. _maxSpeed);
+            GenerateBlockParameters();
             
             Bomb bomb = _blockFactory.CreateBomb(_newPointPosition);
-            bomb.BlockMovement.Construct(direction, speed, bomb.TimeProvider);
+            bomb.BlockMovement.Construct(_newStartDirection, _newSpeed, bomb.TimeProvider);
+        }
+
+        public void SpawnBonusLife()
+        {
+            GenerateBlockParameters();
+            
+            BonusLife bonusLife = _blockFactory.CreateBonusLife(_newPointPosition);
+            bonusLife.BlockMovement.Construct(_newStartDirection, _newSpeed, bonusLife.TimeProvider);
+        }
+
+        private void GenerateBlockParameters()
+        {
+            _newStartDirection = GenerateDirection();
+            OffsetPoint(_newStartDirection);
+            _newSpeed = Random.Range(_spawnerInfo._minSpeed, _spawnerInfo._maxSpeed);
         }
 
         private void OffsetPoint(Vector2 direction)
         {
             _newPointPosition -= direction * _distanceToOffset;
         }
-        
-        private void GenerateNormal()
+
+        private void CalculateNormal()
         {
             Vector2 lineVector = _spawnerInfo._lastPoint - _spawnerInfo._firstPoint;
             _normal = new Vector2(-lineVector.y, lineVector.x).normalized;
         }
-        
+
         private Vector2 GenerateDirection()
         {
             GeneratePointPosition();

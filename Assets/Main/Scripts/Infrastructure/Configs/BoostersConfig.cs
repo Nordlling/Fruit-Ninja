@@ -6,6 +6,8 @@ namespace Main.Scripts.Infrastructure.Configs
     [CreateAssetMenu(fileName = "BoostersConfig", menuName = "Configs/Boosters")]
     public class BoostersConfig : ScriptableObject
     {
+        [Range(0, 1)]
+        public float MaxFractionInPack;
         public BoosterInfo[] Boosters;
     }
     
@@ -21,9 +23,9 @@ namespace Main.Scripts.Infrastructure.Configs
     {
         public float DropoutRate;
         [Range(0, 1)]
-        public float MaxFractionInPack;
+        public float MaxFractionInBoostPack;
         [Range(-1, 20)]
-        public int MaxNumberInPack;
+        public int MaxNumberInBoostPack;
         [Range(-1, 20)]
         public int MaxNumberOnScreen;
     }

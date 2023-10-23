@@ -35,7 +35,12 @@ MonoBehaviour:
     - BlockSprite: {fileID: 21300000, guid: 1782614f6a6462447a0b4f1289b68634, type: 3}
       SplashSprite: {fileID: 21300000, guid: 003798844a593dc458d4fc353875c688, type: 3}
   Bomb:
-    BlockPrefab: {fileID: 5921778475364844782, guid: decfd7de12032874cba4d1624026a8aa, type: 3}
+    BlockPrefab: {fileID: 1374269080090768582, guid: decfd7de12032874cba4d1624026a8aa, type: 3}
     VisualSprites:
     - BlockSprite: {fileID: 21300000, guid: f9f016d00dc803f4bb04741b98524e9f, type: 3}
       SplashSprite: {fileID: 21300000, guid: fedf50ddeb0b072438be86ceed8ea894, type: 3}
+  BonusLife:
+    BlockPrefab: {fileID: 2100754865106279568, guid: 13dc3db8fcd6701488337fb84b045c19, type: 3}
+    VisualSprites:
+    - BlockSprite: {fileID: 21300000, guid: 18e227ac345862d4fb48bae1d2ec5029, type: 3}
+      SplashSprite: {fileID: 21300000, guid: a07daf4e51e3c5943be8b323441ba7cb, type: 3}

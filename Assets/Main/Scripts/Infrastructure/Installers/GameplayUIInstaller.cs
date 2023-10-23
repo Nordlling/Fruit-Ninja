@@ -1,6 +1,7 @@
 using Main.Scripts.Infrastructure.GameplayStates;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services;
+using Main.Scripts.Infrastructure.Services.AnimationTargetContainer;
 using Main.Scripts.Infrastructure.Services.ButtonContainer;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.Score;
@@ -42,7 +43,7 @@ namespace Main.Scripts.Infrastructure.Installers
 
         private void InitHealthUI(ServiceContainer serviceContainer)
         {
-            _uiHealthView.Construct(serviceContainer.Get<IHealthService>());
+            _uiHealthView.Construct(serviceContainer.Get<IHealthService>(), serviceContainer.Get<IAnimationTargetContainer>());
         }
         
         private void InitScoreUI(ServiceContainer serviceContainer)

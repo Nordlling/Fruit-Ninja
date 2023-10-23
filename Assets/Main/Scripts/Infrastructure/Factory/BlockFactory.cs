@@ -72,7 +72,7 @@ namespace Main.Scripts.Infrastructure.Factory
             block.SpriteRenderer.sprite = blockInfo.VisualSprites[randomIndex].BlockSprite;
             block.BoundsChecker.Construct(_livingZone, _healthService, true);
             block.BlockAnimation.Construct(_timeProvider);
-            block.BlockSlicer.Construct(this, _labelFactory, _sliceEffectFactory, _scoreService, _comboService, blockInfo.VisualSprites[randomIndex].SplashSprite);
+            block.BlockSlicer.Construct(this, _labelFactory, _sliceEffectFactory, _scoreService, _comboService, randomIndex);
             _blockContainerService.AddBlock(block);
             return block;
         }
@@ -93,7 +93,7 @@ namespace Main.Scripts.Infrastructure.Factory
                 _sliceEffectFactory, 
                 _healthService,
                 bomb.BombExplosion,
-                blockInfo.VisualSprites[randomIndex].SplashSprite);
+                randomIndex);
             _blockContainerService.AddBomb(bomb);
             return bomb;
         }
@@ -112,8 +112,7 @@ namespace Main.Scripts.Infrastructure.Factory
                 _labelFactory, 
                 _sliceEffectFactory, 
                 _healthService,
-                bonusLife.HealthAdder,
-                blockInfo.VisualSprites[randomIndex].SplashSprite);
+                randomIndex);
            
             _blockContainerService.AddBonusLife(bonusLife);
             return bonusLife;

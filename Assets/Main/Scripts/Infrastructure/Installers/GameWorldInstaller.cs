@@ -37,7 +37,6 @@ namespace Main.Scripts.Infrastructure.Installers
         [SerializeField] private Swiper _swiperPrefab;
         [SerializeField] private CollisionService _collisionServicePrefab;
         [SerializeField] private ComboLabel _comboLabelPrefab;
-        [SerializeField] private Splash _splashPrefab;
         [SerializeField] private SpawnArea _spawnAreaPrefab;
         
         [Header("Scene Objects")]
@@ -210,9 +209,10 @@ namespace Main.Scripts.Infrastructure.Installers
         
         private void RegisterSliceEffectFactory(ServiceContainer serviceContainer)
         {
-            SliceEffectFactory sliceEffectFactory = new SliceEffectFactory(
+            SliceEffectFactory sliceEffectFactory = new SliceEffectFactory
+            (
                 serviceContainer.Get<ITimeProvider>(),
-                _splashPrefab
+                _blockTypesConfig
             );
             
             serviceContainer.SetService<ISliceEffectFactory, SliceEffectFactory>(sliceEffectFactory);

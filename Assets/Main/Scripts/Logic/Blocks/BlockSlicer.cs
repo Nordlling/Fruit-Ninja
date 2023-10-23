@@ -2,7 +2,6 @@ using Main.Scripts.Infrastructure.Factory;
 using Main.Scripts.Infrastructure.Services.Combo;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Logic.Label;
-using Main.Scripts.Logic.Splashing;
 using Main.Scripts.Utils.RectUtils;
 using UnityEngine;
 
@@ -20,22 +19,22 @@ namespace Main.Scripts.Logic.Blocks
         private ISliceEffectFactory _sliceEffectFactory;
         private IScoreService _scoreService;
         private IComboService _comboService;
-        private Sprite _splashSprite;
+        private int _visualIndex;
 
         public void Construct(
             IBlockFactory blockFactory, 
             ILabelFactory labelFactory,
             ISliceEffectFactory sliceEffectFactory,
             IScoreService scoreService, 
-            IComboService comboService, 
-            Sprite splashSprite)
+            IComboService comboService,
+            int visualIndex)
         {
             _blockFactory = blockFactory;
             _labelFactory = labelFactory;
             _sliceEffectFactory = sliceEffectFactory;
             _scoreService = scoreService;
             _comboService = comboService;
-            _splashSprite = splashSprite;
+            _visualIndex = visualIndex;
         }
         public void Slice(Vector2 swiperPosition, Vector2 swiperDirection)
         {
@@ -93,8 +92,7 @@ namespace Main.Scripts.Logic.Blocks
 
         private void SpawnSplash()
         {
-            Splash splash = _sliceEffectFactory.CreateBlockSplash(transform.position);
-            splash.SpriteRenderer.sprite = _splashSprite;
+            _sliceEffectFactory.CreateBlockSplash(transform.position, _visualIndex);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using Main.Scripts.Logic.Blocks;
+using Main.Scripts.Logic.Splashing;
 using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Configs
@@ -17,6 +18,7 @@ namespace Main.Scripts.Infrastructure.Configs
     public class BlockInfo
     {
         public BlockPiece BlockPrefab;
+        public Splash SplashPrefab;
         public VisualSprites[] VisualSprites;
     }
 

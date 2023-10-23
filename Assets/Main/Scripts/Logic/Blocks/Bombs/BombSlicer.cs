@@ -2,7 +2,6 @@ using Main.Scripts.Infrastructure.Factory;
 using Main.Scripts.Infrastructure.Services.Combo;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Logic.Label;
-using Main.Scripts.Logic.Splashing;
 using UnityEngine;
 
 namespace Main.Scripts.Logic.Blocks.Bombs{
@@ -16,6 +15,7 @@ namespace Main.Scripts.Logic.Blocks.Bombs{
         private IComboService _comboService;
         private BombExplosion _bombExplosion;
         private Sprite _splashSprite;
+        private int _visualIndex;
 
         public void Construct
             (
@@ -23,14 +23,14 @@ namespace Main.Scripts.Logic.Blocks.Bombs{
                 ISliceEffectFactory sliceEffectFactory,
                 IHealthService healthService,
                 BombExplosion bombExplosion,
-                Sprite splashSprite
+                int visualIndex
             )
         {
             _labelFactory = labelFactory;
             _sliceEffectFactory = sliceEffectFactory;
             _healthService = healthService;
             _bombExplosion = bombExplosion;
-            _splashSprite = splashSprite;
+            _visualIndex = visualIndex;
         }
         
         public void Slice(Vector2 swiperPosition, Vector2 swiperDirection)
@@ -51,8 +51,7 @@ namespace Main.Scripts.Logic.Blocks.Bombs{
 
         private void SpawnSplash()
         {
-            Splash splash = _sliceEffectFactory.CreateBombSplash(transform.position);
-            splash.SpriteRenderer.sprite = _splashSprite;
+            _sliceEffectFactory.CreateBombSplash(transform.position, _visualIndex);
         }
     }
 }

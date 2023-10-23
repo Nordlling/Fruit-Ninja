@@ -1,51 +1,37 @@
-using DG.Tweening;
 using Main.Scripts.Infrastructure.Provides;
+using Main.Scripts.Logic.Splashing.Animations;
 using UnityEngine;
 
 namespace Main.Scripts.Logic.Splashing
 {
     public class Splash : MonoBehaviour
     {
-        public SpriteRenderer SpriteRenderer => _spriteRenderer;
-
-        [SerializeField] private float _timeBeforeAnimation;
-        [SerializeField] private float _animationDuration;
-        [SerializeField] private float _animationMoveOffset;
-        [SerializeField] private float _animationStretchOffset;
-        
+        [SerializeField] private SplashAnimation _splashAnimation;
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private ParticleSystem _splashEffect;
-        private bool _setColorFromSprite;
+        [SerializeField] private bool _setColorFromSprite;
         
         private ITimeProvider _timeProvider;
-        private Sequence _sequence;
+        private ParticleSystem.MainModule _splashEffectMain;
 
-        public void Construct(ITimeProvider timeProvider, bool setColorFromSprite)
+        public void Construct(ITimeProvider timeProvider, Sprite splashSprite)
         {
             _timeProvider = timeProvider;
-            _setColorFromSprite = setColorFromSprite;
+            _spriteRenderer.sprite = splashSprite;
+            _splashAnimation.Construct(timeProvider);
         }
 
         private void Start()
         {
+            _splashEffectMain = _splashEffect.main;
+
             PlaySplashEffect();
-            PlayAnimation();
+            _splashAnimation.PlayAnimation();
         }
 
         private void Update()
         {
-            _sequence.timeScale = _timeProvider.GetTimeScale();
-        }
-
-        private void PlayAnimation()
-        {
-            _sequence = DOTween.Sequence()
-                .AppendInterval(_timeBeforeAnimation)
-                .Append(transform.DOMoveY(transform.position.y - _animationMoveOffset, _animationDuration))
-                .Join(transform.DOScaleY(transform.localScale.y + _animationStretchOffset, _animationDuration))
-                .Join(_spriteRenderer.material.DOFade(0f, _animationDuration).OnComplete(() => Destroy(gameObject)));
-            
-            _sequence.Play();
+            _splashEffectMain.simulationSpeed = _timeProvider.GetTimeScale();
         }
 
         private void PlaySplashEffect()
@@ -64,8 +50,7 @@ namespace Main.Scripts.Logic.Splashing
             int centerY = texture.height / 2;
             Color centralPixelColor = texture.GetPixel(centerX, centerY);
 
-            ParticleSystem.MainModule splashEffectMain = _splashEffect.main;
-            splashEffectMain.startColor = new ParticleSystem.MinMaxGradient(centralPixelColor);
+            _splashEffectMain.startColor = new ParticleSystem.MinMaxGradient(centralPixelColor);
         }
     }
 }

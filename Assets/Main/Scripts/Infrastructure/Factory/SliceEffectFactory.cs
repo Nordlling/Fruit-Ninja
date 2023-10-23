@@ -9,32 +9,32 @@ namespace Main.Scripts.Infrastructure.Factory
     public class SliceEffectFactory : ISliceEffectFactory
     {
         private readonly ITimeProvider _timeProvider;
-        private readonly Splash _splashPrefab;
+        private readonly BlockTypesConfig _blockTypesConfig;
 
-        public SliceEffectFactory(ITimeProvider timeProvider, Splash splashPrefab)
+        public SliceEffectFactory(ITimeProvider timeProvider, BlockTypesConfig blockTypesConfig)
         {
             _timeProvider = timeProvider;
-            _splashPrefab = splashPrefab;
+            _blockTypesConfig = blockTypesConfig;
         }
 
-        public Splash CreateBlockSplash(Vector2 position)
+        public Splash CreateBlockSplash(Vector2 position, int visualIndex)
         {
-            Splash splash = Object.Instantiate(_splashPrefab, position, Quaternion.identity);
-            splash.Construct(_timeProvider, true);
+            Splash splash = Object.Instantiate(_blockTypesConfig.Block.SplashPrefab, position, Quaternion.identity);
+            splash.Construct(_timeProvider, _blockTypesConfig.Block.VisualSprites[visualIndex].SplashSprite);
             return splash;
         }
         
-        public Splash CreateBombSplash(Vector2 position)
+        public Splash CreateBombSplash(Vector2 position, int visualIndex)
         {
-            Splash splash = Object.Instantiate(_splashPrefab, position, Quaternion.identity);
-            splash.Construct(_timeProvider, false);
+            Splash splash = Object.Instantiate(_blockTypesConfig.Bomb.SplashPrefab, position, Quaternion.identity);
+            splash.Construct(_timeProvider, _blockTypesConfig.Bomb.VisualSprites[visualIndex].SplashSprite);
             return splash;
         }
         
-        public Splash CreateBonusLifeSplash(Vector2 position)
+        public Splash CreateBonusLifeSplash(Vector2 position, int visualIndex)
         {
-            Splash splash = Object.Instantiate(_splashPrefab, position, Quaternion.identity);
-            splash.Construct(_timeProvider, false);
+            Splash splash = Object.Instantiate(_blockTypesConfig.BonusLife.SplashPrefab, position, Quaternion.identity);
+            splash.Construct(_timeProvider, _blockTypesConfig.BonusLife.VisualSprites[visualIndex].SplashSprite);
             return splash;
         }
 

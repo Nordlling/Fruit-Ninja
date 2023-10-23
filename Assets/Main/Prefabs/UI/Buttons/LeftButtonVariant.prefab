@@ -95,5 +95,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: LeftButtonVariant
       objectReference: {fileID: 0}
+    - target: {fileID: 656445438001235201, guid: ca3510cd0d0dacd4c9cdddc845be8df3, type: 3}
+      propertyPath: m_text
+      value: "\u0418\u0433\u0440\u0430\u0442\u044C"
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca3510cd0d0dacd4c9cdddc845be8df3, type: 3}

@@ -36,6 +36,17 @@ namespace Main.Scripts.Logic.Spawn
             Block block = _blockFactory.CreateBlock(_newPointPosition);
             block.BlockMovement.Construct(direction, speed, block.TimeProvider);
         }
+        
+        public void SpawnBomb()
+        {
+            GenerateNormal();
+            Vector2 direction = GenerateDirection();
+            OffsetPoint(direction);
+            float speed = Random.Range(_spawnerInfo._minSpeed, _spawnerInfo. _maxSpeed);
+            
+            Bomb bomb = _blockFactory.CreateBomb(_newPointPosition);
+            bomb.BlockMovement.Construct(direction, speed, bomb.TimeProvider);
+        }
 
         private void OffsetPoint(Vector2 direction)
         {

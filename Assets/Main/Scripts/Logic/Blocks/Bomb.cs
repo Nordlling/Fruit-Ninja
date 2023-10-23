@@ -4,13 +4,15 @@ using UnityEngine;
 
 namespace Main.Scripts.Logic.Blocks
 {
-    public class Block : BlockPiece
+    public class Bomb : BlockPiece
     {
         public BlockCollider BlockCollider => _blockCollider;
-        public BlockSlicer BlockSlicer => blockSlicer;
+        public BombSlicer BombSlicer => bombSlicer;
+        public BombExplosion BombExplosion => _bombExplosion;
         
         [SerializeField] private BlockCollider _blockCollider;
-        [SerializeField] private BlockSlicer blockSlicer;
+        [SerializeField] private BombSlicer bombSlicer;
+        [SerializeField] private BombExplosion _bombExplosion;
         
         private IBlockContainerService _blockContainerService;
         
@@ -22,7 +24,7 @@ namespace Main.Scripts.Logic.Blocks
 
         private void OnDestroy()
         {
-            _blockContainerService?.RemoveBlock(this);
+            _blockContainerService?.RemoveBomb(this);
         }
     }
 }

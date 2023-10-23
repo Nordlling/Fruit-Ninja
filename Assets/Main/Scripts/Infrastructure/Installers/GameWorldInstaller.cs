@@ -8,6 +8,7 @@ using Main.Scripts.Infrastructure.Services.ButtonContainer;
 using Main.Scripts.Infrastructure.Services.Collision;
 using Main.Scripts.Infrastructure.Services.Combo;
 using Main.Scripts.Infrastructure.Services.Difficulty;
+using Main.Scripts.Infrastructure.Services.Explosion;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.LivingZone;
 using Main.Scripts.Infrastructure.Services.SaveLoad;
@@ -24,10 +25,11 @@ namespace Main.Scripts.Infrastructure.Installers
     {
         [Header("Configs")]
         [SerializeField] private DifficultyConfig _difficultyConfig;
-        [SerializeField] private BlockConfig _blockConfig;
         [SerializeField] private HealthConfig _healthConfig;
         [SerializeField] private ScoreConfig _scoreConfig;
-        [SerializeField] private BlockPrefabsConfig _blockPrefabsConfig;
+        [SerializeField] private BlockTypesConfig _blockTypesConfig;
+        [SerializeField] private WordEndingsConfig _wordEndingsConfig;
+        [SerializeField] private BoostersConfig _boostersConfig;
         
         [Header("Prefabs")]
         [SerializeField] private Swiper _swiperPrefab;
@@ -51,11 +53,13 @@ namespace Main.Scripts.Infrastructure.Installers
             RegisterScoreService(serviceContainer);
             RegisterSwiper(serviceContainer);
             RegisterDifficultyService(serviceContainer);
-            
+
+            RegisterExplosionService(serviceContainer);
             RegisterCollisionService(serviceContainer);
             RegisterHealthService(serviceContainer);
             RegisterLabelFactory(serviceContainer);
             RegisterSpawnFactory(serviceContainer);
+            RegisterSliceEffectFactory(serviceContainer);
             RegisterComboService(serviceContainer);
             RegisterBlockFactory(serviceContainer);
             RegisterSpawner(serviceContainer);
@@ -134,6 +138,12 @@ namespace Main.Scripts.Infrastructure.Installers
         }
 
 
+        private void RegisterExplosionService(ServiceContainer serviceContainer)
+        {
+            ExplosionService explosionService = new ExplosionService(serviceContainer.Get<IBlockContainerService>());
+            serviceContainer.SetService<IExplosionService, ExplosionService>(explosionService);
+        }
+
         private void RegisterCollisionService(ServiceContainer serviceContainer)
         {
             CollisionService collisionService = Instantiate(_collisionServicePrefab);
@@ -168,9 +178,21 @@ namespace Main.Scripts.Infrastructure.Installers
             LabelFactory labelFactory = new LabelFactory
                 (
                     serviceContainer.Get<ITimeProvider>(),
-                    serviceContainer.Get<LivingZone>()
+                    serviceContainer.Get<LivingZone>(),
+                    _wordEndingsConfig
                 );
             serviceContainer.SetService<ILabelFactory, LabelFactory>(labelFactory);
+        }
+        
+        private void RegisterSliceEffectFactory(ServiceContainer serviceContainer)
+        {
+            SliceEffectFactory sliceEffectFactory = new SliceEffectFactory(
+                serviceContainer.Get<ITimeProvider>(),
+                _blockTypesConfig,
+                _splashPrefab
+            );
+            
+            serviceContainer.SetService<ISliceEffectFactory, SliceEffectFactory>(sliceEffectFactory);
         }
 
         private void RegisterComboService(ServiceContainer serviceContainer)
@@ -186,20 +208,20 @@ namespace Main.Scripts.Infrastructure.Installers
 
         private void RegisterBlockFactory(ServiceContainer serviceContainer)
         {
-            serviceContainer.SetService<IBlockFactory, BlockFactory>(
-                new BlockFactory(
-                    serviceContainer.Get<IBlockContainerService>(),
-                    serviceContainer.Get<LivingZone>(), 
-                    serviceContainer.Get<IHealthService>(),
-                    serviceContainer.Get<IScoreService>(),
-                    serviceContainer.Get<IComboService>(),
-                    serviceContainer.Get<ITimeProvider>(),
-                    serviceContainer.Get<ILabelFactory>(),
-                    _blockConfig,
-                    _blockPrefabsConfig,
-                    _splashPrefab
-                    )
-                );
+            BlockFactory blockFactory = new BlockFactory(
+                serviceContainer.Get<IBlockContainerService>(),
+                serviceContainer.Get<IExplosionService>(),
+                serviceContainer.Get<LivingZone>(),
+                serviceContainer.Get<IHealthService>(),
+                serviceContainer.Get<IScoreService>(),
+                serviceContainer.Get<IComboService>(),
+                serviceContainer.Get<ITimeProvider>(),
+                serviceContainer.Get<ILabelFactory>(),
+                serviceContainer.Get<ISliceEffectFactory>(),
+                _blockTypesConfig
+            );
+            
+            serviceContainer.SetService<IBlockFactory, BlockFactory>(blockFactory);
         }
 
         private void RegisterSpawner(ServiceContainer serviceContainer)
@@ -209,7 +231,8 @@ namespace Main.Scripts.Infrastructure.Installers
                 serviceContainer.Get<IDifficultyService>(),
                 serviceContainer.Get<IBlockFactory>(),
                 serviceContainer.Get<ISpawnFactory>(),
-                serviceContainer.Get<ITimeProvider>()
+                serviceContainer.Get<ITimeProvider>(),
+                _boostersConfig
             );
             
             serviceContainer.SetServiceSelf(_spawner);

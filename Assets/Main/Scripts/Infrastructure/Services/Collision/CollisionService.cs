@@ -45,7 +45,15 @@ namespace Main.Scripts.Infrastructure.Services.Collision
             {
                 if (_swiper.HasEnoughSpeed() && block.BlockCollider.SphereBounds.Contains(_swiper.Position))
                 {
-                    block.Slicer.Slice(_swiper.Position, _swiper.Direction);
+                    block.BlockSlicer.Slice(_swiper.Position, _swiper.Direction);
+                }
+            }
+            
+            foreach (Bomb bomb in _blockContainerService.Bombs)
+            {
+                if (_swiper.HasEnoughSpeed() && bomb.BlockCollider.SphereBounds.Contains(_swiper.Position))
+                {
+                    bomb.BombSlicer.Slice(_swiper.Position, _swiper.Direction);
                 }
             }
         }

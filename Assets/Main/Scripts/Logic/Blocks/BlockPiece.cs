@@ -9,7 +9,7 @@ namespace Main.Scripts.Logic.Blocks
         public BlockMovement BlockMovement => _blockMovement;
         public BoundsChecker BoundsChecker => _boundsChecker;
         public BlockAnimation BlockAnimation => _blockAnimation;
-        public BlockCollider BlockCollider => _blockCollider;
+        public Bounds ColliderBounds => _blockCollider.SphereBounds;
 
         public SpriteRenderer SpriteRenderer => _spriteRenderer;
         public ITimeProvider TimeProvider { get; protected set; }

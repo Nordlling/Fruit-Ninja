@@ -24,17 +24,17 @@ namespace Main.Scripts.Infrastructure.Services.ButtonContainer
 
         public void EnableAllButtons()
         {
-            foreach (Button button in Buttons)
+            for (int i = 0; i < Buttons.Count; i++)
             {
-                button.interactable = true;
+                Buttons[i].interactable = true;
             }
         }
 
         public void DisableAllButtons()
         {
-            foreach (Button button in Buttons)
+            for (int i = 0; i < Buttons.Count; i++)
             {
-                button.interactable = false;
+                Buttons[i].interactable = false;
             }
         }
     }

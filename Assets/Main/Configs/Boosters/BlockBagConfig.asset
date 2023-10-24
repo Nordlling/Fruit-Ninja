@@ -12,6 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e24c054cd2e848699c859f12ef30744f, type: 3}
   m_Name: BlockBagConfig
   m_EditorClassIdentifier: 
+  BoosterSpawnInfo:
+    DropoutRate: 0.5
+    MaxFractionInBoostPack: 0.3
+    MaxNumberInBoostPack: -1
+    MaxNumberOnScreen: -1
+  BlockInfo:
+    BlockPrefab: {fileID: 7823192239039271056, guid: af2d229b128eb394cb327bf0a78376f0, type: 3}
+    SplashPrefab: {fileID: 6408557679186087295, guid: c803738f79fb06c44b36e5cb67a4ca73, type: 3}
+    VisualSprites:
+    - BlockSprite: {fileID: 21300000, guid: 015e7496fc819754ea7cb62c4f0d3e14, type: 3}
+      SplashSprite: {fileID: 0}
   InvulnerabilityDuration: 0.5
   MinSpeed: 5
   MaxSpeed: 8

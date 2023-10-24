@@ -27,8 +27,7 @@ namespace Main.Scripts.Infrastructure.Factory
         private readonly ITimeProvider _timeProvider;
         private readonly ILabelFactory _labelFactory;
         private readonly ISliceEffectFactory _sliceEffectFactory;
-        private readonly BlockTypesConfig _blockTypesConfig;
-        private readonly BoostersConfig _boostersConfig;
+        private readonly BlocksConfig _blocksConfig;
 
         public BlockFactory(IBlockContainerService blockContainerService,
             IExplosionService explosionService,
@@ -39,8 +38,7 @@ namespace Main.Scripts.Infrastructure.Factory
             ITimeProvider timeProvider,
             ILabelFactory labelFactory,
             ISliceEffectFactory sliceEffectFactory,
-            BlockTypesConfig blockTypesConfig, 
-            BoostersConfig boostersConfig)
+            BlocksConfig blocksConfig)
         {
             _blockContainerService = blockContainerService;
             _explosionService = explosionService;
@@ -51,13 +49,12 @@ namespace Main.Scripts.Infrastructure.Factory
             _timeProvider = timeProvider;
             _labelFactory = labelFactory;
             _sliceEffectFactory = sliceEffectFactory;
-            _blockTypesConfig = blockTypesConfig;
-            _boostersConfig = boostersConfig;
+            _blocksConfig = blocksConfig;
         }
 
         public BlockPiece CreateBlockPiece(Vector2 position)
         {
-            BlockInfo blockPieceInfo = _blockTypesConfig.BlockPiece;
+            BlockInfo blockPieceInfo = _blocksConfig.BlockPiece;
             BlockPiece block = Object.Instantiate(blockPieceInfo.BlockPrefab, position, Quaternion.identity);
             block.Construct(_timeProvider, 0f);
             block.BoundsChecker.Construct(_livingZone, _healthService, false);
@@ -67,7 +64,7 @@ namespace Main.Scripts.Infrastructure.Factory
 
         public Block CreateBlock(Vector2 position, float invulnerabilityDuration)
         {
-            Block block = CreateBasicBlock<Block>(out int randomIndex, position, _blockTypesConfig.Block, true, invulnerabilityDuration);
+            Block block = CreateBasicBlock<Block>(out int randomIndex, position, _blocksConfig.Block, true, invulnerabilityDuration);
 
             block.BlockSlicer.Construct(this, _labelFactory, _sliceEffectFactory, _scoreService, _comboService, randomIndex);
             _blockContainerService.AddBlock(block);
@@ -76,7 +73,7 @@ namespace Main.Scripts.Infrastructure.Factory
         
         public Bomb CreateBomb(Vector2 position)
         {
-            Bomb bomb = CreateBasicBlock<Bomb>(out int randomIndex, position, _blockTypesConfig.Bomb, false, 0f);
+            Bomb bomb = CreateBasicBlock<Bomb>(out int randomIndex, position, _blocksConfig.BombConfig.BlockInfo, false, 0f);
             
             bomb.BombExplosion.Construct(_explosionService);
             bomb.BombSlicer.Construct(
@@ -93,7 +90,7 @@ namespace Main.Scripts.Infrastructure.Factory
 
         public BonusLife CreateBonusLife(Vector2 position)
         {
-            BonusLife bonusLife = CreateBasicBlock<BonusLife>(out int randomIndex, position, _blockTypesConfig.BonusLife, false, 0f);
+            BonusLife bonusLife = CreateBasicBlock<BonusLife>(out int randomIndex, position, _blocksConfig.BonusLifeConfig.BlockInfo, false, 0f);
             
             bonusLife.BonusLifeSlicer.Construct(
                 _labelFactory, 
@@ -108,11 +105,11 @@ namespace Main.Scripts.Infrastructure.Factory
         
         public BlockBag CreateBlockBag(Vector2 position)
         {
-            BlockBag blockBag = CreateBasicBlock<BlockBag>(out int randomIndex, position, _blockTypesConfig.BlockBag, false, 0f);
+            BlockBag blockBag = CreateBasicBlock<BlockBag>(out int randomIndex, position, _blocksConfig.BlockBagConfig.BlockInfo, false, 0f);
             
             blockBag.BlockBagSlicer.Construct(
                 this,
-                _boostersConfig.BlockBagConfig,
+                _blocksConfig.BlockBagConfig, 
                 _sliceEffectFactory, 
                 randomIndex);
             

@@ -29,8 +29,7 @@ namespace Main.Scripts.Infrastructure.Installers
         [SerializeField] private HealthConfig _healthConfig;
         [SerializeField] private ScoreConfig _scoreConfig;
         [SerializeField] private WordEndingsConfig _wordEndingsConfig;
-        [SerializeField] private BlockTypesConfig _blockTypesConfig;
-        [SerializeField] private BoostersConfig _boostersConfig;
+        [SerializeField] private BlocksConfig _blocksConfig;
         
         [Header("Prefabs")]
         [SerializeField] private Swiper _swiperPrefab;
@@ -179,7 +178,7 @@ namespace Main.Scripts.Infrastructure.Installers
         {
             BoostersCheckerService boostersCheckerService = new BoostersCheckerService
             (
-                _boostersConfig.BoostersSpawnConfig,
+                _blocksConfig,
                 serviceContainer.Get<IBlockContainerService>(),
                 serviceContainer.Get<IHealthService>()
             );
@@ -210,7 +209,7 @@ namespace Main.Scripts.Infrastructure.Installers
             SliceEffectFactory sliceEffectFactory = new SliceEffectFactory
             (
                 serviceContainer.Get<ITimeProvider>(),
-                _blockTypesConfig
+                _blocksConfig
             );
             
             serviceContainer.SetService<ISliceEffectFactory, SliceEffectFactory>(sliceEffectFactory);
@@ -239,8 +238,7 @@ namespace Main.Scripts.Infrastructure.Installers
                 serviceContainer.Get<ITimeProvider>(),
                 serviceContainer.Get<ILabelFactory>(),
                 serviceContainer.Get<ISliceEffectFactory>(),
-                _blockTypesConfig,
-                _boostersConfig
+                _blocksConfig
             );
             
             serviceContainer.SetService<IBlockFactory, BlockFactory>(blockFactory);
@@ -254,8 +252,7 @@ namespace Main.Scripts.Infrastructure.Installers
                 serviceContainer.Get<IBlockFactory>(),
                 serviceContainer.Get<ISpawnFactory>(),
                 serviceContainer.Get<ITimeProvider>(),
-                serviceContainer.Get<IBoostersCheckerService>(),
-                _boostersConfig.BoostersSpawnConfig
+                serviceContainer.Get<IBoostersCheckerService>()
             );
             
             serviceContainer.SetServiceSelf(_spawner);

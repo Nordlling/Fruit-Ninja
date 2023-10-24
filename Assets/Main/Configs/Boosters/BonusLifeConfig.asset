@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0623645e7efd41bfa08d7b6e4f316210, type: 3}
+  m_Name: BonusLifeConfig
+  m_EditorClassIdentifier: 
+  BoosterSpawnInfo:
+    DropoutRate: 0.1
+    MaxFractionInBoostPack: 0.2
+    MaxNumberInBoostPack: -1
+    MaxNumberOnScreen: -1
+  BlockInfo:
+    BlockPrefab: {fileID: 2100754865106279568, guid: 13dc3db8fcd6701488337fb84b045c19, type: 3}
+    SplashPrefab: {fileID: 6408557679186087295, guid: 4ef4320916c303d47811d3d83462a9c2, type: 3}
+    VisualSprites:
+    - BlockSprite: {fileID: 21300000, guid: 18e227ac345862d4fb48bae1d2ec5029, type: 3}
+      SplashSprite: {fileID: 21300000, guid: a07daf4e51e3c5943be8b323441ba7cb, type: 3}

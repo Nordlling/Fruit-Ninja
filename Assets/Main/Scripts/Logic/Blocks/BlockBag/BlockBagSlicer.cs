@@ -1,4 +1,4 @@
-using Main.Scripts.Infrastructure.Configs;
+using Main.Scripts.Infrastructure.Configs.Boosters;
 using Main.Scripts.Infrastructure.Factory;
 using UnityEngine;
 

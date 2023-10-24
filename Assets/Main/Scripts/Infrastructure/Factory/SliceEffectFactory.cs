@@ -9,39 +9,39 @@ namespace Main.Scripts.Infrastructure.Factory
     public class SliceEffectFactory : ISliceEffectFactory
     {
         private readonly ITimeProvider _timeProvider;
-        private readonly BlockTypesConfig _blockTypesConfig;
+        private readonly BlocksConfig _blocksConfig;
 
-        public SliceEffectFactory(ITimeProvider timeProvider, BlockTypesConfig blockTypesConfig)
+        public SliceEffectFactory(ITimeProvider timeProvider, BlocksConfig blocksConfig)
         {
             _timeProvider = timeProvider;
-            _blockTypesConfig = blockTypesConfig;
+            _blocksConfig = blocksConfig;
         }
 
         public Splash CreateBlockSplash(Vector2 position, int visualIndex)
         {
-            Splash splash = Object.Instantiate(_blockTypesConfig.Block.SplashPrefab, position, Quaternion.identity);
-            splash.Construct(_timeProvider, _blockTypesConfig.Block.VisualSprites[visualIndex].SplashSprite);
+            Splash splash = Object.Instantiate(_blocksConfig.Block.SplashPrefab, position, Quaternion.identity);
+            splash.Construct(_timeProvider, _blocksConfig.Block.VisualSprites[visualIndex].SplashSprite);
             return splash;
         }
         
         public Splash CreateBombSplash(Vector2 position, int visualIndex)
         {
-            Splash splash = Object.Instantiate(_blockTypesConfig.Bomb.SplashPrefab, position, Quaternion.identity);
-            splash.Construct(_timeProvider, _blockTypesConfig.Bomb.VisualSprites[visualIndex].SplashSprite);
+            Splash splash = Object.Instantiate(_blocksConfig.BombConfig.BlockInfo.SplashPrefab, position, Quaternion.identity);
+            splash.Construct(_timeProvider, _blocksConfig.BombConfig.BlockInfo.VisualSprites[visualIndex].SplashSprite);
             return splash;
         }
         
         public Splash CreateBonusLifeSplash(Vector2 position, int visualIndex)
         {
-            Splash splash = Object.Instantiate(_blockTypesConfig.BonusLife.SplashPrefab, position, Quaternion.identity);
-            splash.Construct(_timeProvider, _blockTypesConfig.BonusLife.VisualSprites[visualIndex].SplashSprite);
+            Splash splash = Object.Instantiate(_blocksConfig.BonusLifeConfig.BlockInfo.SplashPrefab, position, Quaternion.identity);
+            splash.Construct(_timeProvider, _blocksConfig.BonusLifeConfig.BlockInfo.VisualSprites[visualIndex].SplashSprite);
             return splash;
         }
         
         public Splash CreateBlockBagSplash(Vector2 position, int visualIndex)
         {
-            Splash splash = Object.Instantiate(_blockTypesConfig.BlockBag.SplashPrefab, position, Quaternion.identity);
-            splash.Construct(_timeProvider, _blockTypesConfig.BlockBag.VisualSprites[visualIndex].SplashSprite);
+            Splash splash = Object.Instantiate(_blocksConfig.BlockBagConfig.BlockInfo.SplashPrefab, position, Quaternion.identity);
+            splash.Construct(_timeProvider, _blocksConfig.BlockBagConfig.BlockInfo.VisualSprites[visualIndex].SplashSprite);
             return splash;
         }
 

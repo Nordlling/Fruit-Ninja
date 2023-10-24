@@ -20,6 +20,11 @@ namespace Main.Scripts.UI.Gameplay
             _timeProvider = timeProvider;
         }
 
+        public void ResetScore()
+        {
+            _currentScore = 0;
+        }
+
         private void Update()
         {
             if (_currentTweener != null)
@@ -35,7 +40,7 @@ namespace Main.Scripts.UI.Gameplay
             _currentTweener = AnimateScoreChange(_currentScore, newScore);
             _currentScore = newScore;
         }
-        
+
         private Tweener AnimateScoreChange(int oldScore, int newScore)
         {
             return DOTween

@@ -17,7 +17,6 @@ using Main.Scripts.Infrastructure.Services.SaveLoad;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Logic.Combo;
 using Main.Scripts.Logic.Spawn;
-using Main.Scripts.Logic.Splashing;
 using Main.Scripts.Logic.Swipe;
 using UnityEngine;
 
@@ -29,8 +28,8 @@ namespace Main.Scripts.Infrastructure.Installers
         [SerializeField] private DifficultyConfig _difficultyConfig;
         [SerializeField] private HealthConfig _healthConfig;
         [SerializeField] private ScoreConfig _scoreConfig;
-        [SerializeField] private BlockTypesConfig _blockTypesConfig;
         [SerializeField] private WordEndingsConfig _wordEndingsConfig;
+        [SerializeField] private BlockTypesConfig _blockTypesConfig;
         [SerializeField] private BoostersConfig _boostersConfig;
         
         [Header("Prefabs")]
@@ -95,8 +94,7 @@ namespace Main.Scripts.Infrastructure.Installers
 
         private void RegisterBlockContainerService(ServiceContainer serviceContainer)
         {
-            BlockContainerService blockContainerService =
-                new BlockContainerService(serviceContainer.Get<IGameplayStateMachine>());
+            BlockContainerService blockContainerService = new BlockContainerService(serviceContainer.Get<IGameplayStateMachine>());
             
             serviceContainer.SetService<IBlockContainerService, BlockContainerService>(blockContainerService);
             
@@ -181,7 +179,7 @@ namespace Main.Scripts.Infrastructure.Installers
         {
             BoostersCheckerService boostersCheckerService = new BoostersCheckerService
             (
-                _boostersConfig,
+                _boostersConfig.BoostersSpawnConfig,
                 serviceContainer.Get<IBlockContainerService>(),
                 serviceContainer.Get<IHealthService>()
             );
@@ -241,7 +239,8 @@ namespace Main.Scripts.Infrastructure.Installers
                 serviceContainer.Get<ITimeProvider>(),
                 serviceContainer.Get<ILabelFactory>(),
                 serviceContainer.Get<ISliceEffectFactory>(),
-                _blockTypesConfig
+                _blockTypesConfig,
+                _boostersConfig
             );
             
             serviceContainer.SetService<IBlockFactory, BlockFactory>(blockFactory);
@@ -256,7 +255,7 @@ namespace Main.Scripts.Infrastructure.Installers
                 serviceContainer.Get<ISpawnFactory>(),
                 serviceContainer.Get<ITimeProvider>(),
                 serviceContainer.Get<IBoostersCheckerService>(),
-                _boostersConfig
+                _boostersConfig.BoostersSpawnConfig
             );
             
             serviceContainer.SetServiceSelf(_spawner);

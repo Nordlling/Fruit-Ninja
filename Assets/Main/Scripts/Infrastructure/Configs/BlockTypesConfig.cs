@@ -12,6 +12,7 @@ namespace Main.Scripts.Infrastructure.Configs
         public BlockInfo Block;
         public BlockInfo Bomb;
         public BlockInfo BonusLife;
+        public BlockInfo BlockBag;
     }
     
     [Serializable]

@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using Main.Scripts.Infrastructure.Configs;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
 using Main.Scripts.Infrastructure.Services.Health;
+using Main.Scripts.Logic.Blocks;
+using Main.Scripts.Logic.Blocks.BonusLifes;
 using Main.Scripts.Logic.Spawn;
 using UnityEngine;
 
@@ -9,22 +11,22 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
 {
     public class BoostersCheckerService : IBoostersCheckerService
     {
-        private readonly BoostersConfig _boostersConfig;
+        private readonly BoostersSpawnConfig _boostersSpawnConfig;
         private readonly IBlockContainerService _blockContainerService;
         private readonly IHealthService _healthService;
         
         private readonly Dictionary<BoosterType, int> _boosterCounters = new();
 
-        public BoostersCheckerService(BoostersConfig boostersConfig, IBlockContainerService blockContainerService, IHealthService healthService)
+        public BoostersCheckerService(BoostersSpawnConfig boostersSpawnConfig, IBlockContainerService blockContainerService, IHealthService healthService)
         {
-            _boostersConfig = boostersConfig;
+            _boostersSpawnConfig = boostersSpawnConfig;
             _blockContainerService = blockContainerService;
             _healthService = healthService;
         }
         
         public void CalculateBlockMaxCounter(int packBlockCount)
         {
-            foreach (BoosterInfo boosterInfo in _boostersConfig.Boosters)
+            foreach (BoosterInfo boosterInfo in _boostersSpawnConfig.Boosters)
             {
                 BoosterSpawnInfo boosterSpawnInfo = boosterInfo.BoosterSpawnInfo;
                 
@@ -57,9 +59,8 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
                     return TrySpawnBomb(boosterInfo, spawnArea);
                 case BoosterType.BonusLife:
                     return TrySpawnBonusLife(boosterInfo, spawnArea);
-                case BoosterType.BlockBug:
-                    Debug.Log($"Spawn {boosterInfo.BoosterType}");
-                    return true;
+                case BoosterType.BlockBag:
+                    return TrySpawnBlockBag(boosterInfo, spawnArea);
                 case BoosterType.Freeze:
                     Debug.Log($"Spawn {boosterInfo.BoosterType}");
                     return true;
@@ -82,23 +83,19 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
 
         private bool TrySpawnBomb(BoosterInfo boosterInfo, SpawnArea spawnArea)
         {
-            if (_boosterCounters[boosterInfo.BoosterType] <= 0)
+            if (!CanSpawn(boosterInfo))
             {
                 return false;
             }
-            if (boosterInfo.BoosterSpawnInfo.MaxNumberOnScreen != -1 && _blockContainerService.BonusLifes.Count >= boosterInfo.BoosterSpawnInfo.MaxNumberOnScreen)
-            {
-                return false;
-            }
-            
+
             spawnArea.SpawnBomb();
             _boosterCounters[boosterInfo.BoosterType]--;
             return true;
         }
-        
+
         private bool TrySpawnBonusLife(BoosterInfo boosterInfo, SpawnArea spawnArea)
         {
-            if (boosterInfo.BoosterSpawnInfo.MaxNumberOnScreen != -1 && _blockContainerService.BonusLifes.Count >= boosterInfo.BoosterSpawnInfo.MaxNumberOnScreen)
+            if (!CanSpawn(boosterInfo))
             {
                 return false;
             }
@@ -109,6 +106,33 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
             }
             
             spawnArea.SpawnBonusLife();
+            return true;
+        }
+        
+        private bool TrySpawnBlockBag(BoosterInfo boosterInfo, SpawnArea spawnArea)
+        {
+            if (!CanSpawn(boosterInfo))
+            {
+                return false;
+            }
+            
+            spawnArea.SpawnBlockBag();
+            return true;
+        }
+
+        private bool CanSpawn(BoosterInfo boosterInfo)
+        {
+            if (_boosterCounters[boosterInfo.BoosterType] <= 0)
+            {
+                return false;
+            }
+
+            if (boosterInfo.BoosterSpawnInfo.MaxNumberOnScreen != -1 &&
+                _blockContainerService.BlockTypes[typeof(BonusLife)].Count >= boosterInfo.BoosterSpawnInfo.MaxNumberOnScreen)
+            {
+                return false;
+            }
+
             return true;
         }
     }

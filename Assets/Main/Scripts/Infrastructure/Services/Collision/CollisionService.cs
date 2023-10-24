@@ -40,17 +40,25 @@ namespace Main.Scripts.Infrastructure.Services.Collision
             {
                 return;
             }
-            
-            foreach (BlockPiece blockPiece in _blockContainerService.AllBlocks)
+
+            for (int i = 0; i < _blockContainerService.BlocksCount; i++)
             {
-                if (_swiper.HasEnoughSpeed() && blockPiece.BlockCollider.SphereBounds.Contains(_swiper.Position))
+                BlockPiece blockPiece = _blockContainerService.AllBlocks[i];
+                if (CanSlice(blockPiece))
                 {
                     if (blockPiece is ISliceable slicer)
                     {
                         slicer.Slice(_swiper.Position, _swiper.Direction);
                     }
-                }
+                } 
             }
+        }
+
+        private bool CanSlice(BlockPiece blockPiece)
+        {
+            return blockPiece.InvulnerabilityDuration <= 0 && 
+                   _swiper.HasEnoughSpeed() && 
+                   blockPiece.BlockCollider.SphereBounds.Contains(_swiper.Position);
         }
     }
 }

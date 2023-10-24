@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9181529b59b4e8a845f39c4166ec5a4, type: 3}
-  m_Name: BoostersConfig
+  m_Name: BoostersSpawnConfig
   m_EditorClassIdentifier: 
   MaxFractionInPack: 0.34
   Boosters:
@@ -28,10 +28,10 @@ MonoBehaviour:
       MaxNumberOnScreen: -1
   - BoosterType: 2
     BoosterSpawnInfo:
-      DropoutRate: 0
-      MaxFractionInBoostPack: 0
-      MaxNumberInBoostPack: 0
-      MaxNumberOnScreen: 0
+      DropoutRate: 0.5
+      MaxFractionInBoostPack: 0.3
+      MaxNumberInBoostPack: -1
+      MaxNumberOnScreen: -1
   - BoosterType: 3
     BoosterSpawnInfo:
       DropoutRate: 0

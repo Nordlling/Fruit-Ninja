@@ -4,7 +4,7 @@ namespace Main.Scripts.Infrastructure.Configs
     {
         Bomb,
         BonusLife,
-        BlockBug,
+        BlockBag,
         Freeze,
         Magnet,
         Brick,

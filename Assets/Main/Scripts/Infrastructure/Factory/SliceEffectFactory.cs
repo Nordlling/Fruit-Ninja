@@ -37,6 +37,13 @@ namespace Main.Scripts.Infrastructure.Factory
             splash.Construct(_timeProvider, _blockTypesConfig.BonusLife.VisualSprites[visualIndex].SplashSprite);
             return splash;
         }
+        
+        public Splash CreateBlockBagSplash(Vector2 position, int visualIndex)
+        {
+            Splash splash = Object.Instantiate(_blockTypesConfig.BlockBag.SplashPrefab, position, Quaternion.identity);
+            splash.Construct(_timeProvider, _blockTypesConfig.BlockBag.VisualSprites[visualIndex].SplashSprite);
+            return splash;
+        }
 
         public void Cleanup()
         {

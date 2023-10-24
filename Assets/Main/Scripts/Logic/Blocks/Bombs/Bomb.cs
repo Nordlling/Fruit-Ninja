@@ -12,14 +12,6 @@ namespace Main.Scripts.Logic.Blocks.Bombs
         [SerializeField] private BombSlicer _bombSlicer;
         [SerializeField] private BombExplosion _bombExplosion;
         
-        private IBlockContainerService _blockContainerService;
-        
-        public void Construct(IBlockContainerService blockContainerService, ITimeProvider timeProvider)
-        {
-            _blockContainerService = blockContainerService;
-            TimeProvider = timeProvider;
-        }
-        
         public void Slice(Vector2 swiperPosition, Vector2 swiperDirection)
         {
             _bombSlicer.Slice(swiperPosition, swiperDirection);
@@ -27,7 +19,7 @@ namespace Main.Scripts.Logic.Blocks.Bombs
 
         private void OnDestroy()
         {
-            _blockContainerService?.RemoveBomb(this);
+            _blockContainerService?.RemoveBlock(this);
         }
     }
 }

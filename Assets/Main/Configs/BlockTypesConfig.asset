@@ -48,3 +48,9 @@ MonoBehaviour:
     VisualSprites:
     - BlockSprite: {fileID: 21300000, guid: 18e227ac345862d4fb48bae1d2ec5029, type: 3}
       SplashSprite: {fileID: 21300000, guid: a07daf4e51e3c5943be8b323441ba7cb, type: 3}
+  BlockBag:
+    BlockPrefab: {fileID: 7823192239039271056, guid: af2d229b128eb394cb327bf0a78376f0, type: 3}
+    SplashPrefab: {fileID: 6408557679186087295, guid: c803738f79fb06c44b36e5cb67a4ca73, type: 3}
+    VisualSprites:
+    - BlockSprite: {fileID: 21300000, guid: 015e7496fc819754ea7cb62c4f0d3e14, type: 3}
+      SplashSprite: {fileID: 0}

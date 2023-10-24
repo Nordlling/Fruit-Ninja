@@ -2,6 +2,7 @@ using Main.Scripts.Infrastructure.Factory;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services.Collision;
 using Main.Scripts.Logic.Blocks;
+using Main.Scripts.Logic.Blocks.BlockBag;
 using Main.Scripts.Logic.Blocks.Bombs;
 using Main.Scripts.Logic.Blocks.BonusLifes;
 using UnityEngine;
@@ -36,7 +37,7 @@ namespace Main.Scripts.Logic.Spawn
         {
             GenerateBlockParameters();
             
-            Block block = _blockFactory.CreateBlock(_newPointPosition);
+            Block block = _blockFactory.CreateBlock(_newPointPosition, 0f);
             block.BlockMovement.Construct(_newStartDirection, _newSpeed, block.TimeProvider);
         }
         
@@ -54,6 +55,14 @@ namespace Main.Scripts.Logic.Spawn
             
             BonusLife bonusLife = _blockFactory.CreateBonusLife(_newPointPosition);
             bonusLife.BlockMovement.Construct(_newStartDirection, _newSpeed * bonusLife.SpeedMultiplier, bonusLife.TimeProvider);
+        }
+        
+        public void SpawnBlockBag()
+        {
+            GenerateBlockParameters();
+            
+            BlockBag blockBag = _blockFactory.CreateBlockBag(_newPointPosition);
+            blockBag.BlockMovement.Construct(_newStartDirection, _newSpeed, blockBag.TimeProvider);
         }
 
         private void GenerateBlockParameters()

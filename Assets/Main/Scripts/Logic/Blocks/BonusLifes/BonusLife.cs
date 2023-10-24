@@ -1,6 +1,4 @@
-﻿using Main.Scripts.Infrastructure.Provides;
-using Main.Scripts.Infrastructure.Services.BlockContainer;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Main.Scripts.Logic.Blocks.BonusLifes
 {
@@ -12,14 +10,6 @@ namespace Main.Scripts.Logic.Blocks.BonusLifes
         [SerializeField] private BonusLifeSlicer _bonusLifeSlicer;
         [SerializeField] private float _speedMultiplier;
         
-        private IBlockContainerService _blockContainerService;
-        
-        public void Construct(IBlockContainerService blockContainerService, ITimeProvider timeProvider)
-        {
-            _blockContainerService = blockContainerService;
-            TimeProvider = timeProvider;
-        }
-        
         public void Slice(Vector2 swiperPosition, Vector2 swiperDirection)
         {
             _bonusLifeSlicer.Slice(swiperPosition, swiperDirection);
@@ -27,7 +17,7 @@ namespace Main.Scripts.Logic.Blocks.BonusLifes
 
         private void OnDestroy()
         {
-            _blockContainerService?.RemoveBonusLife(this);
+            _blockContainerService?.RemoveBlock(this);
         }
     }
 }

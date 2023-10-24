@@ -7,6 +7,7 @@ using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.LivingZone;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Logic.Blocks;
+using Main.Scripts.Logic.Blocks.BlockBag;
 using Main.Scripts.Logic.Blocks.Bombs;
 using Main.Scripts.Logic.Blocks.BonusLifes;
 using UnityEngine;
@@ -27,9 +28,9 @@ namespace Main.Scripts.Infrastructure.Factory
         private readonly ILabelFactory _labelFactory;
         private readonly ISliceEffectFactory _sliceEffectFactory;
         private readonly BlockTypesConfig _blockTypesConfig;
+        private readonly BoostersConfig _boostersConfig;
 
-        public BlockFactory(
-            IBlockContainerService blockContainerService,
+        public BlockFactory(IBlockContainerService blockContainerService,
             IExplosionService explosionService,
             LivingZone livingZone,
             IHealthService healthService,
@@ -38,7 +39,8 @@ namespace Main.Scripts.Infrastructure.Factory
             ITimeProvider timeProvider,
             ILabelFactory labelFactory,
             ISliceEffectFactory sliceEffectFactory,
-            BlockTypesConfig blockTypesConfig)
+            BlockTypesConfig blockTypesConfig, 
+            BoostersConfig boostersConfig)
         {
             _blockContainerService = blockContainerService;
             _explosionService = explosionService;
@@ -50,28 +52,23 @@ namespace Main.Scripts.Infrastructure.Factory
             _labelFactory = labelFactory;
             _sliceEffectFactory = sliceEffectFactory;
             _blockTypesConfig = blockTypesConfig;
+            _boostersConfig = boostersConfig;
         }
 
         public BlockPiece CreateBlockPiece(Vector2 position)
         {
             BlockInfo blockPieceInfo = _blockTypesConfig.BlockPiece;
             BlockPiece block = Object.Instantiate(blockPieceInfo.BlockPrefab, position, Quaternion.identity);
-            block.Construct(_timeProvider);
+            block.Construct(_timeProvider, 0f);
             block.BoundsChecker.Construct(_livingZone, _healthService, false);
             block.BlockAnimation.Construct(_timeProvider);
             return block;
         }
 
-        public Block CreateBlock(Vector2 position)
+        public Block CreateBlock(Vector2 position, float invulnerabilityDuration)
         {
-            BlockInfo blockInfo = _blockTypesConfig.Block;
-            Block block = (Block)Object.Instantiate(blockInfo.BlockPrefab, position, Quaternion.identity);
-            block.Construct(_blockContainerService, _timeProvider);
-            
-            int randomIndex = Random.Range(0, blockInfo.VisualSprites.Length);
-            block.SpriteRenderer.sprite = blockInfo.VisualSprites[randomIndex].BlockSprite;
-            block.BoundsChecker.Construct(_livingZone, _healthService, true);
-            block.BlockAnimation.Construct(_timeProvider);
+            Block block = CreateBasicBlock<Block>(out int randomIndex, position, _blockTypesConfig.Block, true, invulnerabilityDuration);
+
             block.BlockSlicer.Construct(this, _labelFactory, _sliceEffectFactory, _scoreService, _comboService, randomIndex);
             _blockContainerService.AddBlock(block);
             return block;
@@ -79,14 +76,8 @@ namespace Main.Scripts.Infrastructure.Factory
         
         public Bomb CreateBomb(Vector2 position)
         {
-            BlockInfo blockInfo = _blockTypesConfig.Bomb;
-            Bomb bomb = (Bomb)Object.Instantiate(blockInfo.BlockPrefab, position, Quaternion.identity);
-            bomb.Construct(_blockContainerService, _timeProvider);
+            Bomb bomb = CreateBasicBlock<Bomb>(out int randomIndex, position, _blockTypesConfig.Bomb, false, 0f);
             
-            int randomIndex = Random.Range(0, blockInfo.VisualSprites.Length);
-            bomb.SpriteRenderer.sprite = blockInfo.VisualSprites[randomIndex].BlockSprite;
-            bomb.BoundsChecker.Construct(_livingZone, _healthService, false);
-            bomb.BlockAnimation.Construct(_timeProvider);
             bomb.BombExplosion.Construct(_explosionService);
             bomb.BombSlicer.Construct(
                 _labelFactory, 
@@ -94,32 +85,58 @@ namespace Main.Scripts.Infrastructure.Factory
                 _healthService,
                 bomb.BombExplosion,
                 randomIndex);
-            _blockContainerService.AddBomb(bomb);
+            
+            _blockContainerService.AddBlock(bomb);
+            
             return bomb;
         }
-        
+
         public BonusLife CreateBonusLife(Vector2 position)
         {
-            BlockInfo blockInfo = _blockTypesConfig.BonusLife;
-            BonusLife bonusLife = (BonusLife)Object.Instantiate(blockInfo.BlockPrefab, position, Quaternion.identity);
-            bonusLife.Construct(_blockContainerService, _timeProvider);
+            BonusLife bonusLife = CreateBasicBlock<BonusLife>(out int randomIndex, position, _blockTypesConfig.BonusLife, false, 0f);
             
-            int randomIndex = Random.Range(0, blockInfo.VisualSprites.Length);
-            bonusLife.SpriteRenderer.sprite = blockInfo.VisualSprites[randomIndex].BlockSprite;
-            bonusLife.BoundsChecker.Construct(_livingZone, _healthService, false);
-            bonusLife.BlockAnimation.Construct(_timeProvider);
             bonusLife.BonusLifeSlicer.Construct(
                 _labelFactory, 
                 _sliceEffectFactory, 
                 _healthService,
                 randomIndex);
            
-            _blockContainerService.AddBonusLife(bonusLife);
+            _blockContainerService.AddBlock(bonusLife);
+            
             return bonusLife;
+        }
+        
+        public BlockBag CreateBlockBag(Vector2 position)
+        {
+            BlockBag blockBag = CreateBasicBlock<BlockBag>(out int randomIndex, position, _blockTypesConfig.BlockBag, false, 0f);
+            
+            blockBag.BlockBagSlicer.Construct(
+                this,
+                _boostersConfig.BlockBagConfig,
+                _sliceEffectFactory, 
+                randomIndex);
+            
+            _blockContainerService.AddBlock(blockBag);
+            
+            return blockBag;
         }
 
         public void Cleanup()
         {
+        }
+
+        private T CreateBasicBlock<T>(out int randomIndex, Vector2 position, BlockInfo blockInfo, bool healthAffect, float invulnerabilityDuration) where T : BlockPiece
+        {
+            T basicBlock = (T)Object.Instantiate(blockInfo.BlockPrefab, position, Quaternion.identity);
+            
+            randomIndex = Random.Range(0, blockInfo.VisualSprites.Length);
+
+            basicBlock.Construct(_blockContainerService, _timeProvider, invulnerabilityDuration);
+            basicBlock.SpriteRenderer.sprite = blockInfo.VisualSprites[randomIndex].BlockSprite;
+            basicBlock.BoundsChecker.Construct(_livingZone, _healthService, healthAffect);
+            basicBlock.BlockAnimation.Construct(_timeProvider);
+            
+            return basicBlock;
         }
     }
 }

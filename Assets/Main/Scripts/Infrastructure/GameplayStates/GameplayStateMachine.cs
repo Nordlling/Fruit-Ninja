@@ -17,7 +17,6 @@ namespace Main.Scripts.Infrastructure.GameplayStates
 
         public void AddGameplayStatable(IGameplayStatable gameplayStatable)
         {
-            // _states[typeof(T)].AddStatable(gameplayStatable);
             foreach (IGameplayState gameplayState in _states.Values)
             {
                 gameplayState.AddStatable(gameplayStatable);

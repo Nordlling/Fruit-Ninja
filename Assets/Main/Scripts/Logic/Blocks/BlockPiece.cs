@@ -1,9 +1,10 @@
 ﻿using Main.Scripts.Infrastructure.Provides;
+using Main.Scripts.Infrastructure.Services.BlockContainer;
 using UnityEngine;
 
 namespace Main.Scripts.Logic.Blocks
 {
-    public class BlockPiece : MonoBehaviour
+    public class BlockPiece : MonoBehaviour, IBlockable
     {
         public BlockMovement BlockMovement => _blockMovement;
         public BoundsChecker BoundsChecker => _boundsChecker;
@@ -20,15 +21,34 @@ namespace Main.Scripts.Logic.Blocks
 
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private SpriteRenderer _shadowSpriteRenderer;
+        
+        protected IBlockContainerService _blockContainerService;
+
+        public float InvulnerabilityDuration { get; private set; }
+
+        public void Construct(IBlockContainerService blockContainerService, ITimeProvider timeProvider, float invulnerabilityDuration)
+        {
+            _blockContainerService = blockContainerService;
+            Construct(timeProvider, invulnerabilityDuration);
+        }
+
+        public void Construct(ITimeProvider timeProvider, float invulnerabilityDuration)
+        {
+            TimeProvider = timeProvider;
+            InvulnerabilityDuration = invulnerabilityDuration;
+        }
 
         private void Start()
         {
             _shadowSpriteRenderer.sprite = _spriteRenderer.sprite;
         }
 
-        public void Construct(ITimeProvider timeProvider)
+        private void Update()
         {
-            TimeProvider = timeProvider;
+            if (InvulnerabilityDuration > 0)
+            {
+                InvulnerabilityDuration -= TimeProvider.GetDeltaTime();
+            }
         }
     }
 }

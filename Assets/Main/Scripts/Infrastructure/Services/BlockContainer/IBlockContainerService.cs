@@ -8,10 +8,11 @@ namespace Main.Scripts.Infrastructure.Services.BlockContainer
     {
         
         List<BlockPiece> AllBlocks { get; }
+        List<ISliceable> AllSliceableBlocks { get; }
         int BlocksCount { get; }
         Dictionary<Type, List<BlockPiece>> BlockTypes { get;  }
 
-        void AddBlock<T>(T blockCollider) where T : BlockPiece;
-        void RemoveBlock<T>(T blockCollider) where T : BlockPiece;
+        void AddBlock<T>(T block) where T : BlockPiece;
+        void RemoveBlock<T>(T block) where T : BlockPiece;
     }
 }

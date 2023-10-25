@@ -5,13 +5,13 @@ namespace Main.Scripts.Infrastructure.GameplayStates
 {
     public class PauseState : IGameplayState
     {
-        private readonly SlowedTimeProvider _slowedTimeProvider;
+        private readonly ITimeProvider _timeProvider;
         private List<IPauseable> _pauseables = new();
 
 
-        public PauseState(SlowedTimeProvider slowedTimeProvider)
+        public PauseState(ITimeProvider timeProvider)
         {
-            _slowedTimeProvider = slowedTimeProvider;
+            _timeProvider = timeProvider;
         }
         
         public void AddStatable(IGameplayStatable gameplayStatable)
@@ -29,12 +29,12 @@ namespace Main.Scripts.Infrastructure.GameplayStates
                 pauseable.Pause();
             }
 
-            _slowedTimeProvider.TimeScale = 0f;
+            _timeProvider.StopTime();;
         }
 
         public void Exit()
         {
-            _slowedTimeProvider.TimeScale = 1f;
+            _timeProvider.TurnBackTime();
         }
 
         public GameplayStateMachine StateMachine { get; set; }

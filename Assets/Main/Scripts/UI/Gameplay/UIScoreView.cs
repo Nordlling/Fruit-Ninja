@@ -11,8 +11,6 @@ namespace Main.Scripts.UI.Gameplay
         [SerializeField] protected TextMeshProUGUI _scoreValue;
         
         protected IScoreService _scoreService;
-        
-        private int _currentScore;
 
         public void Construct(IScoreService scoreService, ITimeProvider timeProvider)
         {
@@ -39,8 +37,8 @@ namespace Main.Scripts.UI.Gameplay
 
         private void InitScore()
         {
-            _currentScore = 0;
-            _scoreValue.text = _currentScore.ToString();
+            _scoreAnimation.ResetScore();
+            _scoreValue.text = 0.ToString();
         }
 
         protected void AddScore(int newScore)

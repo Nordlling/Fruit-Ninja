@@ -1,9 +1,13 @@
+using System;
 using System.Collections.Generic;
 using Main.Scripts.Infrastructure.Configs;
+using Main.Scripts.Infrastructure.Configs.Boosters;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
 using Main.Scripts.Infrastructure.Services.Health;
-using Main.Scripts.Logic.Blocks;
+using Main.Scripts.Logic.Blocks.BlockBag;
+using Main.Scripts.Logic.Blocks.Bombs;
 using Main.Scripts.Logic.Blocks.BonusLifes;
+using Main.Scripts.Logic.Blocks.Freezes;
 using Main.Scripts.Logic.Spawn;
 using UnityEngine;
 
@@ -11,26 +15,44 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
 {
     public class BoostersCheckerService : IBoostersCheckerService
     {
-        private readonly BoostersSpawnConfig _boostersSpawnConfig;
+        private readonly BlocksConfig _blocksConfig;
         private readonly IBlockContainerService _blockContainerService;
         private readonly IHealthService _healthService;
-        
-        private readonly Dictionary<BoosterType, int> _boosterCounters = new();
+        private readonly Dictionary<Type, BoosterInfo> _boosterInfos;
 
-        public BoostersCheckerService(BoostersSpawnConfig boostersSpawnConfig, IBlockContainerService blockContainerService, IHealthService healthService)
+        public List<BoosterConfig> BoosterConfigs { get; private set; }
+        public int MaxCountInPack { get; private set; }
+
+        public BoostersCheckerService(BlocksConfig blocksConfig, IBlockContainerService blockContainerService, IHealthService healthService)
         {
-            _boostersSpawnConfig = boostersSpawnConfig;
+            _blocksConfig = blocksConfig;
             _blockContainerService = blockContainerService;
             _healthService = healthService;
+            
+            _boosterInfos = new Dictionary<Type, BoosterInfo>
+            {
+                { typeof(Bomb), new BoosterInfo(_blocksConfig.BombConfig.BoosterSpawnInfo, TrySpawnBomb) },
+                { typeof(BonusLife), new BoosterInfo(_blocksConfig.BonusLifeConfig.BoosterSpawnInfo, TrySpawnBonusLife) },
+                { typeof(BlockBag), new BoosterInfo(_blocksConfig.BlockBagConfig.BoosterSpawnInfo, TrySpawnBlockBag) },
+                { typeof(Freeze), new BoosterInfo(_blocksConfig.FreezeConfig.BoosterSpawnInfo, TrySpawnFreeze) }
+            };
+
+            BoosterConfigs = new List<BoosterConfig>()
+            {
+                _blocksConfig.BombConfig,
+                _blocksConfig.BonusLifeConfig,
+                _blocksConfig.BlockBagConfig,
+                _blocksConfig.FreezeConfig
+            };
         }
-        
+
         public void CalculateBlockMaxCounter(int packBlockCount)
         {
-            foreach (BoosterInfo boosterInfo in _boostersSpawnConfig.Boosters)
+            MaxCountInPack = (int)(packBlockCount * _blocksConfig.MaxFractionInPack);
+            foreach (KeyValuePair<Type, BoosterInfo> kvp in _boosterInfos)
             {
-                BoosterSpawnInfo boosterSpawnInfo = boosterInfo.BoosterSpawnInfo;
-                
-                int blockMaxCounter = (int)(packBlockCount * boosterSpawnInfo.MaxFractionInBoostPack);
+                BoosterSpawnInfo boosterSpawnInfo = kvp.Value.BoosterSpawnInfo;
+                int blockMaxCounter = (int)(MaxCountInPack * boosterSpawnInfo.MaxFractionInBoostPack);
 
                 if (blockMaxCounter == 0)
                 {
@@ -47,55 +69,43 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
                     blockMaxCounter = Mathf.Min(blockMaxCounter, boosterSpawnInfo.MaxNumberOnScreen);
                 }
 
-                _boosterCounters[boosterInfo.BoosterType] = blockMaxCounter;
+                _boosterInfos[kvp.Key].Count = blockMaxCounter;
             }
         }
         
-        public bool TrySpawnBooster(SpawnArea spawnArea, BoosterInfo boosterInfo)
+        public bool TrySpawnBooster(SpawnArea spawnArea, int index)
         {
-            switch (boosterInfo.BoosterType)
+            BoosterConfig boosterConfig = BoosterConfigs[index];
+            Type currentType = boosterConfig.BlockInfo.BlockPrefab.GetType();
+            
+            if (_boosterInfos.TryGetValue(currentType, out BoosterInfo boosterInfo))
             {
-                case BoosterType.Bomb:
-                    return TrySpawnBomb(boosterInfo, spawnArea);
-                case BoosterType.BonusLife:
-                    return TrySpawnBonusLife(boosterInfo, spawnArea);
-                case BoosterType.BlockBag:
-                    return TrySpawnBlockBag(boosterInfo, spawnArea);
-                case BoosterType.Freeze:
-                    Debug.Log($"Spawn {boosterInfo.BoosterType}");
-                    return true;
-                case BoosterType.Magnet:
-                    Debug.Log($"Spawn {boosterInfo.BoosterType}");
-                    return true;
-                case BoosterType.Brick:
-                    Debug.Log($"Spawn {boosterInfo.BoosterType}");
-                    return true;
-                case BoosterType.Samurai:
-                    Debug.Log($"Spawn {boosterInfo.BoosterType}");
-                    return true;
-                case BoosterType.Mimic:
-                    Debug.Log($"Spawn {boosterInfo.BoosterType}");
-                    return true;
+                return boosterInfo.SpawnAction(boosterConfig, spawnArea, currentType);
             }
-
+            
             return false;
         }
 
-        private bool TrySpawnBomb(BoosterInfo boosterInfo, SpawnArea spawnArea)
+        public void SetActivation(Type type, bool activated)
         {
-            if (!CanSpawn(boosterInfo))
+            _boosterInfos[type].Activated = activated;
+        }
+
+        private bool TrySpawnBomb(BoosterConfig boosterConfig, SpawnArea spawnArea, Type type)
+        {
+            if (!CanSpawn(boosterConfig, type))
             {
                 return false;
             }
 
             spawnArea.SpawnBomb();
-            _boosterCounters[boosterInfo.BoosterType]--;
+            _boosterInfos[type].Count--;
             return true;
         }
 
-        private bool TrySpawnBonusLife(BoosterInfo boosterInfo, SpawnArea spawnArea)
+        private bool TrySpawnBonusLife(BoosterConfig boosterConfig, SpawnArea spawnArea, Type type)
         {
-            if (!CanSpawn(boosterInfo))
+            if (!CanSpawn(boosterConfig, type))
             {
                 return false;
             }
@@ -106,34 +116,43 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
             }
             
             spawnArea.SpawnBonusLife();
+            _boosterInfos[type].Count--;
             return true;
         }
         
-        private bool TrySpawnBlockBag(BoosterInfo boosterInfo, SpawnArea spawnArea)
+        private bool TrySpawnBlockBag(BoosterConfig boosterConfig, SpawnArea spawnArea, Type type)
         {
-            if (!CanSpawn(boosterInfo))
+            if (!CanSpawn(boosterConfig, type))
             {
                 return false;
             }
             
             spawnArea.SpawnBlockBag();
+            _boosterInfos[type].Count--;
+            return true;
+        }
+        
+        private bool TrySpawnFreeze(BoosterConfig boosterConfig, SpawnArea spawnArea, Type type)
+        {
+            if (!CanSpawn(boosterConfig, type))
+            {
+                return false;
+            }
+            
+            spawnArea.SpawnFreeze();
+            _boosterInfos[type].Count--;
             return true;
         }
 
-        private bool CanSpawn(BoosterInfo boosterInfo)
+        private bool CanSpawn(BoosterConfig boosterConfig, Type type)
         {
-            if (_boosterCounters[boosterInfo.BoosterType] <= 0)
+            if (_boosterInfos[type].Activated || _boosterInfos[type].Count <= 0)
             {
                 return false;
             }
 
-            if (boosterInfo.BoosterSpawnInfo.MaxNumberOnScreen != -1 &&
-                _blockContainerService.BlockTypes[typeof(BonusLife)].Count >= boosterInfo.BoosterSpawnInfo.MaxNumberOnScreen)
-            {
-                return false;
-            }
-
-            return true;
+            return boosterConfig.BoosterSpawnInfo.MaxNumberOnScreen == -1 ||
+                   _blockContainerService.BlockTypes[type].Count < boosterConfig.BoosterSpawnInfo.MaxNumberOnScreen;
         }
     }
 }

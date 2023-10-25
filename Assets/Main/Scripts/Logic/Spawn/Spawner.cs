@@ -1,12 +1,10 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Main.Scripts.Infrastructure.Configs;
 using Main.Scripts.Infrastructure.Factory;
 using Main.Scripts.Infrastructure.GameplayStates;
 using Main.Scripts.Infrastructure.Provides;
-using Main.Scripts.Infrastructure.Services.BlockContainer;
 using Main.Scripts.Infrastructure.Services.Boosters;
 using Main.Scripts.Infrastructure.Services.Difficulty;
 using Main.Scripts.Utils.RandomUtils;
@@ -30,7 +28,6 @@ namespace Main.Scripts.Logic.Spawn
         private ISpawnFactory _spawnFactory;
         private ITimeProvider _timeProvider;
         private IBoostersCheckerService _boostersCheckerService;
-        private BoostersSpawnConfig _boostersSpawnConfig;
 
         private float _leftTime;
         private float[] _spawnWeights;
@@ -46,8 +43,7 @@ namespace Main.Scripts.Logic.Spawn
             IBlockFactory blockFactory,
             ISpawnFactory spawnFactory,
             ITimeProvider timeProvider, 
-            IBoostersCheckerService boostersCheckerService,
-            BoostersSpawnConfig boostersSpawnConfig
+            IBoostersCheckerService boostersCheckerService
             )
         {
             _difficultyService = difficultyService;
@@ -55,7 +51,6 @@ namespace Main.Scripts.Logic.Spawn
             _spawnFactory = spawnFactory;
             _timeProvider = timeProvider;
             _boostersCheckerService = boostersCheckerService;
-            _boostersSpawnConfig = boostersSpawnConfig;
         }
 
         public void Play()
@@ -73,7 +68,7 @@ namespace Main.Scripts.Logic.Spawn
             _leftTime = Random.Range(_minInterval, _maxInterval);
             CreateSpawnAreas();
             _spawnWeights = _spawnAreas.Select(x => x.ProbabilityWeight).ToArray();
-            _boosterWeights = _boostersSpawnConfig.Boosters.Select(x => x.BoosterSpawnInfo.DropoutRate).ToArray();
+            _boosterWeights = _boostersCheckerService.BoosterConfigs.Select(info => info.BoosterSpawnInfo.DropoutRate).ToArray();
         }
 
         private void Update()
@@ -111,8 +106,9 @@ namespace Main.Scripts.Logic.Spawn
         {
             _spawnPackBusy = true;
             float spawnFrequency = _difficultyService.DifficultyLevel.Frequency;
-            int boostersMaxCounter = (int)(_difficultyService.DifficultyLevel.BlockCount * _boostersSpawnConfig.MaxFractionInPack);
-            _boostersCheckerService.CalculateBlockMaxCounter(boostersMaxCounter);
+            _boostersCheckerService.CalculateBlockMaxCounter(_difficultyService.DifficultyLevel.BlockCount);
+            int boostersMaxCounter = _boostersCheckerService.MaxCountInPack;
+            
             for (int i = 0; i < _difficultyService.DifficultyLevel.BlockCount; i++)
             {
                 float elapsedTime = 0f;
@@ -141,7 +137,7 @@ namespace Main.Scripts.Logic.Spawn
         private bool TrySpawnBooster(SpawnArea spawnArea)
         {
             int randomIndex = GenerateRandomIndex(_boosterWeights);
-            return _boostersCheckerService.TrySpawnBooster(spawnArea, _boostersSpawnConfig.Boosters[randomIndex]);
+            return _boostersCheckerService.TrySpawnBooster(spawnArea, randomIndex);
         }
 
         private void CreateSpawnAreas()

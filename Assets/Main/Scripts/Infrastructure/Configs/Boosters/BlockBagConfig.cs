@@ -1,12 +1,13 @@
 using UnityEngine;
 
-namespace Main.Scripts.Infrastructure.Configs
+namespace Main.Scripts.Infrastructure.Configs.Boosters
 {
     [CreateAssetMenu(fileName = "BlockBagConfig", menuName = "Configs/BlockBag")]
-    public class BlockBagConfig : ScriptableObject
+    public class BlockBagConfig : BoosterConfig
     {
         public float InvulnerabilityDuration;
         
+        [Header("Booster")]
         public float MinSpeed;
         public float MaxSpeed;
         
@@ -20,6 +21,7 @@ namespace Main.Scripts.Infrastructure.Configs
         [Range(0, 20)]
         public int MaxBlockCount;
         
+        [Header("Parts")]
         public Sprite LeftPart;
         public Sprite RightPart;
         

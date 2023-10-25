@@ -5,12 +5,14 @@ using Main.Scripts.Logic.Blocks;
 using Main.Scripts.Logic.Blocks.BlockBag;
 using Main.Scripts.Logic.Blocks.Bombs;
 using Main.Scripts.Logic.Blocks.BonusLifes;
+using Main.Scripts.Logic.Blocks.Freezes;
 
 namespace Main.Scripts.Infrastructure.Services.BlockContainer
 {
     public class BlockContainerService : IBlockContainerService, ILoseable
     {
         public List<BlockPiece> AllBlocks { get; private set; } = new();
+        public List<ISliceable> AllSliceableBlocks { get; private set; } = new();
         public int BlocksCount { get; private set; }
         public Dictionary<Type, List<BlockPiece>> BlockTypes { get; private set; }
 
@@ -27,29 +29,42 @@ namespace Main.Scripts.Infrastructure.Services.BlockContainer
                 { typeof(Block), new List<BlockPiece>() },
                 { typeof(Bomb), new List<BlockPiece>() },
                 { typeof(BonusLife), new List<BlockPiece>() },
-                { typeof(BlockBag), new List<BlockPiece>() }
+                { typeof(BlockBag), new List<BlockPiece>() },
+                { typeof(Freeze), new List<BlockPiece>() }
             };
         }
-        
-        public void AddBlock<T>(T blockCollider) where T : BlockPiece
+
+        public void AddBlock<T>(T block) where T : BlockPiece
         {
             if (BlockTypes.TryGetValue(typeof(T), out List<BlockPiece> blockList))
             {
-                blockList.Add(blockCollider);
-                AllBlocks.Add(blockCollider);
+                blockList.Add(block);
+                AllBlocks.Add(block);
                 BlocksCount = AllBlocks.Count;
+
+                if (block is not ISliceable sliceable)
+                {
+                    return;
+                }
+                AllSliceableBlocks.Add(sliceable);
             }
             
         }
 
-        public void RemoveBlock<T>(T blockCollider) where T: BlockPiece
+        public void RemoveBlock<T>(T block) where T: BlockPiece
         {
             if (BlockTypes.TryGetValue(typeof(T), out List<BlockPiece> blockList))
             {
-                blockList.Remove(blockCollider);
-                AllBlocks.Remove(blockCollider);
+                blockList.Remove(block);
+                AllBlocks.Remove(block);
                 BlocksCount = AllBlocks.Count;
                 CheckBocksFell();
+                
+                if (block is not ISliceable sliceable)
+                {
+                    return;
+                }
+                AllSliceableBlocks.Remove(sliceable);
             }
         }
 

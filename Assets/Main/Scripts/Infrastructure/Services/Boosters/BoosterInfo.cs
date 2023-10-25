@@ -14,6 +14,7 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
         }
         
         public int Count;
+        public bool Activated;
         public readonly BoosterSpawnInfo BoosterSpawnInfo;
         public readonly Func<BoosterConfig, SpawnArea, Type, bool> SpawnAction;
     }

@@ -7,6 +7,7 @@ using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Logic.Blocks.BlockBag;
 using Main.Scripts.Logic.Blocks.Bombs;
 using Main.Scripts.Logic.Blocks.BonusLifes;
+using Main.Scripts.Logic.Blocks.Freezes;
 using Main.Scripts.Logic.Spawn;
 using UnityEngine;
 
@@ -32,14 +33,16 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
             {
                 { typeof(Bomb), new BoosterInfo(_blocksConfig.BombConfig.BoosterSpawnInfo, TrySpawnBomb) },
                 { typeof(BonusLife), new BoosterInfo(_blocksConfig.BonusLifeConfig.BoosterSpawnInfo, TrySpawnBonusLife) },
-                { typeof(BlockBag), new BoosterInfo(_blocksConfig.BlockBagConfig.BoosterSpawnInfo, TrySpawnBlockBag) }
+                { typeof(BlockBag), new BoosterInfo(_blocksConfig.BlockBagConfig.BoosterSpawnInfo, TrySpawnBlockBag) },
+                { typeof(Freeze), new BoosterInfo(_blocksConfig.FreezeConfig.BoosterSpawnInfo, TrySpawnFreeze) }
             };
 
             BoosterConfigs = new List<BoosterConfig>()
             {
                 _blocksConfig.BombConfig,
                 _blocksConfig.BonusLifeConfig,
-                _blocksConfig.BlockBagConfig
+                _blocksConfig.BlockBagConfig,
+                _blocksConfig.FreezeConfig
             };
         }
 
@@ -75,12 +78,17 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
             BoosterConfig boosterConfig = BoosterConfigs[index];
             Type currentType = boosterConfig.BlockInfo.BlockPrefab.GetType();
             
-            if (_boosterInfos.ContainsKey(currentType))
+            if (_boosterInfos.TryGetValue(currentType, out BoosterInfo boosterInfo))
             {
-                return _boosterInfos[currentType].SpawnAction(boosterConfig, spawnArea, currentType);
+                return boosterInfo.SpawnAction(boosterConfig, spawnArea, currentType);
             }
             
             return false;
+        }
+
+        public void SetActivation(Type type, bool activated)
+        {
+            _boosterInfos[type].Activated = activated;
         }
 
         private bool TrySpawnBomb(BoosterConfig boosterConfig, SpawnArea spawnArea, Type type)
@@ -123,21 +131,28 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
             _boosterInfos[type].Count--;
             return true;
         }
+        
+        private bool TrySpawnFreeze(BoosterConfig boosterConfig, SpawnArea spawnArea, Type type)
+        {
+            if (!CanSpawn(boosterConfig, type))
+            {
+                return false;
+            }
+            
+            spawnArea.SpawnFreeze();
+            _boosterInfos[type].Count--;
+            return true;
+        }
 
         private bool CanSpawn(BoosterConfig boosterConfig, Type type)
         {
-            if (_boosterInfos[type].Count <= 0)
+            if (_boosterInfos[type].Activated || _boosterInfos[type].Count <= 0)
             {
                 return false;
             }
 
-            if (boosterConfig.BoosterSpawnInfo.MaxNumberOnScreen != -1 &&
-                _blockContainerService.BlockTypes[typeof(BonusLife)].Count >= boosterConfig.BoosterSpawnInfo.MaxNumberOnScreen)
-            {
-                return false;
-            }
-
-            return true;
+            return boosterConfig.BoosterSpawnInfo.MaxNumberOnScreen == -1 ||
+                   _blockContainerService.BlockTypes[type].Count < boosterConfig.BoosterSpawnInfo.MaxNumberOnScreen;
         }
     }
 }

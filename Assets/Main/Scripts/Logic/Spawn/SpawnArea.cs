@@ -1,10 +1,10 @@
 using Main.Scripts.Infrastructure.Factory;
 using Main.Scripts.Infrastructure.Provides;
-using Main.Scripts.Infrastructure.Services.Collision;
 using Main.Scripts.Logic.Blocks;
 using Main.Scripts.Logic.Blocks.BlockBag;
 using Main.Scripts.Logic.Blocks.Bombs;
 using Main.Scripts.Logic.Blocks.BonusLifes;
+using Main.Scripts.Logic.Blocks.Freezes;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -63,6 +63,14 @@ namespace Main.Scripts.Logic.Spawn
             
             BlockBag blockBag = _blockFactory.CreateBlockBag(_newPointPosition);
             blockBag.BlockMovement.Construct(_newStartDirection, _newSpeed, blockBag.TimeProvider);
+        }
+        
+        public void SpawnFreeze()
+        {
+            GenerateBlockParameters();
+            
+            Freeze freeze = _blockFactory.CreateFreeze(_newPointPosition);
+            freeze.BlockMovement.Construct(_newStartDirection, _newSpeed, freeze.TimeProvider);
         }
 
         private void GenerateBlockParameters()

@@ -44,6 +44,13 @@ namespace Main.Scripts.Infrastructure.Factory
             splash.Construct(_timeProvider, _blocksConfig.BlockBagConfig.BlockInfo.VisualSprites[visualIndex].SplashSprite);
             return splash;
         }
+        
+        public Splash CreateFreezeSplash(Vector2 position, int visualIndex)
+        {
+            Splash splash = Object.Instantiate(_blocksConfig.FreezeConfig.BlockInfo.SplashPrefab, position, Quaternion.identity);
+            splash.Construct(_timeProvider, _blocksConfig.FreezeConfig.BlockInfo.VisualSprites[visualIndex].SplashSprite);
+            return splash;
+        }
 
         public void Cleanup()
         {

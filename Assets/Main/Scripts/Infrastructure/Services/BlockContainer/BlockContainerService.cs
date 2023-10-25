@@ -5,6 +5,7 @@ using Main.Scripts.Logic.Blocks;
 using Main.Scripts.Logic.Blocks.BlockBag;
 using Main.Scripts.Logic.Blocks.Bombs;
 using Main.Scripts.Logic.Blocks.BonusLifes;
+using Main.Scripts.Logic.Blocks.Freezes;
 
 namespace Main.Scripts.Infrastructure.Services.BlockContainer
 {
@@ -28,7 +29,8 @@ namespace Main.Scripts.Infrastructure.Services.BlockContainer
                 { typeof(Block), new List<BlockPiece>() },
                 { typeof(Bomb), new List<BlockPiece>() },
                 { typeof(BonusLife), new List<BlockPiece>() },
-                { typeof(BlockBag), new List<BlockPiece>() }
+                { typeof(BlockBag), new List<BlockPiece>() },
+                { typeof(Freeze), new List<BlockPiece>() }
             };
         }
 

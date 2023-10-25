@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BlockBagConfig
   m_EditorClassIdentifier: 
   BoosterSpawnInfo:
-    DropoutRate: 0.5
+    DropoutRate: 0.4
     MaxFractionInBoostPack: 0.3
     MaxNumberInBoostPack: -1
     MaxNumberOnScreen: -1

@@ -56,3 +56,4 @@ MonoBehaviour:
   BombConfig: {fileID: 11400000, guid: 898911ef184e353409d7d977ea17755d, type: 2}
   BonusLifeConfig: {fileID: 11400000, guid: 6024839de7cbe6445b0ec7ddd50f4acf, type: 2}
   BlockBagConfig: {fileID: 11400000, guid: 010b45e501c2e5f488df1540f2c1b87b, type: 2}
+  FreezeConfig: {fileID: 11400000, guid: dbf2504b9bb70284daf7ac28ea7d6e7a, type: 2}

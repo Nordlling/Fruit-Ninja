@@ -52,11 +52,6 @@ namespace Main.Scripts.Logic.Blocks.BlockBag
             SpawnBlockPiece(_blockBagConfig.RightPart, rightPartPosition, rightPartDirection);
         }
 
-        private void SpawnSplash()
-        {
-            _sliceEffectFactory.CreateBlockBagSplash(transform.position, _visualIndex);
-        }
-        
         private void SpawnBlockPiece(Sprite sprite, Vector2 position, Vector2 direction)
         {
             
@@ -64,6 +59,11 @@ namespace Main.Scripts.Logic.Blocks.BlockBag
             blockPiece.BlockMovement.Construct(direction, _blockBagConfig.PartSpeed, blockPiece.TimeProvider);
             blockPiece.SpriteRenderer.sprite = sprite;
             blockPiece.SpriteRenderer.transform.localScale = _spriteRenderer.transform.localScale;
+        }
+        
+        private void SpawnSplash()
+        {
+            _sliceEffectFactory.CreateBlockBagSplash(transform.position, _visualIndex);
         }
     }
 }

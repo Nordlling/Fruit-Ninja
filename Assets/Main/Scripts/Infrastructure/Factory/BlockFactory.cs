@@ -3,6 +3,7 @@ using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
 using Main.Scripts.Infrastructure.Services.Combo;
 using Main.Scripts.Infrastructure.Services.Explosion;
+using Main.Scripts.Infrastructure.Services.Freezing;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.LivingZone;
 using Main.Scripts.Infrastructure.Services.Score;
@@ -10,6 +11,7 @@ using Main.Scripts.Logic.Blocks;
 using Main.Scripts.Logic.Blocks.BlockBag;
 using Main.Scripts.Logic.Blocks.Bombs;
 using Main.Scripts.Logic.Blocks.BonusLifes;
+using Main.Scripts.Logic.Blocks.Freezes;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
@@ -27,6 +29,7 @@ namespace Main.Scripts.Infrastructure.Factory
         private readonly ITimeProvider _timeProvider;
         private readonly ILabelFactory _labelFactory;
         private readonly ISliceEffectFactory _sliceEffectFactory;
+        private readonly IFreezeService _freezeService;
         private readonly BlocksConfig _blocksConfig;
 
         public BlockFactory(IBlockContainerService blockContainerService,
@@ -38,6 +41,7 @@ namespace Main.Scripts.Infrastructure.Factory
             ITimeProvider timeProvider,
             ILabelFactory labelFactory,
             ISliceEffectFactory sliceEffectFactory,
+            IFreezeService freezeService,
             BlocksConfig blocksConfig)
         {
             _blockContainerService = blockContainerService;
@@ -49,6 +53,7 @@ namespace Main.Scripts.Infrastructure.Factory
             _timeProvider = timeProvider;
             _labelFactory = labelFactory;
             _sliceEffectFactory = sliceEffectFactory;
+            _freezeService = freezeService;
             _blocksConfig = blocksConfig;
         }
 
@@ -116,6 +121,20 @@ namespace Main.Scripts.Infrastructure.Factory
             _blockContainerService.AddBlock(blockBag);
             
             return blockBag;
+        }
+        
+        public Freeze CreateFreeze(Vector2 position)
+        {
+            Freeze freeze = CreateBasicBlock<Freeze>(out int randomIndex, position, _blocksConfig.FreezeConfig.BlockInfo, false, 0f);
+            
+            freeze.FreezeSlicer.Construct(
+                _freezeService,
+                _sliceEffectFactory, 
+                randomIndex);
+            
+            _blockContainerService.AddBlock(freeze);
+            
+            return freeze;
         }
 
         public void Cleanup()

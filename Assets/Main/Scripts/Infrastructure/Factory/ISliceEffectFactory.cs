@@ -9,6 +9,7 @@ namespace Main.Scripts.Infrastructure.Factory
         Splash CreateBombSplash(Vector2 position, int visualIndex);
         Splash CreateBonusLifeSplash(Vector2 position, int visualIndex);
         Splash CreateBlockBagSplash(Vector2 position, int visualIndex);
+        Splash CreateFreezeSplash(Vector2 position, int visualIndex);
         void Cleanup();
     }
 }

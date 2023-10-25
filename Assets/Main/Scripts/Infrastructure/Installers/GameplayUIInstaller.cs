@@ -3,6 +3,7 @@ using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services;
 using Main.Scripts.Infrastructure.Services.AnimationTargetContainer;
 using Main.Scripts.Infrastructure.Services.ButtonContainer;
+using Main.Scripts.Infrastructure.Services.Freezing;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Infrastructure.States;
@@ -19,6 +20,7 @@ namespace Main.Scripts.Infrastructure.Installers
         [SerializeField] private UIHighScoreView _uiHighScoreView;
         [SerializeField] private UIGameOverView _uiGameOverView;
         [SerializeField] private UIPauseView _uiPauseView;
+        [SerializeField] private UIFreezeView _uiFreezeView;
 
         public override void InstallBindings(ServiceContainer serviceContainer)
         {
@@ -28,6 +30,7 @@ namespace Main.Scripts.Infrastructure.Installers
             InitHighScoreUI(serviceContainer);
             InitGameOverUI(serviceContainer);
             InitPauseUI(serviceContainer);
+            InitFreezeUI(serviceContainer);
         }
         
         private void InitGameplayUI(ServiceContainer serviceContainer)
@@ -74,6 +77,14 @@ namespace Main.Scripts.Infrastructure.Installers
                 serviceContainer.Get<IGameStateMachine>(),
                 serviceContainer.Get<IGameplayStateMachine>(),
                 serviceContainer.Get<IButtonContainerService>()
+            );
+        }
+        
+        private void InitFreezeUI(ServiceContainer serviceContainer)
+        {
+            _uiFreezeView.Construct
+            (
+                serviceContainer.Get<IFreezeService>()
             );
         }
     }

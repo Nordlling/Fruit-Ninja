@@ -20,6 +20,7 @@ namespace Main.Scripts.Infrastructure.Configs
         public BombConfig BombConfig;
         public BonusLifeConfig BonusLifeConfig;
         public BlockBagConfig BlockBagConfig;
+        public FreezeConfig FreezeConfig;
     }
     
     [Serializable]

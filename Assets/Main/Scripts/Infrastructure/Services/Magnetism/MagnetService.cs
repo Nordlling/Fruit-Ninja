@@ -9,7 +9,9 @@ using Main.Scripts.Infrastructure.Services.BlockContainer;
 using Main.Scripts.Infrastructure.Services.Boosters;
 using Main.Scripts.Logic.Blocks;
 using Main.Scripts.Logic.Blocks.BlockBag;
+using Main.Scripts.Logic.Blocks.BonusLifes;
 using Main.Scripts.Logic.Blocks.Freezes;
+using Main.Scripts.Logic.Blocks.Magnets;
 using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Services.Magnetism
@@ -41,8 +43,10 @@ namespace Main.Scripts.Infrastructure.Services.Magnetism
             {
                 typeof(BlockPiece),
                 typeof(Block),
+                typeof(BonusLife),
                 typeof(BlockBag),
-                typeof(Freeze)
+                typeof(Freeze),
+                typeof(Magnet),
             };
         }
 

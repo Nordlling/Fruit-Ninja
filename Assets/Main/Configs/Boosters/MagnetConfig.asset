@@ -26,6 +26,5 @@ MonoBehaviour:
   Duration: 3
   AttractionForce: 40
   AttractionRadius: 4
-  StrongRadius: 0.5
-  SingularityRadius: 0.3
+  SingularityRadius: 0.4
   MagnetAreaEffectPrefab: {fileID: 8531943058825680658, guid: b5416ec8612799a42b4b33b1bdd78587, type: 3}

@@ -33,6 +33,7 @@ namespace Main.Scripts.Logic.Spawn
 
         private bool _spawnPackBusy;
         private bool _stop;
+        Coroutine spawnCoroutine;
 
         public void Construct(
             IDifficultyService difficultyService,
@@ -66,8 +67,29 @@ namespace Main.Scripts.Logic.Spawn
             _leftTime = Random.Range(_minInterval, _maxInterval);
             CreateSpawnAreas();
             _spawnWeights = _spawnAreas.Select(x => x.ProbabilityWeight).ToArray();
+        }
 
-            _samuraiService.OnStarted += () => _leftTime = 0;
+        private void OnEnable()
+        {
+            _samuraiService.OnStarted += StartSamuraiMode;
+            _samuraiService.OnFinished += FinishSamuraiMode;
+        }
+
+        private void OnDisable()
+        {
+            _samuraiService.OnStarted -= StartSamuraiMode;
+            _samuraiService.OnFinished -= FinishSamuraiMode;
+        }
+
+        private void StartSamuraiMode()
+        {
+            _leftTime = 0f;
+        }
+        
+        private void FinishSamuraiMode()
+        {
+            StopCoroutine(spawnCoroutine);
+            _spawnPackBusy = false;
         }
 
         private void Update()
@@ -88,7 +110,7 @@ namespace Main.Scripts.Logic.Spawn
                 _difficultyService.IncreaseDifficulty();
             }
             
-            StartCoroutine(SpawnPack(() => _spawnPackBusy = false));
+            spawnCoroutine = StartCoroutine(SpawnPack(() => _spawnPackBusy = false));
 
             float PackFrequencyMultiplier = _samuraiService.SamuraiInfo.PackFrequencyMultiplier;
             _leftTime = Random.Range(_minInterval / PackFrequencyMultiplier, _maxInterval / PackFrequencyMultiplier);

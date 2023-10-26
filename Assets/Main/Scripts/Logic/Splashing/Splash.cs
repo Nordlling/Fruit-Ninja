@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Logic.Splashing.Animations;
 using UnityEngine;
@@ -10,10 +11,13 @@ namespace Main.Scripts.Logic.Splashing
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private ParticleSystem _splashEffect;
         [SerializeField] private bool _setColorFromSprite;
-        
-        private ITimeProvider _timeProvider;
-        private ParticleSystem.MainModule _splashEffectMain;
+        [SerializeField] private float _lifeTime;
 
+        private ITimeProvider _timeProvider;
+        
+        private bool _isLifeTime;
+        private ParticleSystem.MainModule _splashEffectMain;
+        
         public void Construct(ITimeProvider timeProvider, Sprite splashSprite)
         {
             _timeProvider = timeProvider;
@@ -23,15 +27,27 @@ namespace Main.Scripts.Logic.Splashing
 
         private void Start()
         {
+            _isLifeTime = _lifeTime != 0;
             _splashEffectMain = _splashEffect.main;
 
-            PlaySplashEffect();
+            if (_setColorFromSprite)
+            {
+                SetColorToSplashEffect();
+            }
+            // PlaySplashEffect();
             _splashAnimation.PlayAnimation();
         }
 
         private void Update()
         {
+            if (_isLifeTime && _lifeTime <= 0)
+            {
+                Destroy(gameObject);
+            }
+            
             _splashEffectMain.simulationSpeed = _timeProvider.GetTimeScale();
+            
+            _lifeTime -= _timeProvider.GetDeltaTime();
         }
 
         private void PlaySplashEffect()

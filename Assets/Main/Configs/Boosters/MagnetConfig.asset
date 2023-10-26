@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MagnetConfig
   m_EditorClassIdentifier: 
   BoosterSpawnInfo:
-    DropoutRate: 0.3
+    DropoutRate: 0.2
     MaxFractionInBoostPack: 1
     MaxNumberInBoostPack: 1
     MaxNumberOnScreen: 1

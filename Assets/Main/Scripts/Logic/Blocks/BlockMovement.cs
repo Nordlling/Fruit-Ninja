@@ -35,10 +35,8 @@ namespace Main.Scripts.Logic.Blocks
             _additionalForce.AttractionPosition = attractionPosition;
             _additionalForce.Force = magnetConfig.AttractionForce;
             _additionalForce.Duration = duration;
-            _additionalForce.StrongRadius = magnetConfig.StrongRadius;
             _additionalForce.SingularityRadius = magnetConfig.SingularityRadius;
             _additionalForce.MaxRadius = Vector2.Distance(attractionPosition, transform.position);
-            _additionalForce.MaxMagnetRadius = magnetConfig.AttractionRadius;
         }
 
         private void Start()
@@ -75,29 +73,19 @@ namespace Main.Scripts.Logic.Blocks
         {
             Vector2 directionToAttraction = _additionalForce.AttractionPosition - _currentPosition;
             Vector2 normalizedDirection = directionToAttraction.normalized;
-            float distance = directionToAttraction.magnitude;
             Vector2 force = normalizedDirection * _additionalForce.Force;
-
-            if (distance > _additionalForce.MaxRadius * _additionalForce.StrongRadius)
-            {
-                _currentVelocity += force * _timeProvider.GetDeltaTime();
-                _currentPosition += _currentVelocity * _timeProvider.GetDeltaTime();
-            }
-            
-            if (distance <= _additionalForce.MaxRadius * _additionalForce.StrongRadius && distance > _additionalForce.MaxRadius * _additionalForce.SingularityRadius)
-            {
-                _currentVelocity = force;
-                _currentPosition += _currentVelocity * _timeProvider.GetDeltaTime();
-            }
+            _currentVelocity += force * _timeProvider.GetDeltaTime();
+            _currentPosition += _currentVelocity * _timeProvider.GetDeltaTime();
+            float distance = directionToAttraction.magnitude;
             
             if (distance <= _additionalForce.MaxRadius * _additionalForce.SingularityRadius)
             {
                 _currentVelocity = Vector2.zero;
                 _currentPosition = _additionalForce.AttractionPosition;
             }
-
+            
             _additionalForce.Duration -= _timeProvider.GetDeltaTime();
-
+            
             if (_additionalForce.Duration <= 0f)
             {
                 _currentVelocity = Vector2.zero;

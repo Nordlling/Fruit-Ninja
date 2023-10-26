@@ -24,8 +24,8 @@ MonoBehaviour:
     - BlockSprite: {fileID: 21300000, guid: f191b75064427eb4da9d5bef46d0ef91, type: 3}
       SplashSprite: {fileID: 21300000, guid: a5d2a249af8bd2b42af29f5af22a8e9c, type: 3}
   Duration: 3
-  AttractionForce: 20
+  AttractionForce: 40
   AttractionRadius: 4
   StrongRadius: 0.5
-  SingularityRadius: 0.1
+  SingularityRadius: 0.3
   MagnetAreaEffectPrefab: {fileID: 8531943058825680658, guid: b5416ec8612799a42b4b33b1bdd78587, type: 3}

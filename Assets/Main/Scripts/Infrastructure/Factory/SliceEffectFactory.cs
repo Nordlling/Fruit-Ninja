@@ -21,52 +21,34 @@ namespace Main.Scripts.Infrastructure.Factory
 
         public Splash CreateBlockSplash(Vector2 position, int visualIndex)
         {
-            BlockInfo blockInfo = _blocksConfig.Block;
-            Splash splash = Object.Instantiate(blockInfo.SplashPrefab, position, Quaternion.identity);
-            splash.Construct(_serviceContainer.Get<ITimeProvider>(), blockInfo.VisualSprites[visualIndex].SplashSprite);
-            return splash;
+            return CreateSplash(_blocksConfig.Block, position, visualIndex);
         }
-        
+
         public Splash CreateBombSplash(Vector2 position, int visualIndex)
         {
-            BlockInfo blockInfo = _blocksConfig.BombConfig.BlockInfo;
-            Splash splash = Object.Instantiate(blockInfo.SplashPrefab, position, Quaternion.identity);
-            splash.Construct(_serviceContainer.Get<ITimeProvider>(), blockInfo.VisualSprites[visualIndex].SplashSprite);
-            return splash;
+            return CreateSplash(_blocksConfig.BombConfig.BlockInfo, position, visualIndex);
         }
-        
+
         public Splash CreateBonusLifeSplash(Vector2 position, int visualIndex)
         {
-            BlockInfo blockInfo = _blocksConfig.BonusLifeConfig.BlockInfo;
-            Splash splash = Object.Instantiate(blockInfo.SplashPrefab, position, Quaternion.identity);
-            splash.Construct(_serviceContainer.Get<ITimeProvider>(), blockInfo.VisualSprites[visualIndex].SplashSprite);
-            return splash;
+            return CreateSplash(_blocksConfig.BonusLifeConfig.BlockInfo, position, visualIndex);
         }
-        
+
         public Splash CreateBlockBagSplash(Vector2 position, int visualIndex)
         {
-            BlockInfo blockInfo = _blocksConfig.BlockBagConfig.BlockInfo;
-            Splash splash = Object.Instantiate(blockInfo.SplashPrefab, position, Quaternion.identity);
-            splash.Construct(_serviceContainer.Get<ITimeProvider>(), blockInfo.VisualSprites[visualIndex].SplashSprite);
-            return splash;
+            return CreateSplash(_blocksConfig.BlockBagConfig.BlockInfo, position, visualIndex);
         }
-        
+
         public Splash CreateFreezeSplash(Vector2 position, int visualIndex)
         {
-            BlockInfo blockInfo = _blocksConfig.FreezeConfig.BlockInfo;
-            Splash splash = Object.Instantiate(blockInfo.SplashPrefab, position, Quaternion.identity);
-            splash.Construct(_serviceContainer.Get<ITimeProvider>(), blockInfo.VisualSprites[visualIndex].SplashSprite);
-            return splash;
+            return CreateSplash(_blocksConfig.FreezeConfig.BlockInfo, position, visualIndex);
         }
-        
+
         public Splash CreateMagnetSplash(Vector2 position, int visualIndex)
         {
-            BlockInfo blockInfo = _blocksConfig.MagnetConfig.BlockInfo;
-            Splash splash = Object.Instantiate(blockInfo.SplashPrefab, position, Quaternion.identity);
-            splash.Construct(_serviceContainer.Get<ITimeProvider>(), blockInfo.VisualSprites[visualIndex].SplashSprite);
-            return splash;
+            return CreateSplash(_blocksConfig.MagnetConfig.BlockInfo, position, visualIndex);
         }
-        
+
         public MagnetAreaEffect CreateMagnetAreaEffect(Vector2 position)
         {
             MagnetConfig magnetConfig = _blocksConfig.MagnetConfig; 
@@ -74,17 +56,26 @@ namespace Main.Scripts.Infrastructure.Factory
             magnetAreaEffect.Construct(_serviceContainer.Get<ITimeProvider>(), magnetConfig.AttractionRadius, magnetConfig.Duration);
             return magnetAreaEffect;
         }
-        
+
         public Splash CreateBrickSplash(Vector2 position, int visualIndex)
         {
-            BlockInfo blockInfo = _blocksConfig.BrickConfig.BlockInfo;
-            Splash splash = Object.Instantiate(blockInfo.SplashPrefab, position, Quaternion.identity);
-            splash.Construct(_serviceContainer.Get<ITimeProvider>(), blockInfo.VisualSprites[visualIndex].SplashSprite);
-            return splash;
+            return CreateSplash(_blocksConfig.BrickConfig.BlockInfo, position, visualIndex);
+        }
+
+        public Splash CreateSamuraiSplash(Vector2 position, int visualIndex)
+        {
+            return CreateSplash(_blocksConfig.SamuraiConfig.BlockInfo, position, visualIndex);
         }
 
         public void Cleanup()
         {
+        }
+
+        private Splash CreateSplash(BlockInfo blockInfo, Vector2 position, int visualIndex)
+        {
+            Splash splash = Object.Instantiate(blockInfo.SplashPrefab, position, Quaternion.identity);
+            splash.Construct(_serviceContainer.Get<ITimeProvider>(), blockInfo.VisualSprites[visualIndex].SplashSprite);
+            return splash;
         }
     }
 }

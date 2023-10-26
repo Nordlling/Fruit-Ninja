@@ -18,7 +18,7 @@ namespace Main.Scripts.Infrastructure.Factory
         private readonly ServiceContainer _serviceContainer;
         private readonly WordEndingsConfig _wordEndingsConfig;
 
-        public LabelFactory(ServiceContainer serviceContainer,  WordEndingsConfig wordEndingsConfig)
+        public LabelFactory(ServiceContainer serviceContainer, WordEndingsConfig wordEndingsConfig)
         {
             _serviceContainer = serviceContainer;
             _wordEndingsConfig = wordEndingsConfig;

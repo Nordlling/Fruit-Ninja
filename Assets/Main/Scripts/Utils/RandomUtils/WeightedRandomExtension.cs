@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Main.Scripts.Utils.RandomUtils
@@ -22,7 +23,8 @@ namespace Main.Scripts.Utils.RandomUtils
                 }
             }
 
-            return -1;
+            Debug.LogError("Can't find weighted random index. Return random without weight");
+            return Random.Range(0, items.Count);
         }
     }
 }

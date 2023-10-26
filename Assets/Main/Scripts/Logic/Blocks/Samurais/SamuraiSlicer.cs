@@ -1,33 +1,31 @@
 using Main.Scripts.Infrastructure.Factory;
-using Main.Scripts.Infrastructure.Services.Combo;
-using Main.Scripts.Infrastructure.Services.Health;
-using Main.Scripts.Infrastructure.Services.Magnetism;
+using Main.Scripts.Infrastructure.Services.Samuraism;
 using UnityEngine;
 
-namespace Main.Scripts.Logic.Blocks.Magnets
+namespace Main.Scripts.Logic.Blocks.Samurais
 {
-    public class MagnetSlicer : MonoBehaviour, ISlicer
+    public class SamuraiSlicer : MonoBehaviour, ISlicer
     {
-        
+
+        private ISamuraiService _samuraiService;
         private ISliceEffectFactory _sliceEffectFactory;
-        private IMagnetService _magnetService;
         private int _visualIndex;
 
         public void Construct
             (
+                ISamuraiService samuraiService,
                 ISliceEffectFactory sliceEffectFactory,
-                IMagnetService magnetService,
                 int visualIndex
             )
         {
             _sliceEffectFactory = sliceEffectFactory;
-            _magnetService = magnetService;
+            _samuraiService = samuraiService;
             _visualIndex = visualIndex;
         }
         
         public void Slice(Vector2 swiperPosition, Vector2 swiperDirection)
         {
-            _magnetService.Attract(transform.position);
+            _samuraiService.ActivateSamurai();
             
             SpawnSplash();
 
@@ -36,8 +34,7 @@ namespace Main.Scripts.Logic.Blocks.Magnets
 
         private void SpawnSplash()
         {
-            _sliceEffectFactory.CreateMagnetSplash(transform.position, _visualIndex);
-            _sliceEffectFactory.CreateMagnetAreaEffect(transform.position);
+            _sliceEffectFactory.CreateSamuraiSplash(transform.position, _visualIndex);
         }
     }
 }

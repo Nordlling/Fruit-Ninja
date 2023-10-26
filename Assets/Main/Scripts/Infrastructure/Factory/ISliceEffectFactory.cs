@@ -13,6 +13,7 @@ namespace Main.Scripts.Infrastructure.Factory
         Splash CreateMagnetSplash(Vector2 position, int visualIndex);
         MagnetAreaEffect CreateMagnetAreaEffect(Vector2 position);
         Splash CreateBrickSplash(Vector2 position, int visualIndex);
+        Splash CreateSamuraiSplash(Vector2 position, int visualIndex);
         void Cleanup();
     }
 }

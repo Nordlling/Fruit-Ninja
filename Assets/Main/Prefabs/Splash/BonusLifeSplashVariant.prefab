@@ -15,6 +15,18 @@ PrefabInstance:
       propertyPath: playOnAwake
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1507363001270261453, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1507363001270261453, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1507363001270261453, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1884454342092968996, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
       propertyPath: _splashAnimation
       value: 

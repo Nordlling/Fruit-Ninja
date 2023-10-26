@@ -4851,7 +4851,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 12
   m_RenderMode: 4
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -9580,7 +9580,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 12
   m_RenderMode: 4
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -14354,7 +14354,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 12
   m_RenderMode: 1
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -19150,7 +19150,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 12
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 2
@@ -23924,7 +23924,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 12
   m_RenderMode: 1
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -25152,7 +25152,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8651372918322403006, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
       propertyPath: m_SortingOrder
-      value: 0
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8651372918322403006, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
       propertyPath: m_VelocityScale

@@ -1297,12 +1297,8 @@ PrefabInstance:
       objectReference: {fileID: 519420031}
     - target: {fileID: 693594858823016175, guid: 0d0baf513fef4994cb9ecfb877e2a897, type: 3}
       propertyPath: _deadOffset
-      value: 0.5
+      value: 0.8
       objectReference: {fileID: 0}
-    - target: {fileID: 693594858823016175, guid: 0d0baf513fef4994cb9ecfb877e2a897, type: 3}
-      propertyPath: lineMaterial
-      value: 
-      objectReference: {fileID: 10756, guid: 0000000000000000e000000000000000, type: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d0baf513fef4994cb9ecfb877e2a897, type: 3}
 --- !u!1001 &1409634196142986466

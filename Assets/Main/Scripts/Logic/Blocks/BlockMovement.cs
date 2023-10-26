@@ -27,7 +27,7 @@ namespace Main.Scripts.Logic.Blocks
 
         public void AddForceOnce(Vector2 forcedDirection)
         {
-            _startDirection += forcedDirection;
+            _currentVelocity += forcedDirection;
         }
         
         public void AddAttraction(Vector2 attractionPosition, float duration, MagnetConfig magnetConfig)

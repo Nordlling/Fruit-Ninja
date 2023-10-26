@@ -28,7 +28,7 @@ namespace Main.Scripts.Logic.Label
 
         private void Update()
         {
-            _sequence.timeScale = _timeProvider.GetTimeScale();
+            _sequence.timeScale = _timeProvider.Stopped ? 0f : 1f;
         }
 
         private void PlayAnimation()

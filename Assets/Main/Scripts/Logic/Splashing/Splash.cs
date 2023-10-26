@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Logic.Splashing.Animations;
 using UnityEngine;
@@ -9,14 +8,13 @@ namespace Main.Scripts.Logic.Splashing
     {
         [SerializeField] private SplashAnimation _splashAnimation;
         [SerializeField] private SpriteRenderer _spriteRenderer;
-        [SerializeField] private ParticleSystem _splashEffect;
+        [SerializeField] private ParticleSystem[] _splashEffects;
         [SerializeField] private bool _setColorFromSprite;
         [SerializeField] private float _lifeTime;
 
         private ITimeProvider _timeProvider;
         
         private bool _isLifeTime;
-        private ParticleSystem.MainModule _splashEffectMain;
         
         public void Construct(ITimeProvider timeProvider, Sprite splashSprite)
         {
@@ -28,13 +26,11 @@ namespace Main.Scripts.Logic.Splashing
         private void Start()
         {
             _isLifeTime = _lifeTime != 0;
-            _splashEffectMain = _splashEffect.main;
 
             if (_setColorFromSprite)
             {
                 SetColorToSplashEffect();
             }
-            // PlaySplashEffect();
             _splashAnimation.PlayAnimation();
         }
 
@@ -45,18 +41,16 @@ namespace Main.Scripts.Logic.Splashing
                 Destroy(gameObject);
             }
             
-            _splashEffectMain.simulationSpeed = _timeProvider.GetTimeScale();
-            
-            _lifeTime -= _timeProvider.GetDeltaTime();
-        }
-
-        private void PlaySplashEffect()
-        {
-            if (_setColorFromSprite)
+            for (int i = 0; i < _splashEffects.Length; i++)
             {
-                SetColorToSplashEffect();
+                var splashEffectMain = _splashEffects[i].main;
+                splashEffectMain.simulationSpeed = _timeProvider.Stopped ? 0f : 1f;
             }
-            _splashEffect.Play();
+            
+            if (!_timeProvider.Stopped)
+            {
+                _lifeTime -= Time.deltaTime;
+            }
         }
 
         private void SetColorToSplashEffect()
@@ -66,7 +60,11 @@ namespace Main.Scripts.Logic.Splashing
             int centerY = texture.height / 2;
             Color centralPixelColor = texture.GetPixel(centerX, centerY);
 
-            _splashEffectMain.startColor = new ParticleSystem.MinMaxGradient(centralPixelColor);
+            for (int i = 0; i < _splashEffects.Length; i++)
+            {
+                var splashEffectMain = _splashEffects[i].main;
+                splashEffectMain.startColor = new ParticleSystem.MinMaxGradient(centralPixelColor);
+            }
         }
     }
 }

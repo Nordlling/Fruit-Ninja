@@ -10,7 +10,7 @@ namespace Main.Scripts.Logic.Splashing.Animations
 
         private void Update()
         {
-            _sequence.timeScale = _timeProvider.GetTimeScale();
+            _sequence.timeScale = _timeProvider.Stopped ? 0f : 1f;
         }
         
         public override void PlayAnimation()

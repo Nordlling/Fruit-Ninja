@@ -139,7 +139,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2f3a7abeecf4c0085b05179ff7ba41c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _magnetAreaEffect: {fileID: 9054824906184400070}
+  _magnetAreaEffects:
+  - {fileID: 9054824906184400070}
+  - {fileID: 7681805148271533200}
   _disappearDuration: 0.5
   _effectTransform: {fileID: 6276905740670562693}
 --- !u!1 &2938031643619287861

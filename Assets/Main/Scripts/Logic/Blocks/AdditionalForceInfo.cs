@@ -7,9 +7,7 @@ namespace Main.Scripts.Logic.Blocks
         public Vector2 AttractionPosition;
         public float Force;
         public float Duration;
-        public float StrongRadius;
         public float SingularityRadius;
         public float MaxRadius;
-        public float MaxMagnetRadius;
     }
 }

@@ -29,7 +29,7 @@ namespace Main.Scripts.UI.Gameplay
         {
             if (_currentTweener != null)
             {
-                _currentTweener.timeScale = _timeProvider.GetTimeScale();
+                _currentTweener.timeScale = _timeProvider.Stopped ? 0f : 1f;
             }
         }
 

@@ -11,7 +11,6 @@ namespace Main.Scripts.Infrastructure.Configs.Boosters
         public float Duration;
         public float AttractionForce;
         public float AttractionRadius;
-        public float StrongRadius;
         public float SingularityRadius;
         
         [Header("Magnet Area Effect")]

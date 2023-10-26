@@ -67,10 +67,12 @@ namespace Main.Scripts.Logic.Swipe
             if (Input.GetMouseButtonDown(0))
             {
                 EnableSwiper();
+                return;
             }
             
             if (_touched && !_stop && _timeProvider.GetTimeScale() != 0f && Input.GetMouseButton(0))
             {
+                SwitchTrails(true);
                 Speed = Vector2.Distance(_lastPosition, _currentPosition) / Time.deltaTime;
                 Direction = _currentPosition - _lastPosition;
             }
@@ -83,7 +85,7 @@ namespace Main.Scripts.Logic.Swipe
         {
             _touched = true;
             _lastPosition = _currentPosition;
-            SwitchTrails(true);
+            transform.position = _currentPosition;
         }
 
         private void DisableSwiper()

@@ -24,4 +24,4 @@ MonoBehaviour:
     - BlockSprite: {fileID: 21300000, guid: 036c717e324026b4db61886ef6cebda9, type: 3}
       SplashSprite: {fileID: 21300000, guid: 2f4d43a33cd33a743a316216fbc44128, type: 3}
   TimeScale: 0.3
-  Duration: 8
+  Duration: 4

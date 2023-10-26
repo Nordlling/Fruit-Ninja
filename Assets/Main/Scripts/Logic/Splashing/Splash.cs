@@ -45,9 +45,12 @@ namespace Main.Scripts.Logic.Splashing
                 Destroy(gameObject);
             }
             
-            _splashEffectMain.simulationSpeed = _timeProvider.GetTimeScale();
+            _splashEffectMain.simulationSpeed = _timeProvider.Stopped ? 0f : 1f;
             
-            _lifeTime -= _timeProvider.GetDeltaTime();
+            if (!_timeProvider.Stopped)
+            {
+                _lifeTime -= Time.deltaTime;
+            }
         }
 
         private void PlaySplashEffect()

@@ -40,7 +40,7 @@ namespace Main.Scripts.Logic.Combo
 
         private void Update()
         {
-            _sequence.timeScale = _timeProvider.GetTimeScale();
+            _sequence.timeScale = _timeProvider.Stopped ? 0f : 1f;
         }
 
         private string CreateCounterValue(int multiplier, Dictionary<int, string> fruitDictionary)

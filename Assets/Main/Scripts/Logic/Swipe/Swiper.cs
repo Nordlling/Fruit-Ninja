@@ -16,8 +16,9 @@ namespace Main.Scripts.Logic.Swipe
 
         private Camera _camera;
         private ITimeProvider _timeProvider;
-        private Vector3 _lastPosition;
+        private Vector2 _lastPosition;
         private bool _touched;
+        private Vector2 _currentPosition;
         private bool _stop;
 
         public void Construct(Camera mainCamera, ITimeProvider timeProvider)
@@ -26,10 +27,14 @@ namespace Main.Scripts.Logic.Swipe
             _timeProvider = timeProvider;
         }
 
-
         public bool HasEnoughSpeed()
         {
             return Speed >= _minSpeedToSlice;
+        }
+
+        public void Block()
+        {
+            DisableSwiper();
         }
 
         public void Play()
@@ -44,33 +49,55 @@ namespace Main.Scripts.Logic.Swipe
 
         private void Start()
         {
-            _lastPosition = transform.position;
+            SwitchTrails(false);
+            _currentPosition = transform.position;
+            _lastPosition = _currentPosition;
         }
 
         private void Update()
         {
-            if (!_stop && _timeProvider.GetTimeScale() != 0f && Input.GetMouseButton(0))
+            Vector2 mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition);
+            _currentPosition = mousePosition;
+            
+            if (Input.GetMouseButtonUp(0))
             {
-                _firstTrailRenderer.enabled = true;
-                _secondTrailRenderer.enabled = true;
-                Vector2 mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition);
-                transform.position = mousePosition;
-                if (!_touched)
-                {
-                    _firstTrailRenderer.enabled = false;
-                    _secondTrailRenderer.enabled = false;
-                    _lastPosition = transform.position;
-                }
-                _touched = true;
-            }
-            else
-            {
-                _touched = false;
+                DisableSwiper();
             }
             
-            Speed = Vector2.Distance(_lastPosition, transform.position) / Time.deltaTime;
-            Direction = transform.position - _lastPosition;
-            _lastPosition = transform.position;
+            if (Input.GetMouseButtonDown(0))
+            {
+                EnableSwiper();
+            }
+            
+            if (_touched && !_stop && _timeProvider.GetTimeScale() != 0f && Input.GetMouseButton(0))
+            {
+                Speed = Vector2.Distance(_lastPosition, _currentPosition) / Time.deltaTime;
+                Direction = _currentPosition - _lastPosition;
+            }
+            
+            _lastPosition = _currentPosition;
+            transform.position = _currentPosition;
+        }
+
+        private void EnableSwiper()
+        {
+            _touched = true;
+            _lastPosition = _currentPosition;
+            SwitchTrails(true);
+        }
+
+        private void DisableSwiper()
+        {
+            _touched = false;
+            SwitchTrails(false);
+            Speed = 0f;
+            Direction = Vector2.zero;
+        }
+
+        private void SwitchTrails(bool enable)
+        {
+            _firstTrailRenderer.enabled = enable;
+            _secondTrailRenderer.enabled = enable;
         }
     }
 }

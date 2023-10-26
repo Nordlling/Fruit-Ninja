@@ -2,6 +2,7 @@ using Main.Scripts.Infrastructure.Configs;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
+using Main.Scripts.Infrastructure.Services.Bricking;
 using Main.Scripts.Infrastructure.Services.Combo;
 using Main.Scripts.Infrastructure.Services.Explosion;
 using Main.Scripts.Infrastructure.Services.Freezing;
@@ -13,6 +14,7 @@ using Main.Scripts.Logic.Blocks;
 using Main.Scripts.Logic.Blocks.BlockBag;
 using Main.Scripts.Logic.Blocks.Bombs;
 using Main.Scripts.Logic.Blocks.BonusLifes;
+using Main.Scripts.Logic.Blocks.Bricks;
 using Main.Scripts.Logic.Blocks.Freezes;
 using Main.Scripts.Logic.Blocks.Magnets;
 using UnityEngine;
@@ -131,6 +133,20 @@ namespace Main.Scripts.Infrastructure.Factory
             _serviceContainer.Get<IBlockContainerService>().AddBlock(magnet);
             
             return magnet;
+        }
+        
+        public Brick CreateBrick(Vector2 position)
+        {
+            Brick brick = CreateBasicBlock<Brick>(out int randomIndex, position, _blocksConfig.BrickConfig.BlockInfo, false, 0f);
+            
+            brick.BrickSlicer.Construct(
+                _serviceContainer.Get<IBrickService>(),
+                _serviceContainer.Get<ISliceEffectFactory>(), 
+                randomIndex);
+            
+            _serviceContainer.Get<IBlockContainerService>().AddBlock(brick);
+            
+            return brick;
         }
 
         public void Cleanup()

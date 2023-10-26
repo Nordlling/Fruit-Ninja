@@ -74,6 +74,14 @@ namespace Main.Scripts.Infrastructure.Factory
             magnetAreaEffect.Construct(_serviceContainer.Get<ITimeProvider>(), magnetConfig.AttractionRadius, magnetConfig.Duration);
             return magnetAreaEffect;
         }
+        
+        public Splash CreateBrickSplash(Vector2 position, int visualIndex)
+        {
+            BlockInfo blockInfo = _blocksConfig.BrickConfig.BlockInfo;
+            Splash splash = Object.Instantiate(blockInfo.SplashPrefab, position, Quaternion.identity);
+            splash.Construct(_serviceContainer.Get<ITimeProvider>(), blockInfo.VisualSprites[visualIndex].SplashSprite);
+            return splash;
+        }
 
         public void Cleanup()
         {

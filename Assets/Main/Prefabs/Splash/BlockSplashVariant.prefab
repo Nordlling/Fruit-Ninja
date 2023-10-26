@@ -11,6 +11,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 8bd45a6e69dbac843bf63493f0256211, type: 3}
+    - target: {fileID: 1507363001270261453, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1884454342092968996, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
       propertyPath: _splashAnimation
       value: 

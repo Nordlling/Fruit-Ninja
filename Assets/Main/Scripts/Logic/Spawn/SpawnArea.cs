@@ -4,6 +4,7 @@ using Main.Scripts.Logic.Blocks;
 using Main.Scripts.Logic.Blocks.BlockBag;
 using Main.Scripts.Logic.Blocks.Bombs;
 using Main.Scripts.Logic.Blocks.BonusLifes;
+using Main.Scripts.Logic.Blocks.Bricks;
 using Main.Scripts.Logic.Blocks.Freezes;
 using Main.Scripts.Logic.Blocks.Magnets;
 using UnityEngine;
@@ -73,13 +74,21 @@ namespace Main.Scripts.Logic.Spawn
             Freeze freeze = _blockFactory.CreateFreeze(_newPointPosition);
             freeze.BlockMovement.Construct(_newStartDirection, _newSpeed, freeze.TimeProvider);
         }
-        
+
         public void SpawnMagnet()
         {
             GenerateBlockParameters();
             
             Magnet magnet = _blockFactory.CreateMagnet(_newPointPosition);
             magnet.BlockMovement.Construct(_newStartDirection, _newSpeed, magnet.TimeProvider);
+        }
+
+        public void SpawnBrick()
+        {
+            GenerateBlockParameters();
+            
+            Brick brick = _blockFactory.CreateBrick(_newPointPosition);
+            brick.BlockMovement.Construct(_newStartDirection, _newSpeed, brick.TimeProvider);
         }
 
         private void GenerateBlockParameters()

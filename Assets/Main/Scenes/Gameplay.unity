@@ -1601,10 +1601,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6675736241967171827, guid: f734e8bd86a7cfb48a7af5ffb7af15a2, type: 3}
-      propertyPath: m_BlocksRaycasts
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8690991014023303028, guid: f734e8bd86a7cfb48a7af5ffb7af15a2, type: 3}
       propertyPath: m_Name
       value: UISamuraiView

@@ -101,7 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spriteRenderer: {fileID: 5577851314036347277}
   _timeBeforeAnimation: 0
-  _animationDuration: 0.2
+  _animationDuration: 0.3
   _animationMoveOffset: {x: 0, y: 0}
   _animationStretchOffset: {x: 1, y: 1}
   _initialScale: {x: 0, y: 0}

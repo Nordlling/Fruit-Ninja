@@ -23,3 +23,5 @@ MonoBehaviour:
     VisualSprites:
     - BlockSprite: {fileID: 21300000, guid: f9f016d00dc803f4bb04741b98524e9f, type: 3}
       SplashSprite: {fileID: 21300000, guid: fedf50ddeb0b072438be86ceed8ea894, type: 3}
+  ExplosionForce: 1
+  ExplosionRadius: 8

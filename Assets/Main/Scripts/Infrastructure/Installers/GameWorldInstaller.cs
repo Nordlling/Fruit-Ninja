@@ -14,6 +14,7 @@ using Main.Scripts.Infrastructure.Services.Explosion;
 using Main.Scripts.Infrastructure.Services.Freezing;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.LivingZone;
+using Main.Scripts.Infrastructure.Services.Magnetism;
 using Main.Scripts.Infrastructure.Services.SaveLoad;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Logic.Combo;
@@ -50,22 +51,26 @@ namespace Main.Scripts.Infrastructure.Installers
             RegisterGameplayStateMachine(serviceContainer);
             RegisterBlockContainerService(serviceContainer);
             RegisterAnimationTargetContainer(serviceContainer);
-
-            RegisterLivingZone(serviceContainer);
-            RegisterScoreService(serviceContainer);
-            RegisterSwiper(serviceContainer);
-            RegisterDifficultyService(serviceContainer);
-
-            RegisterExplosionService(serviceContainer);
-            RegisterCollisionService(serviceContainer);
-            RegisterHealthService(serviceContainer);
-            RegisterBoostersCheckerService(serviceContainer);
-            RegisterFreezeService(serviceContainer);
+            
             RegisterLabelFactory(serviceContainer);
             RegisterSpawnFactory(serviceContainer);
             RegisterSliceEffectFactory(serviceContainer);
-            RegisterComboService(serviceContainer);
             RegisterBlockFactory(serviceContainer);
+
+            RegisterLivingZone(serviceContainer);
+            RegisterSwiper(serviceContainer);
+            RegisterCollisionService(serviceContainer);
+            
+            RegisterScoreService(serviceContainer);
+            RegisterDifficultyService(serviceContainer);
+            RegisterHealthService(serviceContainer);
+            RegisterComboService(serviceContainer);
+
+            RegisterBoostersCheckerService(serviceContainer);
+            RegisterExplosionService(serviceContainer);
+            RegisterFreezeService(serviceContainer);
+            RegisterMagnetService(serviceContainer);
+            
             RegisterSpawner(serviceContainer);
         }
 
@@ -109,22 +114,34 @@ namespace Main.Scripts.Infrastructure.Installers
         }
 
 
+        private void RegisterSpawnFactory(ServiceContainer serviceContainer)
+        {
+            SpawnFactory spawnFactory = new SpawnFactory(_spawnAreaPrefab);
+            serviceContainer.SetService<ISpawnFactory, SpawnFactory>(spawnFactory);
+        }
+
+        private void RegisterLabelFactory(ServiceContainer serviceContainer)
+        {
+            LabelFactory labelFactory = new LabelFactory(serviceContainer, _wordEndingsConfig);
+            serviceContainer.SetService<ILabelFactory, LabelFactory>(labelFactory);
+        }
+
+        private void RegisterSliceEffectFactory(ServiceContainer serviceContainer)
+        {
+            SliceEffectFactory sliceEffectFactory = new SliceEffectFactory(serviceContainer, _blocksConfig);
+            serviceContainer.SetService<ISliceEffectFactory, SliceEffectFactory>(sliceEffectFactory);
+        }
+
+        private void RegisterBlockFactory(ServiceContainer serviceContainer)
+        {
+            BlockFactory blockFactory = new BlockFactory(serviceContainer,_blocksConfig);
+            serviceContainer.SetService<IBlockFactory, BlockFactory>(blockFactory);
+        }
+        
+
         private void RegisterLivingZone(ServiceContainer serviceContainer)
         {
             serviceContainer.SetServiceSelf(_livingZone);
-        }
-
-        private void RegisterScoreService(ServiceContainer serviceContainer)
-        {
-            ScoreService scoreService = new ScoreService
-            (
-                _scoreConfig,
-                serviceContainer.Get<ISaveLoadService>()
-            );
-            
-            serviceContainer.SetService<IScoreService, ScoreService>(scoreService);
-            
-            SetGameplayStates(serviceContainer, scoreService);
         }
 
         private void RegisterSwiper(ServiceContainer serviceContainer)
@@ -134,21 +151,6 @@ namespace Main.Scripts.Infrastructure.Installers
             serviceContainer.SetService<ISwiper, Swiper>(swiper);
 
             SetGameplayStates(serviceContainer, swiper);
-        }
-
-
-        private void RegisterDifficultyService(ServiceContainer serviceContainer)
-        {
-            DifficultyService difficultyService = new DifficultyService(_difficultyConfig);
-            serviceContainer.SetService<IDifficultyService, DifficultyService>(difficultyService);
-            
-            SetGameplayStates(serviceContainer, difficultyService);
-        }
-
-        private void RegisterExplosionService(ServiceContainer serviceContainer)
-        {
-            ExplosionService explosionService = new ExplosionService(serviceContainer.Get<IBlockContainerService>());
-            serviceContainer.SetService<IExplosionService, ExplosionService>(explosionService);
         }
 
         private void RegisterCollisionService(ServiceContainer serviceContainer)
@@ -161,17 +163,43 @@ namespace Main.Scripts.Infrastructure.Installers
             SetGameplayStates(serviceContainer, collisionService);
         }
 
+        private void RegisterScoreService(ServiceContainer serviceContainer)
+        {
+            ScoreService scoreService = new ScoreService(_scoreConfig, serviceContainer.Get<ISaveLoadService>());
+            
+            serviceContainer.SetService<IScoreService, ScoreService>(scoreService);
+            
+            SetGameplayStates(serviceContainer, scoreService);
+        }
+
+
+        private void RegisterDifficultyService(ServiceContainer serviceContainer)
+        {
+            DifficultyService difficultyService = new DifficultyService(_difficultyConfig);
+            
+            serviceContainer.SetService<IDifficultyService, DifficultyService>(difficultyService);
+            
+            SetGameplayStates(serviceContainer, difficultyService);
+        }
+
         private void RegisterHealthService(ServiceContainer serviceContainer)
         {
-            HealthService healthService = new HealthService
-            (
-                _healthConfig,
-                serviceContainer.Get<IGameplayStateMachine>()
-            );
+            HealthService healthService = new HealthService(_healthConfig, serviceContainer.Get<IGameplayStateMachine>());
             
             serviceContainer.SetService<IHealthService, HealthService>(healthService);
             
             SetGameplayStates(serviceContainer, healthService);
+        }
+
+        private void RegisterComboService(ServiceContainer serviceContainer)
+        {
+            ComboService comboService = new ComboService(
+                _scoreConfig,
+                serviceContainer.Get<IScoreService>(),
+                serviceContainer.Get<ILabelFactory>(),
+                _comboLabelPrefab);
+
+            serviceContainer.SetService<IComboService, ComboService>(comboService);
         }
 
         private void RegisterBoostersCheckerService(ServiceContainer serviceContainer)
@@ -184,6 +212,12 @@ namespace Main.Scripts.Infrastructure.Installers
             );
             
             serviceContainer.SetService<IBoostersCheckerService, BoostersCheckerService>(boostersCheckerService);
+        }
+
+        private void RegisterExplosionService(ServiceContainer serviceContainer)
+        {
+            ExplosionService explosionService = new ExplosionService(serviceContainer.Get<IBlockContainerService>(), _blocksConfig.BombConfig);
+            serviceContainer.SetService<IExplosionService, ExplosionService>(explosionService);
         }
 
         private void RegisterFreezeService(ServiceContainer serviceContainer)
@@ -200,63 +234,17 @@ namespace Main.Scripts.Infrastructure.Installers
             SetGameplayStates(serviceContainer, freezeService);
         }
 
-        private void RegisterSpawnFactory(ServiceContainer serviceContainer)
+        private void RegisterMagnetService(ServiceContainer serviceContainer)
         {
-            SpawnFactory spawnFactory = new SpawnFactory(_spawnAreaPrefab);
-            serviceContainer.SetService<ISpawnFactory, SpawnFactory>(spawnFactory);
-        }
-
-        private void RegisterLabelFactory(ServiceContainer serviceContainer)
-        {
-            LabelFactory labelFactory = new LabelFactory
-                (
-                    serviceContainer.Get<ITimeProvider>(),
-                    serviceContainer.Get<LivingZone>(),
-                    serviceContainer.Get<IAnimationTargetContainer>(),
-                    _wordEndingsConfig
-                );
-            serviceContainer.SetService<ILabelFactory, LabelFactory>(labelFactory);
-        }
-
-        private void RegisterSliceEffectFactory(ServiceContainer serviceContainer)
-        {
-            SliceEffectFactory sliceEffectFactory = new SliceEffectFactory
+            MagnetService magnetService = new MagnetService
             (
+                serviceContainer.Get<IBoostersCheckerService>(),
+                serviceContainer.Get<IBlockContainerService>(), 
                 serviceContainer.Get<ITimeProvider>(),
-                _blocksConfig
+                _blocksConfig.MagnetConfig
             );
             
-            serviceContainer.SetService<ISliceEffectFactory, SliceEffectFactory>(sliceEffectFactory);
-        }
-
-        private void RegisterComboService(ServiceContainer serviceContainer)
-        {
-            ComboService comboService = new ComboService(
-                _scoreConfig,
-                serviceContainer.Get<IScoreService>(),
-                serviceContainer.Get<ILabelFactory>(),
-                _comboLabelPrefab);
-
-            serviceContainer.SetService<IComboService, ComboService>(comboService);
-        }
-
-        private void RegisterBlockFactory(ServiceContainer serviceContainer)
-        {
-            BlockFactory blockFactory = new BlockFactory(
-                serviceContainer.Get<IBlockContainerService>(),
-                serviceContainer.Get<IExplosionService>(),
-                serviceContainer.Get<LivingZone>(),
-                serviceContainer.Get<IHealthService>(),
-                serviceContainer.Get<IScoreService>(),
-                serviceContainer.Get<IComboService>(),
-                serviceContainer.Get<ITimeProvider>(),
-                serviceContainer.Get<ILabelFactory>(),
-                serviceContainer.Get<ISliceEffectFactory>(),
-                serviceContainer.Get<IFreezeService>(),
-                _blocksConfig
-            );
-            
-            serviceContainer.SetService<IBlockFactory, BlockFactory>(blockFactory);
+            serviceContainer.SetService<IMagnetService, MagnetService>(magnetService);
         }
 
         private void RegisterSpawner(ServiceContainer serviceContainer)

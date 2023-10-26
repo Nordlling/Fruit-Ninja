@@ -12,7 +12,7 @@ namespace Main.Scripts.Logic.Blocks
         {
             _blockSlicer.Slice(swiperPosition, swiperDirection);
         }
-
+        
         private void OnDestroy()
         {
             _blockContainerService?.RemoveBlock(this);

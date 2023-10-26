@@ -21,6 +21,7 @@ namespace Main.Scripts.Infrastructure.Configs
         public BonusLifeConfig BonusLifeConfig;
         public BlockBagConfig BlockBagConfig;
         public FreezeConfig FreezeConfig;
+        public MagnetConfig MagnetConfig;
     }
     
     [Serializable]

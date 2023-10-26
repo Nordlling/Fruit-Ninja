@@ -1,17 +1,20 @@
 using Main.Scripts.Infrastructure.Configs;
 using Main.Scripts.Infrastructure.Provides;
+using Main.Scripts.Infrastructure.Services;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
 using Main.Scripts.Infrastructure.Services.Combo;
 using Main.Scripts.Infrastructure.Services.Explosion;
 using Main.Scripts.Infrastructure.Services.Freezing;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.LivingZone;
+using Main.Scripts.Infrastructure.Services.Magnetism;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Logic.Blocks;
 using Main.Scripts.Logic.Blocks.BlockBag;
 using Main.Scripts.Logic.Blocks.Bombs;
 using Main.Scripts.Logic.Blocks.BonusLifes;
 using Main.Scripts.Logic.Blocks.Freezes;
+using Main.Scripts.Logic.Blocks.Magnets;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
@@ -20,40 +23,12 @@ namespace Main.Scripts.Infrastructure.Factory
 {
     public class BlockFactory : IBlockFactory
     {
-        private readonly IBlockContainerService _blockContainerService;
-        private readonly IExplosionService _explosionService;
-        private readonly LivingZone _livingZone;
-        private readonly IHealthService _healthService;
-        private readonly IScoreService _scoreService;
-        private readonly IComboService _comboService;
-        private readonly ITimeProvider _timeProvider;
-        private readonly ILabelFactory _labelFactory;
-        private readonly ISliceEffectFactory _sliceEffectFactory;
-        private readonly IFreezeService _freezeService;
+        private readonly ServiceContainer _serviceContainer;
         private readonly BlocksConfig _blocksConfig;
 
-        public BlockFactory(IBlockContainerService blockContainerService,
-            IExplosionService explosionService,
-            LivingZone livingZone,
-            IHealthService healthService,
-            IScoreService scoreService,
-            IComboService comboService,
-            ITimeProvider timeProvider,
-            ILabelFactory labelFactory,
-            ISliceEffectFactory sliceEffectFactory,
-            IFreezeService freezeService,
-            BlocksConfig blocksConfig)
+        public BlockFactory(ServiceContainer serviceContainer, BlocksConfig blocksConfig)
         {
-            _blockContainerService = blockContainerService;
-            _explosionService = explosionService;
-            _livingZone = livingZone;
-            _healthService = healthService;
-            _scoreService = scoreService;
-            _comboService = comboService;
-            _timeProvider = timeProvider;
-            _labelFactory = labelFactory;
-            _sliceEffectFactory = sliceEffectFactory;
-            _freezeService = freezeService;
+            _serviceContainer = serviceContainer;
             _blocksConfig = blocksConfig;
         }
 
@@ -61,9 +36,11 @@ namespace Main.Scripts.Infrastructure.Factory
         {
             BlockInfo blockPieceInfo = _blocksConfig.BlockPiece;
             BlockPiece block = Object.Instantiate(blockPieceInfo.BlockPrefab, position, Quaternion.identity);
-            block.Construct(_timeProvider, 0f);
-            block.BoundsChecker.Construct(_livingZone, _healthService, false);
-            block.BlockAnimation.Construct(_timeProvider);
+            block.Construct(_serviceContainer.Get<IBlockContainerService>(), _serviceContainer.Get<ITimeProvider>(), 0f);
+            block.BoundsChecker.Construct(_serviceContainer.Get<LivingZone>(), _serviceContainer.Get<IHealthService>(), false);
+            block.BlockAnimation.Construct(_serviceContainer.Get<ITimeProvider>());
+            
+            _serviceContainer.Get<IBlockContainerService>().AddBlock(block);
             return block;
         }
 
@@ -71,8 +48,14 @@ namespace Main.Scripts.Infrastructure.Factory
         {
             Block block = CreateBasicBlock<Block>(out int randomIndex, position, _blocksConfig.Block, true, invulnerabilityDuration);
 
-            block.BlockSlicer.Construct(this, _labelFactory, _sliceEffectFactory, _scoreService, _comboService, randomIndex);
-            _blockContainerService.AddBlock(block);
+            block.BlockSlicer.Construct(this, 
+                _serviceContainer.Get<ILabelFactory>(), 
+                _serviceContainer.Get<ISliceEffectFactory>(), 
+                _serviceContainer.Get<IScoreService>(), 
+                _serviceContainer.Get<IComboService>(), 
+                randomIndex);
+            
+            _serviceContainer.Get<IBlockContainerService>().AddBlock(block);
             return block;
         }
         
@@ -80,15 +63,14 @@ namespace Main.Scripts.Infrastructure.Factory
         {
             Bomb bomb = CreateBasicBlock<Bomb>(out int randomIndex, position, _blocksConfig.BombConfig.BlockInfo, false, 0f);
             
-            bomb.BombExplosion.Construct(_explosionService);
             bomb.BombSlicer.Construct(
-                _labelFactory, 
-                _sliceEffectFactory, 
-                _healthService,
-                bomb.BombExplosion,
+                _serviceContainer.Get<ILabelFactory>(), 
+                _serviceContainer.Get<ISliceEffectFactory>(), 
+                _serviceContainer.Get<IHealthService>(),
+                _serviceContainer.Get<IExplosionService>(),
                 randomIndex);
             
-            _blockContainerService.AddBlock(bomb);
+            _serviceContainer.Get<IBlockContainerService>().AddBlock(bomb);
             
             return bomb;
         }
@@ -98,12 +80,12 @@ namespace Main.Scripts.Infrastructure.Factory
             BonusLife bonusLife = CreateBasicBlock<BonusLife>(out int randomIndex, position, _blocksConfig.BonusLifeConfig.BlockInfo, false, 0f);
             
             bonusLife.BonusLifeSlicer.Construct(
-                _labelFactory, 
-                _sliceEffectFactory, 
-                _healthService,
+                _serviceContainer.Get<ILabelFactory>(), 
+                _serviceContainer.Get<ISliceEffectFactory>(), 
+                _serviceContainer.Get<IHealthService>(),
                 randomIndex);
            
-            _blockContainerService.AddBlock(bonusLife);
+            _serviceContainer.Get<IBlockContainerService>().AddBlock(bonusLife);
             
             return bonusLife;
         }
@@ -115,10 +97,10 @@ namespace Main.Scripts.Infrastructure.Factory
             blockBag.BlockBagSlicer.Construct(
                 this,
                 _blocksConfig.BlockBagConfig, 
-                _sliceEffectFactory, 
+                _serviceContainer.Get<ISliceEffectFactory>(), 
                 randomIndex);
             
-            _blockContainerService.AddBlock(blockBag);
+            _serviceContainer.Get<IBlockContainerService>().AddBlock(blockBag);
             
             return blockBag;
         }
@@ -128,13 +110,27 @@ namespace Main.Scripts.Infrastructure.Factory
             Freeze freeze = CreateBasicBlock<Freeze>(out int randomIndex, position, _blocksConfig.FreezeConfig.BlockInfo, false, 0f);
             
             freeze.FreezeSlicer.Construct(
-                _freezeService,
-                _sliceEffectFactory, 
+                _serviceContainer.Get<IFreezeService>(),
+                _serviceContainer.Get<ISliceEffectFactory>(), 
                 randomIndex);
             
-            _blockContainerService.AddBlock(freeze);
+            _serviceContainer.Get<IBlockContainerService>().AddBlock(freeze);
             
             return freeze;
+        }
+        
+        public Magnet CreateMagnet(Vector2 position)
+        {
+            Magnet magnet = CreateBasicBlock<Magnet>(out int randomIndex, position, _blocksConfig.MagnetConfig.BlockInfo, false, 0f);
+            
+            magnet.MagnetSlicer.Construct(
+                _serviceContainer.Get<ISliceEffectFactory>(),
+                _serviceContainer.Get<IMagnetService>(),
+                randomIndex);
+            
+            _serviceContainer.Get<IBlockContainerService>().AddBlock(magnet);
+            
+            return magnet;
         }
 
         public void Cleanup()
@@ -147,10 +143,10 @@ namespace Main.Scripts.Infrastructure.Factory
             
             randomIndex = Random.Range(0, blockInfo.VisualSprites.Length);
 
-            basicBlock.Construct(_blockContainerService, _timeProvider, invulnerabilityDuration);
+            basicBlock.Construct(_serviceContainer.Get<IBlockContainerService>(), _serviceContainer.Get<ITimeProvider>(), invulnerabilityDuration);
             basicBlock.SpriteRenderer.sprite = blockInfo.VisualSprites[randomIndex].BlockSprite;
-            basicBlock.BoundsChecker.Construct(_livingZone, _healthService, healthAffect);
-            basicBlock.BlockAnimation.Construct(_timeProvider);
+            basicBlock.BoundsChecker.Construct(_serviceContainer.Get<LivingZone>(), _serviceContainer.Get<IHealthService>(), healthAffect);
+            basicBlock.BlockAnimation.Construct(_serviceContainer.Get<ITimeProvider>());
             
             return basicBlock;
         }

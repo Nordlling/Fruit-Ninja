@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da0cee85cd9240bf8708c40f60769ef3, type: 3}
+  m_Name: MagnetConfig
+  m_EditorClassIdentifier: 
+  BoosterSpawnInfo:
+    DropoutRate: 0.3
+    MaxFractionInBoostPack: 1
+    MaxNumberInBoostPack: 1
+    MaxNumberOnScreen: 1
+  BlockInfo:
+    BlockPrefab: {fileID: 4140517882592963336, guid: ba7ae5d9f1ee104438b8c5073b3ffcb7, type: 3}
+    SplashPrefab: {fileID: 6408557679186087295, guid: 13543ad2d9cd7ac42805be4d8b4bf910, type: 3}
+    VisualSprites:
+    - BlockSprite: {fileID: 21300000, guid: f191b75064427eb4da9d5bef46d0ef91, type: 3}
+      SplashSprite: {fileID: 21300000, guid: a5d2a249af8bd2b42af29f5af22a8e9c, type: 3}
+  Duration: 3
+  AttractionForce: 20
+  AttractionRadius: 4
+  StrongRadius: 0.5
+  SingularityRadius: 0.1
+  MagnetAreaEffectPrefab: {fileID: 8531943058825680658, guid: b5416ec8612799a42b4b33b1bdd78587, type: 3}

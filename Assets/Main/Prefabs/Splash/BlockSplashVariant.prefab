@@ -19,6 +19,14 @@ PrefabInstance:
       propertyPath: _splashAnimation
       value: 
       objectReference: {fileID: -5992458899025452459}
+    - target: {fileID: 1884454342092968996, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
+      propertyPath: _splashEffects.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1884454342092968996, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
+      propertyPath: _splashEffects.Array.data[0]
+      value: 
+      objectReference: {fileID: 6206543946800041878}
     - target: {fileID: 2040446220970719620, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
       propertyPath: m_Name
       value: BlockSplashVariant
@@ -72,6 +80,11 @@ PrefabInstance:
 --- !u!212 &5577851314036347277 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 1126368623444412630, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
+  m_PrefabInstance: {fileID: 4812422190695307611}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &6206543946800041878 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1507363001270261453, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
   m_PrefabInstance: {fileID: 4812422190695307611}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &6816259036533924063 stripped

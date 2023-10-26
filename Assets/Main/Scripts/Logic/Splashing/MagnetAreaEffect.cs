@@ -6,7 +6,7 @@ namespace Main.Scripts.Logic.Splashing
 {
     public class MagnetAreaEffect : MonoBehaviour
     {
-        [SerializeField] private ParticleSystem _magnetAreaEffect;
+        [SerializeField] private ParticleSystem[] _magnetAreaEffects;
         [SerializeField] private float _disappearDuration;
         [SerializeField] private Transform _effectTransform;
         
@@ -15,7 +15,6 @@ namespace Main.Scripts.Logic.Splashing
         private float _lifeTime;
         
         private Sequence _sequence;
-        private ParticleSystem.MainModule _magnetAreaEffectMain;
 
         public void Construct(ITimeProvider timeProvider, float radius, float lifeTime)
         {
@@ -27,14 +26,18 @@ namespace Main.Scripts.Logic.Splashing
         private void Start()
         {
             _effectTransform.localScale = new Vector3(_radius * 2f, _radius * 2f, _radius * 2f);
-            _magnetAreaEffectMain = _magnetAreaEffect.main;
             PlayDisappearMagnetArea();
         }
 
         private void Update()
         {
             _sequence.timeScale = _timeProvider.GetTimeScale();
-            _magnetAreaEffectMain.simulationSpeed = _timeProvider.GetTimeScale();
+            
+            for (int i = 0; i < _magnetAreaEffects.Length; i++)
+            {
+                var magnetAreaEffectMain = _magnetAreaEffects[i].main;
+                magnetAreaEffectMain.simulationSpeed = _timeProvider.GetTimeScale();
+            }
         }
 
         private void PlayDisappearMagnetArea()

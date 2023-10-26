@@ -5505,6 +5505,18 @@ PrefabInstance:
       propertyPath: _setColorFromSprite
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1884454342092968996, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
+      propertyPath: _splashEffects.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1884454342092968996, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
+      propertyPath: _splashEffects.Array.data[0]
+      value: 
+      objectReference: {fileID: 6206543946800041878}
+    - target: {fileID: 1884454342092968996, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
+      propertyPath: _splashEffects.Array.data[1]
+      value: 
+      objectReference: {fileID: 6292604455716559076}
     - target: {fileID: 2040446220970719620, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
       propertyPath: m_Name
       value: BlockBagSplashVariant
@@ -5565,9 +5577,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7726955097950979543, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7726955097950979543, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7726955097950979543, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7726955097950979543, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8651372918322403006, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8651372918322403006, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8651372918322403006, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
       propertyPath: m_SortMode
@@ -5642,6 +5674,11 @@ PrefabInstance:
 --- !u!4 &3022619882464926860 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7726955097950979543, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
+  m_PrefabInstance: {fileID: 4812422190695307611}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &6206543946800041878 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1507363001270261453, guid: cfc4dccc6c8f8cd49ac00825d91ecb18, type: 3}
   m_PrefabInstance: {fileID: 4812422190695307611}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &6816259036533924063 stripped

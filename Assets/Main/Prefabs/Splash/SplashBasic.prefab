@@ -48,7 +48,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _splashAnimation: {fileID: 0}
   _spriteRenderer: {fileID: 1126368623444412630}
-  _splashEffect: {fileID: 1507363001270261453}
+  _splashEffects:
+  - {fileID: 1507363001270261453}
   _setColorFromSprite: 1
   _lifeTime: 0
 --- !u!1 &4126903343715526590

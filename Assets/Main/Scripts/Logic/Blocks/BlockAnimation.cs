@@ -37,7 +37,15 @@ namespace Main.Scripts.Logic.Blocks
         public void Construct(ITimeProvider timeProvider)
         {
             _timeProvider = timeProvider;
-        } 
+        }
+
+        public void StopAnimation()
+        {
+            foreach (Tweener tweener in _tweeners)
+            {
+                tweener.Pause();
+            }
+        }
 
         private void FillAnimationList()
         {

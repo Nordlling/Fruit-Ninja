@@ -1,7 +1,9 @@
-﻿namespace Main.Scripts.Constants
+﻿using UnityEngine;
+
+namespace Main.Scripts.Constants
 {
     public static class PhysicsConstants
     {
-        public const float Gravity = 9.81f;
+        public static readonly Vector2 Gravity = new(0f, -9.81f);
     }
 }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Scripts.Infrastructure.Configs;
 using Main.Scripts.Infrastructure.Provides;
+using Main.Scripts.Infrastructure.Services;
 using Main.Scripts.Infrastructure.Services.AnimationTargetContainer;
 using Main.Scripts.Infrastructure.Services.Combo;
 using Main.Scripts.Infrastructure.Services.LivingZone;
@@ -14,24 +15,19 @@ namespace Main.Scripts.Infrastructure.Factory
 {
     public class LabelFactory : ILabelFactory
     {
-        private readonly ITimeProvider _timeProvider;
-        private readonly LivingZone _livingZone;
-        private readonly IAnimationTargetContainer _animationTargetContainer;
+        private readonly ServiceContainer _serviceContainer;
         private readonly WordEndingsConfig _wordEndingsConfig;
 
-        public LabelFactory(ITimeProvider timeProvider, LivingZone livingZone,
-            IAnimationTargetContainer animationTargetContainer, WordEndingsConfig wordEndingsConfig)
+        public LabelFactory(ServiceContainer serviceContainer,  WordEndingsConfig wordEndingsConfig)
         {
-            _timeProvider = timeProvider;
-            _livingZone = livingZone;
-            _animationTargetContainer = animationTargetContainer;
+            _serviceContainer = serviceContainer;
             _wordEndingsConfig = wordEndingsConfig;
         }
 
         public ScoreLabel CreateScoreLabel(ScoreLabel scoreLabelPrefab, Vector2 position, string value)
         {
             ScoreLabel scoreLabel = Object.Instantiate(scoreLabelPrefab, position, Quaternion.identity);
-            scoreLabel.Construct(value, _timeProvider);
+            scoreLabel.Construct(value, _serviceContainer.Get<ITimeProvider>());
             return scoreLabel;
         }
         
@@ -39,21 +35,21 @@ namespace Main.Scripts.Infrastructure.Factory
         {
             ComboLabel comboLabel = Object.Instantiate(comboLabelPrefab, comboInfo.SpawnPosition, Quaternion.identity);
             Dictionary<int, string> fruitDictionary = _wordEndingsConfig.FruitDictionary.ToDictionary(key => key.Number, value => value.Word);
-            comboLabel.Construct(comboInfo.ComboCount, _timeProvider, _livingZone, fruitDictionary);
+            comboLabel.Construct(comboInfo.ComboCount, _serviceContainer.Get<ITimeProvider>(), _serviceContainer.Get<LivingZone>(), fruitDictionary);
             return comboLabel;
         }
 
         public ExplosionLabel CreateExplosionLabel(ExplosionLabel explosionLabelPrefab, Vector2 position)
         {
             ExplosionLabel explosionLabel = Object.Instantiate(explosionLabelPrefab, position, Quaternion.identity);
-            explosionLabel.Construct(_timeProvider);
+            explosionLabel.Construct(_serviceContainer.Get<ITimeProvider>());
             return explosionLabel;
         }
         
         public HealthLabel CreateHealthLabel(HealthLabel healthLabelPrefab, Vector2 position)
         {
             HealthLabel healthLabel = Object.Instantiate(healthLabelPrefab, position, Quaternion.identity);
-            healthLabel.Construct(_timeProvider, _animationTargetContainer.HealthTarget);
+            healthLabel.Construct(_serviceContainer.Get<ITimeProvider>(), _serviceContainer.Get<IAnimationTargetContainer>().HealthTarget);
             return healthLabel;
         }
 

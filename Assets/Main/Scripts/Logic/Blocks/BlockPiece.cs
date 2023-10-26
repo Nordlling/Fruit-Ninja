@@ -29,11 +29,6 @@ namespace Main.Scripts.Logic.Blocks
         public void Construct(IBlockContainerService blockContainerService, ITimeProvider timeProvider, float invulnerabilityDuration)
         {
             _blockContainerService = blockContainerService;
-            Construct(timeProvider, invulnerabilityDuration);
-        }
-
-        public void Construct(ITimeProvider timeProvider, float invulnerabilityDuration)
-        {
             TimeProvider = timeProvider;
             InvulnerabilityDuration = invulnerabilityDuration;
         }
@@ -49,6 +44,11 @@ namespace Main.Scripts.Logic.Blocks
             {
                 InvulnerabilityDuration -= TimeProvider.GetDeltaTime();
             }
+        }
+        
+        private void OnDestroy()
+        {
+            _blockContainerService?.RemoveBlock(this);
         }
     }
 }

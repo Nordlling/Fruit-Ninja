@@ -1,10 +1,12 @@
 using Main.Scripts.Infrastructure.Factory;
 using Main.Scripts.Infrastructure.Services.Combo;
+using Main.Scripts.Infrastructure.Services.Explosion;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Logic.Label;
 using UnityEngine;
 
-namespace Main.Scripts.Logic.Blocks.Bombs{
+namespace Main.Scripts.Logic.Blocks.Bombs
+{
     public class BombSlicer : MonoBehaviour, ISlicer
     {
         [SerializeField] private ExplosionLabel _explosionLabelPrefab;
@@ -13,7 +15,7 @@ namespace Main.Scripts.Logic.Blocks.Bombs{
         private ISliceEffectFactory _sliceEffectFactory;
         private IHealthService _healthService;
         private IComboService _comboService;
-        private BombExplosion _bombExplosion;
+        private IExplosionService _explosionService;
         private Sprite _splashSprite;
         private int _visualIndex;
 
@@ -22,21 +24,21 @@ namespace Main.Scripts.Logic.Blocks.Bombs{
                 ILabelFactory labelFactory,
                 ISliceEffectFactory sliceEffectFactory,
                 IHealthService healthService,
-                BombExplosion bombExplosion,
+                IExplosionService explosionService,
                 int visualIndex
             )
         {
             _labelFactory = labelFactory;
             _sliceEffectFactory = sliceEffectFactory;
             _healthService = healthService;
-            _bombExplosion = bombExplosion;
+            _explosionService = explosionService;
             _visualIndex = visualIndex;
         }
         
         public void Slice(Vector2 swiperPosition, Vector2 swiperDirection)
         {
             _healthService.DecreaseHealth();
-            _bombExplosion.Explode();
+            _explosionService.Explode(transform.position);
             
             SpawnLabel();
             SpawnSplash();

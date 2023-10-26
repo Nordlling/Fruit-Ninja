@@ -7,7 +7,8 @@ namespace Main.Scripts.Infrastructure.Configs.Boosters
     {
         public float InvulnerabilityDuration;
         
-        [Header("Booster")]
+        [Header("Booster Settings")]
+        
         public float MinSpeed;
         public float MaxSpeed;
         

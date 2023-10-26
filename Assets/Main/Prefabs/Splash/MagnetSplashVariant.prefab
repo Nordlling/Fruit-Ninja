@@ -16013,7 +16013,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spriteRenderer: {fileID: 5577851314036347277}
-  _timeBeforeAnimation: 5
+  _timeBeforeAnimation: 0
   _animationDuration: 0.3
   _animationMoveOffset: {x: 0, y: 0}
   _animationStretchOffset: {x: 0, y: 0}

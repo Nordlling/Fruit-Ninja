@@ -108,6 +108,7 @@ namespace Main.Scripts.Logic.Spawn
             float spawnFrequency = _difficultyService.DifficultyLevel.Frequency;
             _boostersCheckerService.CalculateBlockMaxCounter(_difficultyService.DifficultyLevel.BlockCount);
             int boostersMaxCounter = _boostersCheckerService.MaxCountInPack;
+            int blockMaxCounter = _difficultyService.DifficultyLevel.BlockCount - boostersMaxCounter;
             
             for (int i = 0; i < _difficultyService.DifficultyLevel.BlockCount; i++)
             {
@@ -116,13 +117,22 @@ namespace Main.Scripts.Logic.Spawn
                 int randomIndex = GenerateRandomIndex(_spawnWeights);
                 SpawnArea spawnArea = _spawnAreas[randomIndex].SpawnArea;
 
-                if (boostersMaxCounter > 0 && TrySpawnBooster(spawnArea))
+                if (Random.value > 0.5 && blockMaxCounter > 0)
                 {
-                    boostersMaxCounter--;
+                    spawnArea.SpawnBlock();
+                    blockMaxCounter--;
                 }
                 else
                 {
-                    spawnArea.SpawnBlock();
+                    if (boostersMaxCounter > 0 && TrySpawnBooster(spawnArea))
+                    {
+                        boostersMaxCounter--;
+                    }
+                    else
+                    {
+                        spawnArea.SpawnBlock();
+                        blockMaxCounter--;
+                    }
                 }
                 
                 while (elapsedTime < spawnFrequency)

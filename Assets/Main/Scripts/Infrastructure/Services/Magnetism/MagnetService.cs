@@ -12,6 +12,7 @@ using Main.Scripts.Logic.Blocks.BlockBag;
 using Main.Scripts.Logic.Blocks.BonusLifes;
 using Main.Scripts.Logic.Blocks.Freezes;
 using Main.Scripts.Logic.Blocks.Magnets;
+using Main.Scripts.Logic.Blocks.Samurais;
 using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Services.Magnetism
@@ -47,6 +48,7 @@ namespace Main.Scripts.Infrastructure.Services.Magnetism
                 typeof(BlockBag),
                 typeof(Freeze),
                 typeof(Magnet),
+                typeof(Samurai)
             };
         }
 

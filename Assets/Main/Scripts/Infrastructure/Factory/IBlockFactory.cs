@@ -6,6 +6,7 @@ using Main.Scripts.Logic.Blocks.BonusLifes;
 using Main.Scripts.Logic.Blocks.Bricks;
 using Main.Scripts.Logic.Blocks.Freezes;
 using Main.Scripts.Logic.Blocks.Magnets;
+using Main.Scripts.Logic.Blocks.Samurais;
 using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Factory
@@ -20,6 +21,7 @@ namespace Main.Scripts.Infrastructure.Factory
     Freeze CreateFreeze(Vector2 position);
     Magnet CreateMagnet(Vector2 position);
     Brick CreateBrick(Vector2 position);
+    Samurai CreateSamurai(Vector2 newPointPosition);
     void Cleanup();
   }
 }

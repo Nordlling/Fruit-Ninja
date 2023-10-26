@@ -23,6 +23,7 @@ namespace Main.Scripts.Infrastructure.Configs
         public FreezeConfig FreezeConfig;
         public MagnetConfig MagnetConfig;
         public BrickConfig BrickConfig;
+        public SamuraiConfig SamuraiConfig;
     }
     
     [Serializable]

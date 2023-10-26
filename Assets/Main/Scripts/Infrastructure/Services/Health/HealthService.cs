@@ -9,12 +9,14 @@ namespace Main.Scripts.Infrastructure.Services.Health
         public event Action OnDecreased;
         public event Action OnIncreased;
         public event Action OnReset;
-        
+
         private readonly HealthConfig _healthConfig;
         private readonly IGameplayStateMachine _gameplayStateMachine;
 
+        private bool _block;
+
         public int LeftHealths { get; private set; }
-        
+
         public HealthService(HealthConfig healthConfig, IGameplayStateMachine gameplayStateMachine)
         {
             _healthConfig = healthConfig;
@@ -22,7 +24,12 @@ namespace Main.Scripts.Infrastructure.Services.Health
             
             InitHealth(healthConfig);
         }
-        
+
+        public void SwitchBlock(bool blocked)
+        {
+            _block = blocked;
+        }
+
         public bool IsMaxHealth()
         {
             return LeftHealths == _healthConfig.HealthCount;
@@ -30,6 +37,11 @@ namespace Main.Scripts.Infrastructure.Services.Health
 
         public void DecreaseHealth()
         {
+            if (_block)
+            {
+                return;
+            }
+            
             LeftHealths--;
             OnDecreased?.Invoke();
             

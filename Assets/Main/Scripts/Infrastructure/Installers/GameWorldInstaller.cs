@@ -16,6 +16,7 @@ using Main.Scripts.Infrastructure.Services.Freezing;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.LivingZone;
 using Main.Scripts.Infrastructure.Services.Magnetism;
+using Main.Scripts.Infrastructure.Services.Samuraism;
 using Main.Scripts.Infrastructure.Services.SaveLoad;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Logic.Combo;
@@ -72,6 +73,7 @@ namespace Main.Scripts.Infrastructure.Installers
             RegisterFreezeService(serviceContainer);
             RegisterMagnetService(serviceContainer);
             RegisterBrickService(serviceContainer);
+            RegisterSamuraiService(serviceContainer);
             
             RegisterSpawner(serviceContainer);
         }
@@ -255,6 +257,19 @@ namespace Main.Scripts.Infrastructure.Installers
             
             serviceContainer.SetService<IBrickService, BrickService>(brickService);
         }
+        
+        private void RegisterSamuraiService(ServiceContainer serviceContainer)
+        {
+            SamuraiService samuraiService = new SamuraiService
+                (
+                    serviceContainer.Get<IBoostersCheckerService>(),
+                    serviceContainer.Get<IHealthService>(),
+                    serviceContainer.Get<ITimeProvider>(),
+                    _blocksConfig.SamuraiConfig
+                );
+            
+            serviceContainer.SetService<ISamuraiService, SamuraiService>(samuraiService);
+        }
 
         private void RegisterSpawner(ServiceContainer serviceContainer)
         {
@@ -264,7 +279,8 @@ namespace Main.Scripts.Infrastructure.Installers
                 serviceContainer.Get<IBlockFactory>(),
                 serviceContainer.Get<ISpawnFactory>(),
                 serviceContainer.Get<ITimeProvider>(),
-                serviceContainer.Get<IBoostersCheckerService>()
+                serviceContainer.Get<IBoostersCheckerService>(),
+                serviceContainer.Get<ISamuraiService>()
             );
             
             serviceContainer.SetServiceSelf(_spawner);

@@ -1,12 +1,12 @@
 using System;
 using System.Collections;
 using System.Linq;
-using Main.Scripts.Infrastructure.Configs;
 using Main.Scripts.Infrastructure.Factory;
 using Main.Scripts.Infrastructure.GameplayStates;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services.Boosters;
 using Main.Scripts.Infrastructure.Services.Difficulty;
+using Main.Scripts.Infrastructure.Services.Samuraism;
 using Main.Scripts.Utils.RandomUtils;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -16,8 +16,6 @@ namespace Main.Scripts.Logic.Spawn
     public class Spawner : MonoBehaviour, IPlayable, ILoseable
     {
         public SpawnInfo[] SpawnAreas => _spawnAreas;
-        
-        [SerializeField] private SpawnArea _spawnerAreaPrefab;
 
         [SerializeField] private float _minInterval;
         [SerializeField] private float _maxInterval;
@@ -28,6 +26,7 @@ namespace Main.Scripts.Logic.Spawn
         private ISpawnFactory _spawnFactory;
         private ITimeProvider _timeProvider;
         private IBoostersCheckerService _boostersCheckerService;
+        private ISamuraiService _samuraiService;
 
         private float _leftTime;
         private float[] _spawnWeights;
@@ -35,15 +34,13 @@ namespace Main.Scripts.Logic.Spawn
         private bool _spawnPackBusy;
         private bool _stop;
 
-        private float[] _boosterWeights;
-
-
         public void Construct(
             IDifficultyService difficultyService,
             IBlockFactory blockFactory,
             ISpawnFactory spawnFactory,
             ITimeProvider timeProvider, 
-            IBoostersCheckerService boostersCheckerService
+            IBoostersCheckerService boostersCheckerService,
+            ISamuraiService samuraiService
             )
         {
             _difficultyService = difficultyService;
@@ -51,6 +48,7 @@ namespace Main.Scripts.Logic.Spawn
             _spawnFactory = spawnFactory;
             _timeProvider = timeProvider;
             _boostersCheckerService = boostersCheckerService;
+            _samuraiService = samuraiService;
         }
 
         public void Play()
@@ -68,7 +66,8 @@ namespace Main.Scripts.Logic.Spawn
             _leftTime = Random.Range(_minInterval, _maxInterval);
             CreateSpawnAreas();
             _spawnWeights = _spawnAreas.Select(x => x.ProbabilityWeight).ToArray();
-            _boosterWeights = _boostersCheckerService.BoosterConfigs.Select(info => info.BoosterSpawnInfo.DropoutRate).ToArray();
+
+            _samuraiService.OnStarted += () => _leftTime = 0;
         }
 
         private void Update()
@@ -84,57 +83,45 @@ namespace Main.Scripts.Logic.Spawn
                 return;
             }
 
-            _difficultyService.IncreaseDifficulty();
+            if (!_samuraiService.Activated)
+            {
+                _difficultyService.IncreaseDifficulty();
+            }
+            
             StartCoroutine(SpawnPack(() => _spawnPackBusy = false));
 
-            _leftTime = Random.Range(_minInterval, _maxInterval);
-        }
-
-        private int GenerateRandomIndex(float[] weights)
-        {
-            int randomIndex = weights.GetRandomWeightedIndex();
-            if (randomIndex == -1)
-            {
-                Debug.LogError("Can't find weighted random index");
-                randomIndex = Random.Range(0, weights.Length);
-            }
-
-            return randomIndex;
+            float PackFrequencyMultiplier = _samuraiService.SamuraiInfo.PackFrequencyMultiplier;
+            _leftTime = Random.Range(_minInterval / PackFrequencyMultiplier, _maxInterval / PackFrequencyMultiplier);
         }
         
         private IEnumerator SpawnPack(Action onPackSpawned = null)
         {
             _spawnPackBusy = true;
-            float spawnFrequency = _difficultyService.DifficultyLevel.Frequency;
-            _boostersCheckerService.CalculateBlockMaxCounter(_difficultyService.DifficultyLevel.BlockCount);
-            int boostersMaxCounter = _boostersCheckerService.MaxCountInPack;
-            int blockMaxCounter = _difficultyService.DifficultyLevel.BlockCount - boostersMaxCounter;
             
-            for (int i = 0; i < _difficultyService.DifficultyLevel.BlockCount; i++)
+            float blockFrequencyMultiplier = _samuraiService.SamuraiInfo.BlockFrequencyMultiplier;
+            float spawnFrequency = _difficultyService.DifficultyLevel.Frequency / blockFrequencyMultiplier;
+            
+            int blockCount = _difficultyService.DifficultyLevel.BlockCount * _samuraiService.SamuraiInfo.BlockCountMultiplier;
+            _boostersCheckerService.CalculateBlockMaxCounter(blockCount);
+            
+            int boostersMaxCounter = _boostersCheckerService.MaxCountInPack;
+            int blockMaxCounter = blockCount - boostersMaxCounter;
+            
+            for (int i = 0; i < blockCount; i++)
             {
                 float elapsedTime = 0f;
-                
-                int randomIndex = GenerateRandomIndex(_spawnWeights);
-                SpawnArea spawnArea = _spawnAreas[randomIndex].SpawnArea;
 
-                if (Random.value > 0.5 && blockMaxCounter > 0)
+                if (!_samuraiService.Activated)
                 {
-                    spawnArea.SpawnBlock();
-                    blockMaxCounter--;
+                    Spawn(ref blockMaxCounter, ref boostersMaxCounter);
                 }
                 else
                 {
-                    if (boostersMaxCounter > 0 && TrySpawnBooster(spawnArea))
-                    {
-                        boostersMaxCounter--;
-                    }
-                    else
-                    {
-                        spawnArea.SpawnBlock();
-                        blockMaxCounter--;
-                    }
+                    int randomIndex = _spawnWeights.GetRandomWeightedIndex();
+                    SpawnArea spawnArea = _spawnAreas[randomIndex].SpawnArea;
+                    spawnArea.SpawnBlock();
                 }
-                
+
                 while (elapsedTime < spawnFrequency)
                 {
                     yield return null;
@@ -144,10 +131,28 @@ namespace Main.Scripts.Logic.Spawn
             onPackSpawned?.Invoke();
         }
 
-        private bool TrySpawnBooster(SpawnArea spawnArea)
+        private void Spawn(ref int blockMaxCounter, ref int boostersMaxCounter)
         {
-            int randomIndex = GenerateRandomIndex(_boosterWeights);
-            return _boostersCheckerService.TrySpawnBooster(spawnArea, randomIndex);
+            int randomIndex = _spawnWeights.GetRandomWeightedIndex();
+            SpawnArea spawnArea = _spawnAreas[randomIndex].SpawnArea;
+
+            if (Random.value > 0.5 && blockMaxCounter > 0)
+            {
+                spawnArea.SpawnBlock();
+                blockMaxCounter--;
+            }
+            else
+            {
+                if (boostersMaxCounter > 0 && _boostersCheckerService.TrySpawnBooster(spawnArea))
+                {
+                    boostersMaxCounter--;
+                }
+                else
+                {
+                    spawnArea.SpawnBlock();
+                    blockMaxCounter--;
+                }
+            }
         }
 
         private void CreateSpawnAreas()

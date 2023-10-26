@@ -1,6 +1,5 @@
 ﻿using DG.Tweening;
 using Main.Scripts.Infrastructure.Provides;
-using TMPro;
 using UnityEngine;
 
 namespace Main.Scripts.Logic.Label

@@ -5,6 +5,7 @@ using Main.Scripts.Infrastructure.Services.AnimationTargetContainer;
 using Main.Scripts.Infrastructure.Services.ButtonContainer;
 using Main.Scripts.Infrastructure.Services.Freezing;
 using Main.Scripts.Infrastructure.Services.Health;
+using Main.Scripts.Infrastructure.Services.Samuraism;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Infrastructure.States;
 using Main.Scripts.UI.Gameplay;
@@ -21,6 +22,7 @@ namespace Main.Scripts.Infrastructure.Installers
         [SerializeField] private UIGameOverView _uiGameOverView;
         [SerializeField] private UIPauseView _uiPauseView;
         [SerializeField] private UIFreezeView _uiFreezeView;
+        [SerializeField] private UISamuraiView _uiSamuraiView;
 
         public override void InstallBindings(ServiceContainer serviceContainer)
         {
@@ -31,6 +33,7 @@ namespace Main.Scripts.Infrastructure.Installers
             InitGameOverUI(serviceContainer);
             InitPauseUI(serviceContainer);
             InitFreezeUI(serviceContainer);
+            InitSamuraiUI(serviceContainer);
         }
         
         private void InitGameplayUI(ServiceContainer serviceContainer)
@@ -82,10 +85,12 @@ namespace Main.Scripts.Infrastructure.Installers
         
         private void InitFreezeUI(ServiceContainer serviceContainer)
         {
-            _uiFreezeView.Construct
-            (
-                serviceContainer.Get<IFreezeService>()
-            );
+            _uiFreezeView.Construct(serviceContainer.Get<IFreezeService>());
+        }
+        
+        private void InitSamuraiUI(ServiceContainer serviceContainer)
+        {
+            _uiSamuraiView.Construct(serviceContainer.Get<ISamuraiService>());
         }
     }
 }

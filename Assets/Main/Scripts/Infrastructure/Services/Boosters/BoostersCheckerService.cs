@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Scripts.Infrastructure.Configs;
 using Main.Scripts.Infrastructure.Configs.Boosters;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
@@ -10,7 +11,9 @@ using Main.Scripts.Logic.Blocks.BonusLifes;
 using Main.Scripts.Logic.Blocks.Bricks;
 using Main.Scripts.Logic.Blocks.Freezes;
 using Main.Scripts.Logic.Blocks.Magnets;
+using Main.Scripts.Logic.Blocks.Samurais;
 using Main.Scripts.Logic.Spawn;
+using Main.Scripts.Utils.RandomUtils;
 using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Services.Boosters
@@ -21,6 +24,7 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
         private readonly IBlockContainerService _blockContainerService;
         private readonly IHealthService _healthService;
         private readonly Dictionary<Type, BoosterInfo> _boosterInfos;
+        private readonly float[] _boosterWeights;
 
         public List<BoosterConfig> BoosterConfigs { get; private set; }
         public int MaxCountInPack { get; private set; }
@@ -38,7 +42,8 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
                 { typeof(BlockBag), new BoosterInfo(_blocksConfig.BlockBagConfig.BoosterSpawnInfo, TrySpawnBlockBag) },
                 { typeof(Freeze), new BoosterInfo(_blocksConfig.FreezeConfig.BoosterSpawnInfo, TrySpawnFreeze) },
                 { typeof(Magnet), new BoosterInfo(_blocksConfig.MagnetConfig.BoosterSpawnInfo, TrySpawnMagnet) },
-                { typeof(Brick), new BoosterInfo(_blocksConfig.BrickConfig.BoosterSpawnInfo, TrySpawnBrick) }
+                { typeof(Brick), new BoosterInfo(_blocksConfig.BrickConfig.BoosterSpawnInfo, TrySpawnBrick) },
+                { typeof(Samurai), new BoosterInfo(_blocksConfig.SamuraiConfig.BoosterSpawnInfo, TrySpawnSamurai) }
             };
 
             BoosterConfigs = new List<BoosterConfig>()
@@ -48,8 +53,11 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
                 _blocksConfig.BlockBagConfig,
                 _blocksConfig.FreezeConfig,
                 _blocksConfig.MagnetConfig,
-                _blocksConfig.BrickConfig
+                _blocksConfig.BrickConfig,
+                _blocksConfig.SamuraiConfig
             };
+            
+            _boosterWeights = BoosterConfigs.Select(info => info.BoosterSpawnInfo.DropoutRate).ToArray();
         }
 
         public void CalculateBlockMaxCounter(int packBlockCount)
@@ -79,9 +87,10 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
             }
         }
         
-        public bool TrySpawnBooster(SpawnArea spawnArea, int index)
+        public bool TrySpawnBooster(SpawnArea spawnArea)
         {
-            BoosterConfig boosterConfig = BoosterConfigs[index];
+            int randomIndex = _boosterWeights.GetRandomWeightedIndex();
+            BoosterConfig boosterConfig = BoosterConfigs[randomIndex];
             Type currentType = boosterConfig.BlockInfo.BlockPrefab.GetType();
             
             if (_boosterInfos.TryGetValue(currentType, out BoosterInfo boosterInfo))
@@ -170,6 +179,18 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
             }
             
             spawnArea.SpawnBrick();
+            _boosterInfos[type].Count--;
+            return true;
+        }
+        
+        private bool TrySpawnSamurai(BoosterConfig boosterConfig, SpawnArea spawnArea, Type type)
+        {
+            if (!CanSpawn(boosterConfig, type))
+            {
+                return false;
+            }
+            
+            spawnArea.SpawnSamurai();
             _boosterInfos[type].Count--;
             return true;
         }

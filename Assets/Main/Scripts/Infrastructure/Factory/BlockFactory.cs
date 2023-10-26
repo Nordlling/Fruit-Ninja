@@ -9,6 +9,7 @@ using Main.Scripts.Infrastructure.Services.Freezing;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.LivingZone;
 using Main.Scripts.Infrastructure.Services.Magnetism;
+using Main.Scripts.Infrastructure.Services.Samuraism;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Logic.Blocks;
 using Main.Scripts.Logic.Blocks.BlockBag;
@@ -17,6 +18,7 @@ using Main.Scripts.Logic.Blocks.BonusLifes;
 using Main.Scripts.Logic.Blocks.Bricks;
 using Main.Scripts.Logic.Blocks.Freezes;
 using Main.Scripts.Logic.Blocks.Magnets;
+using Main.Scripts.Logic.Blocks.Samurais;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
@@ -147,6 +149,20 @@ namespace Main.Scripts.Infrastructure.Factory
             _serviceContainer.Get<IBlockContainerService>().AddBlock(brick);
             
             return brick;
+        }
+        
+        public Samurai CreateSamurai(Vector2 position)
+        {
+            Samurai samurai = CreateBasicBlock<Samurai>(out int randomIndex, position, _blocksConfig.SamuraiConfig.BlockInfo, false, 0f);
+            
+            samurai.SamuraiSlicer.Construct(
+                _serviceContainer.Get<ISamuraiService>(),
+                _serviceContainer.Get<ISliceEffectFactory>(),
+                randomIndex);
+            
+            _serviceContainer.Get<IBlockContainerService>().AddBlock(samurai);
+            
+            return samurai;
         }
 
         public void Cleanup()

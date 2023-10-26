@@ -9,7 +9,7 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
     {
         int MaxCountInPack { get; }
         void CalculateBlockMaxCounter(int packBlockCount);
-        bool TrySpawnBooster(SpawnArea spawnArea, int index);
+        bool TrySpawnBooster(SpawnArea spawnArea);
         List<BoosterConfig> BoosterConfigs { get; }
         void SetActivation(Type type, bool activated);
     }

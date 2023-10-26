@@ -7,6 +7,7 @@ using Main.Scripts.Logic.Blocks.BonusLifes;
 using Main.Scripts.Logic.Blocks.Bricks;
 using Main.Scripts.Logic.Blocks.Freezes;
 using Main.Scripts.Logic.Blocks.Magnets;
+using Main.Scripts.Logic.Blocks.Samurais;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -89,6 +90,14 @@ namespace Main.Scripts.Logic.Spawn
             
             Brick brick = _blockFactory.CreateBrick(_newPointPosition);
             brick.BlockMovement.Construct(_newStartDirection, _newSpeed, brick.TimeProvider);
+        }
+        
+        public void SpawnSamurai()
+        {
+            GenerateBlockParameters();
+            
+            Samurai samurai = _blockFactory.CreateSamurai(_newPointPosition);
+            samurai.BlockMovement.Construct(_newStartDirection, _newSpeed, samurai.TimeProvider);
         }
 
         private void GenerateBlockParameters()

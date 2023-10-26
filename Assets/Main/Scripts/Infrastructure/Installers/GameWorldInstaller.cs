@@ -6,6 +6,7 @@ using Main.Scripts.Infrastructure.Services;
 using Main.Scripts.Infrastructure.Services.AnimationTargetContainer;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
 using Main.Scripts.Infrastructure.Services.Boosters;
+using Main.Scripts.Infrastructure.Services.Bricking;
 using Main.Scripts.Infrastructure.Services.ButtonContainer;
 using Main.Scripts.Infrastructure.Services.Collision;
 using Main.Scripts.Infrastructure.Services.Combo;
@@ -70,6 +71,7 @@ namespace Main.Scripts.Infrastructure.Installers
             RegisterExplosionService(serviceContainer);
             RegisterFreezeService(serviceContainer);
             RegisterMagnetService(serviceContainer);
+            RegisterBrickService(serviceContainer);
             
             RegisterSpawner(serviceContainer);
         }
@@ -245,6 +247,13 @@ namespace Main.Scripts.Infrastructure.Installers
             );
             
             serviceContainer.SetService<IMagnetService, MagnetService>(magnetService);
+        }
+        
+        private void RegisterBrickService(ServiceContainer serviceContainer)
+        {
+            BrickService brickService = new BrickService(serviceContainer.Get<ISwiper>());
+            
+            serviceContainer.SetService<IBrickService, BrickService>(brickService);
         }
 
         private void RegisterSpawner(ServiceContainer serviceContainer)

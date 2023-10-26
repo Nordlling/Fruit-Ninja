@@ -7,6 +7,7 @@ using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Logic.Blocks.BlockBag;
 using Main.Scripts.Logic.Blocks.Bombs;
 using Main.Scripts.Logic.Blocks.BonusLifes;
+using Main.Scripts.Logic.Blocks.Bricks;
 using Main.Scripts.Logic.Blocks.Freezes;
 using Main.Scripts.Logic.Blocks.Magnets;
 using Main.Scripts.Logic.Spawn;
@@ -36,7 +37,8 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
                 { typeof(BonusLife), new BoosterInfo(_blocksConfig.BonusLifeConfig.BoosterSpawnInfo, TrySpawnBonusLife) },
                 { typeof(BlockBag), new BoosterInfo(_blocksConfig.BlockBagConfig.BoosterSpawnInfo, TrySpawnBlockBag) },
                 { typeof(Freeze), new BoosterInfo(_blocksConfig.FreezeConfig.BoosterSpawnInfo, TrySpawnFreeze) },
-                { typeof(Magnet), new BoosterInfo(_blocksConfig.MagnetConfig.BoosterSpawnInfo, TrySpawnMagnet) }
+                { typeof(Magnet), new BoosterInfo(_blocksConfig.MagnetConfig.BoosterSpawnInfo, TrySpawnMagnet) },
+                { typeof(Brick), new BoosterInfo(_blocksConfig.BrickConfig.BoosterSpawnInfo, TrySpawnBrick) }
             };
 
             BoosterConfigs = new List<BoosterConfig>()
@@ -45,7 +47,8 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
                 _blocksConfig.BonusLifeConfig,
                 _blocksConfig.BlockBagConfig,
                 _blocksConfig.FreezeConfig,
-                _blocksConfig.MagnetConfig
+                _blocksConfig.MagnetConfig,
+                _blocksConfig.BrickConfig
             };
         }
 
@@ -155,6 +158,18 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
             }
             
             spawnArea.SpawnMagnet();
+            _boosterInfos[type].Count--;
+            return true;
+        }
+        
+        private bool TrySpawnBrick(BoosterConfig boosterConfig, SpawnArea spawnArea, Type type)
+        {
+            if (!CanSpawn(boosterConfig, type))
+            {
+                return false;
+            }
+            
+            spawnArea.SpawnBrick();
             _boosterInfos[type].Count--;
             return true;
         }

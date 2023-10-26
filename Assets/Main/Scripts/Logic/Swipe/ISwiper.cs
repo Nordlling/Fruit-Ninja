@@ -11,5 +11,7 @@ namespace Main.Scripts.Logic.Swipe
         Vector2 Position { get; }
 
         bool HasEnoughSpeed();
+        
+        void Block();
     }
 }

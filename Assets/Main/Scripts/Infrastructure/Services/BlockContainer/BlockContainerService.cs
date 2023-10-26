@@ -5,6 +5,7 @@ using Main.Scripts.Logic.Blocks;
 using Main.Scripts.Logic.Blocks.BlockBag;
 using Main.Scripts.Logic.Blocks.Bombs;
 using Main.Scripts.Logic.Blocks.BonusLifes;
+using Main.Scripts.Logic.Blocks.Bricks;
 using Main.Scripts.Logic.Blocks.Freezes;
 using Main.Scripts.Logic.Blocks.Magnets;
 
@@ -32,7 +33,8 @@ namespace Main.Scripts.Infrastructure.Services.BlockContainer
                 { typeof(BonusLife), new List<BlockPiece>() },
                 { typeof(BlockBag), new List<BlockPiece>() },
                 { typeof(Freeze), new List<BlockPiece>() },
-                { typeof(Magnet), new List<BlockPiece>() }
+                { typeof(Magnet), new List<BlockPiece>() },
+                { typeof(Brick), new List<BlockPiece>() }
             };
         }
 

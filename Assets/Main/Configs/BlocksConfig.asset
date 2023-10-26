@@ -58,3 +58,4 @@ MonoBehaviour:
   BlockBagConfig: {fileID: 11400000, guid: 010b45e501c2e5f488df1540f2c1b87b, type: 2}
   FreezeConfig: {fileID: 11400000, guid: dbf2504b9bb70284daf7ac28ea7d6e7a, type: 2}
   MagnetConfig: {fileID: 11400000, guid: 219ac4102da15114ba0eac80c8859a3b, type: 2}
+  BrickConfig: {fileID: 11400000, guid: b8ce21ef0e9a84041a7c6a709bd1d30c, type: 2}

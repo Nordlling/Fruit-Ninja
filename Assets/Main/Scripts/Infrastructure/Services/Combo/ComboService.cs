@@ -82,7 +82,7 @@ namespace Main.Scripts.Infrastructure.Services.Combo
         {
             if (_comboCounter <= 1)
             {
-                Debug.LogWarning("Incorrect combo counter");
+                // Debug.LogWarning("Incorrect combo counter");
                 return;
             }
             

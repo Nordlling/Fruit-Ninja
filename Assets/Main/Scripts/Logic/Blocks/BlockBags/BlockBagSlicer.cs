@@ -2,7 +2,7 @@ using Main.Scripts.Infrastructure.Configs.Boosters;
 using Main.Scripts.Infrastructure.Factory;
 using UnityEngine;
 
-namespace Main.Scripts.Logic.Blocks.BlockBag
+namespace Main.Scripts.Logic.Blocks.BlockBags
 {
     public class BlockBagSlicer : MonoBehaviour, ISlicer
     {

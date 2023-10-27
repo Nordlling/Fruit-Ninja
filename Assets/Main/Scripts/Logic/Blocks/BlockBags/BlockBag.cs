@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Main.Scripts.Logic.Blocks.BlockBag
+namespace Main.Scripts.Logic.Blocks.BlockBags
 {
     public class BlockBag : BlockPiece, ISliceable
     {

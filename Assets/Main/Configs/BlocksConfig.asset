@@ -60,3 +60,4 @@ MonoBehaviour:
   MagnetConfig: {fileID: 11400000, guid: 219ac4102da15114ba0eac80c8859a3b, type: 2}
   BrickConfig: {fileID: 11400000, guid: b8ce21ef0e9a84041a7c6a709bd1d30c, type: 2}
   SamuraiConfig: {fileID: 11400000, guid: 770e9a84b24752140a4287a6ea1aac74, type: 2}
+  MimicConfig: {fileID: 11400000, guid: e348e63d51c37634e9458943d0e27bd2, type: 2}

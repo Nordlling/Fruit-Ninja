@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Configs.Boosters
 {
-    [CreateAssetMenu(fileName = "MagnetConfig", menuName = "Configs/Magnet")]
+    [CreateAssetMenu(fileName = "MagnetConfig", menuName = "Configs/Boosters/Magnet")]
     public class MagnetConfig : BoosterConfig
     {
         [Header("Booster Settings")]

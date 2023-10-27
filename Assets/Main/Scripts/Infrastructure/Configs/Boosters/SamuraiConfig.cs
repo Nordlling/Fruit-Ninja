@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Configs.Boosters
 {
-    [CreateAssetMenu(fileName = "SamuraiConfig", menuName = "Configs/Samurai")]
+    [CreateAssetMenu(fileName = "SamuraiConfig", menuName = "Configs/Boosters/Samurai")]
     public class SamuraiConfig : BoosterConfig
     {
         [Header("Booster Settings")]

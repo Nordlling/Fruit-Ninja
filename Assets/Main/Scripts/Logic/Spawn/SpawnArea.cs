@@ -1,12 +1,13 @@
 using Main.Scripts.Infrastructure.Factory;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Logic.Blocks;
-using Main.Scripts.Logic.Blocks.BlockBag;
+using Main.Scripts.Logic.Blocks.BlockBags;
 using Main.Scripts.Logic.Blocks.Bombs;
 using Main.Scripts.Logic.Blocks.BonusLifes;
 using Main.Scripts.Logic.Blocks.Bricks;
 using Main.Scripts.Logic.Blocks.Freezes;
 using Main.Scripts.Logic.Blocks.Magnets;
+using Main.Scripts.Logic.Blocks.Mimics;
 using Main.Scripts.Logic.Blocks.Samurais;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -98,6 +99,14 @@ namespace Main.Scripts.Logic.Spawn
             
             Samurai samurai = _blockFactory.CreateSamurai(_newPointPosition);
             samurai.BlockMovement.Construct(_newStartDirection, _newSpeed, samurai.TimeProvider);
+        }
+        
+        public void SpawnMimic()
+        {
+            GenerateBlockParameters();
+            
+            Mimic mimic = _blockFactory.CreateMimic(_newPointPosition);
+            mimic.BlockMovement.Construct(_newStartDirection, _newSpeed, mimic.TimeProvider);
         }
 
         private void GenerateBlockParameters()

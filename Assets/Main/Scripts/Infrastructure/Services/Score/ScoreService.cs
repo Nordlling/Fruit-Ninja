@@ -2,6 +2,7 @@
 using Main.Scripts.Data;
 using Main.Scripts.Infrastructure.Configs;
 using Main.Scripts.Infrastructure.GameplayStates;
+using Main.Scripts.Infrastructure.Services.Applications;
 using Main.Scripts.Infrastructure.Services.SaveLoad;
 
 namespace Main.Scripts.Infrastructure.Services.Score
@@ -14,14 +15,18 @@ namespace Main.Scripts.Infrastructure.Services.Score
 
         private readonly ScoreConfig _scoreConfig;
         private readonly ISaveLoadService _saveLoadService;
+        private readonly IApplicationService _applicationService;
 
         private PlayerScore _playerScore;
 
-        public ScoreService(ScoreConfig scoreConfig, ISaveLoadService saveLoadService)
+        public ScoreService(ScoreConfig scoreConfig, ISaveLoadService saveLoadService, IApplicationService applicationService)
         {
             _scoreConfig = scoreConfig;
             _saveLoadService = saveLoadService;
+            _applicationService = applicationService;
             LoadHighScore();
+
+            _applicationService.OnPaused += SaveHighScore;
         }
         
         public ScoreService(ISaveLoadService saveLoadService)

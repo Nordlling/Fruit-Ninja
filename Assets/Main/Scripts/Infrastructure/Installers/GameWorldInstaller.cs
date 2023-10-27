@@ -4,6 +4,7 @@ using Main.Scripts.Infrastructure.GameplayStates;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services;
 using Main.Scripts.Infrastructure.Services.AnimationTargetContainer;
+using Main.Scripts.Infrastructure.Services.Applications;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
 using Main.Scripts.Infrastructure.Services.Boosters;
 using Main.Scripts.Infrastructure.Services.Bricking;
@@ -178,7 +179,12 @@ namespace Main.Scripts.Infrastructure.Installers
 
         private void RegisterScoreService(ServiceContainer serviceContainer)
         {
-            ScoreService scoreService = new ScoreService(_scoreConfig, serviceContainer.Get<ISaveLoadService>());
+            ScoreService scoreService = new ScoreService
+            (
+                _scoreConfig, 
+                serviceContainer.Get<ISaveLoadService>(), 
+                serviceContainer.Get<IApplicationService>()
+            );
             
             serviceContainer.SetService<IScoreService, ScoreService>(scoreService);
             

@@ -1223,6 +1223,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _applicationConfig: {fileID: 11400000, guid: 6eb9d3b33715e304d83f63525a2a596a, type: 2}
+  _applicationServicePrefab: {fileID: 6016044753531810363, guid: 18ea7a4d68dfc3e40b0b730557080553, type: 3}
 --- !u!4 &2129467569
 Transform:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 using Main.Scripts.Infrastructure.Configs;
 using Main.Scripts.Infrastructure.Services;
+using Main.Scripts.Infrastructure.Services.Applications;
 using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Installers
@@ -7,17 +8,18 @@ namespace Main.Scripts.Infrastructure.Installers
     public class ApplicationInstaller : MonoInstaller
     {
         [SerializeField] private ApplicationConfig _applicationConfig;
-
+        [SerializeField] private ApplicationService _applicationServicePrefab;
 
         public override void InstallBindings(ServiceContainer serviceContainer)
         {
-            InitApplicationSettings();
+            RegisterApplicationService(serviceContainer);
         }
-
-        private void InitApplicationSettings()
+        
+        private void RegisterApplicationService(ServiceContainer serviceContainer)
         {
-            Application.targetFrameRate = _applicationConfig.TargetFPS;
-            Screen.sleepTimeout = SleepTimeout.NeverSleep;
+            ApplicationService applicationService = Instantiate(_applicationServicePrefab);
+            applicationService.Construct(_applicationConfig);
+            serviceContainer.SetService<IApplicationService, ApplicationService>(applicationService);
         }
     }
 }

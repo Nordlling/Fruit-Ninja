@@ -2,6 +2,7 @@ using Main.Scripts.Infrastructure.GameplayStates;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services;
 using Main.Scripts.Infrastructure.Services.AnimationTargetContainer;
+using Main.Scripts.Infrastructure.Services.Applications;
 using Main.Scripts.Infrastructure.Services.ButtonContainer;
 using Main.Scripts.Infrastructure.Services.Freezing;
 using Main.Scripts.Infrastructure.Services.Health;
@@ -41,7 +42,8 @@ namespace Main.Scripts.Infrastructure.Installers
             _gameplayUI.Construct
             (
                 serviceContainer.Get<IGameplayStateMachine>(), 
-                serviceContainer.Get<IButtonContainerService>()
+                serviceContainer.Get<IButtonContainerService>(),
+                serviceContainer.Get<IApplicationService>()
             );
 
             serviceContainer.Get<IGameplayStateMachine>().AddGameplayStatable(_gameplayUI);

@@ -1,4 +1,5 @@
 using Main.Scripts.Infrastructure.GameplayStates;
+using Main.Scripts.Infrastructure.Services.Applications;
 using Main.Scripts.Infrastructure.Services.ButtonContainer;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,12 +14,14 @@ namespace Main.Scripts.UI.Gameplay
 
         private IGameplayStateMachine _gameplayStateMachine;
         private IButtonContainerService _buttonContainerService;
+        private IApplicationService _applicationService;
         private bool _canPause = true;
 
-        public void Construct(IGameplayStateMachine gameplayStateMachine, IButtonContainerService buttonContainerService)
+        public void Construct(IGameplayStateMachine gameplayStateMachine, IButtonContainerService buttonContainerService, IApplicationService applicationService)
         {
             _gameplayStateMachine = gameplayStateMachine;
             _buttonContainerService = buttonContainerService;
+            _applicationService = applicationService;
             AddButtonsToContainer();
         }
 
@@ -40,6 +43,7 @@ namespace Main.Scripts.UI.Gameplay
         private void OnEnable()
         {
             _pauseButton.onClick.AddListener(PauseGame);
+            _applicationService.OnPaused += PauseGame;
         }
 
         private void OnDisable()

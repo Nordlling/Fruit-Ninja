@@ -5,12 +5,13 @@ using Main.Scripts.Infrastructure.Configs;
 using Main.Scripts.Infrastructure.Configs.Boosters;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
 using Main.Scripts.Infrastructure.Services.Health;
-using Main.Scripts.Logic.Blocks.BlockBag;
+using Main.Scripts.Logic.Blocks.BlockBags;
 using Main.Scripts.Logic.Blocks.Bombs;
 using Main.Scripts.Logic.Blocks.BonusLifes;
 using Main.Scripts.Logic.Blocks.Bricks;
 using Main.Scripts.Logic.Blocks.Freezes;
 using Main.Scripts.Logic.Blocks.Magnets;
+using Main.Scripts.Logic.Blocks.Mimics;
 using Main.Scripts.Logic.Blocks.Samurais;
 using Main.Scripts.Logic.Spawn;
 using Main.Scripts.Utils.RandomUtils;
@@ -43,7 +44,8 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
                 { typeof(Freeze), new BoosterInfo(_blocksConfig.FreezeConfig.BoosterSpawnInfo, TrySpawnFreeze) },
                 { typeof(Magnet), new BoosterInfo(_blocksConfig.MagnetConfig.BoosterSpawnInfo, TrySpawnMagnet) },
                 { typeof(Brick), new BoosterInfo(_blocksConfig.BrickConfig.BoosterSpawnInfo, TrySpawnBrick) },
-                { typeof(Samurai), new BoosterInfo(_blocksConfig.SamuraiConfig.BoosterSpawnInfo, TrySpawnSamurai) }
+                { typeof(Samurai), new BoosterInfo(_blocksConfig.SamuraiConfig.BoosterSpawnInfo, TrySpawnSamurai) },
+                { typeof(Mimic), new BoosterInfo(_blocksConfig.MimicConfig.BoosterSpawnInfo, TrySpawnMimic) }
             };
 
             BoosterConfigs = new List<BoosterConfig>()
@@ -54,7 +56,8 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
                 _blocksConfig.FreezeConfig,
                 _blocksConfig.MagnetConfig,
                 _blocksConfig.BrickConfig,
-                _blocksConfig.SamuraiConfig
+                _blocksConfig.SamuraiConfig,
+                _blocksConfig.MimicConfig
             };
             
             _boosterWeights = BoosterConfigs.Select(info => info.BoosterSpawnInfo.DropoutRate).ToArray();
@@ -179,6 +182,18 @@ namespace Main.Scripts.Infrastructure.Services.Boosters
             }
             
             spawnArea.SpawnBrick();
+            _boosterInfos[type].Count--;
+            return true;
+        }
+        
+        private bool TrySpawnMimic(BoosterConfig boosterConfig, SpawnArea spawnArea, Type type)
+        {
+            if (!CanSpawn(boosterConfig, type))
+            {
+                return false;
+            }
+            
+            spawnArea.SpawnMimic();
             _boosterInfos[type].Count--;
             return true;
         }

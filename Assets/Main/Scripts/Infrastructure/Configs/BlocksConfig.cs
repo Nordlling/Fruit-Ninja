@@ -24,6 +24,7 @@ namespace Main.Scripts.Infrastructure.Configs
         public MagnetConfig MagnetConfig;
         public BrickConfig BrickConfig;
         public SamuraiConfig SamuraiConfig;
+        public MimicConfig MimicConfig;
     }
     
     [Serializable]

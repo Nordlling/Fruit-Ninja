@@ -39,7 +39,7 @@ namespace Main.Scripts.Logic.Blocks
             _timeProvider = timeProvider;
         }
 
-        public void StopAnimation()
+        public void StopAnimations()
         {
             foreach (Tweener tweener in _tweeners)
             {

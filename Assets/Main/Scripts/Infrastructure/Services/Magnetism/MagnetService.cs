@@ -8,10 +8,11 @@ using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
 using Main.Scripts.Infrastructure.Services.Boosters;
 using Main.Scripts.Logic.Blocks;
-using Main.Scripts.Logic.Blocks.BlockBag;
+using Main.Scripts.Logic.Blocks.BlockBags;
 using Main.Scripts.Logic.Blocks.BonusLifes;
 using Main.Scripts.Logic.Blocks.Freezes;
 using Main.Scripts.Logic.Blocks.Magnets;
+using Main.Scripts.Logic.Blocks.Mimics;
 using Main.Scripts.Logic.Blocks.Samurais;
 using UnityEngine;
 
@@ -27,7 +28,7 @@ namespace Main.Scripts.Infrastructure.Services.Magnetism
         private readonly List<Type> _typesToMagnet;
         private readonly List<BlockPiece> _attractedBlocks = new();
         
-        private CancellationTokenSource _cancelToken = new();
+        private List<CancellationTokenSource> _cancelTokens = new();
 
         public MagnetService(
             IBoostersCheckerService boostersCheckerService, 
@@ -48,7 +49,8 @@ namespace Main.Scripts.Infrastructure.Services.Magnetism
                 typeof(BlockBag),
                 typeof(Freeze),
                 typeof(Magnet),
-                typeof(Samurai)
+                typeof(Samurai),
+                typeof(Mimic),
             };
         }
 
@@ -56,23 +58,23 @@ namespace Main.Scripts.Infrastructure.Services.Magnetism
         {
             _boostersCheckerService.SetActivation(_magnetConfig.BlockInfo.BlockPrefab.GetType(), true);
 
-            _cancelToken.Cancel();
-            _cancelToken = new();
+            CancellationTokenSource cancelToken = new();
+            _cancelTokens.Add(cancelToken);
             _attractedBlocks.Clear();
-            AttractAsync(_magnetConfig.Duration, attractPosition);
+            AttractAsync(_magnetConfig.Duration, attractPosition, cancelToken);
         }
 
         public void Lose()
         {
-            _cancelToken.Cancel();
+            _cancelTokens.ForEach(token => token.Cancel());
             Unattract();
         }
 
-        private async void AttractAsync(float duration, Vector2 attractionPosition)
+        private async void AttractAsync(float duration, Vector2 attractionPosition, CancellationTokenSource cancelToken)
         {
             while (duration > 0)
             {
-                if (_cancelToken.Token.IsCancellationRequested)
+                if (cancelToken.Token.IsCancellationRequested)
                 {
                     break;
                 }
@@ -93,6 +95,11 @@ namespace Main.Scripts.Infrastructure.Services.Magnetism
             for (int i = 0; i < _blockContainerService.BlocksCount; i++)
             {
                 BlockPiece block = _blockContainerService.AllBlocks[i];
+
+                if (block.BlockMovement == null)
+                {
+                    continue;
+                }
                 
                 if (!_typesToMagnet.Contains(block.GetType()) || _attractedBlocks.Contains(block))
                 {
@@ -107,7 +114,7 @@ namespace Main.Scripts.Infrastructure.Services.Magnetism
                 }
                 
                 block.BlockMovement.AddAttraction(attractionPosition, duration, _magnetConfig);
-                block.BlockAnimation.StopAnimation();
+                block.BlockAnimation.StopAnimations();
                 
                 _attractedBlocks.Add(block);
             }

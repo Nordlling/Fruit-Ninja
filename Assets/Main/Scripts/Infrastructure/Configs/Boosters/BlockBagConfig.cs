@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Configs.Boosters
 {
-    [CreateAssetMenu(fileName = "BlockBagConfig", menuName = "Configs/BlockBag")]
+    [CreateAssetMenu(fileName = "BlockBagConfig", menuName = "Configs/Boosters/BlockBag")]
     public class BlockBagConfig : BoosterConfig
     {
         public float InvulnerabilityDuration;

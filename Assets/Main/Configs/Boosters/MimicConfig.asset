@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f66a2a58878c4f3e94ccda64c8382cd1, type: 3}
+  m_Name: MimicConfig
+  m_EditorClassIdentifier: 
+  BoosterSpawnInfo:
+    DropoutRate: 0.2
+    MaxFractionInBoostPack: 0.4
+    MaxNumberInBoostPack: -1
+    MaxNumberOnScreen: -1
+  BlockInfo:
+    BlockPrefab: {fileID: 4181894269705178435, guid: 933685be9cb8ee64bbf8b31366e47a49, type: 3}
+    SplashPrefab: {fileID: 0}
+    VisualSprites: []
+  TransformationTime: 1.4
+  PrepareTime: 0.4
+  BlockPrefab: {fileID: 7451329234354239626, guid: b1ee81b8fadc1394e980b1f00c47fda2, type: 3}
+  BombPrefab: {fileID: 1374269080090768582, guid: ed3e72f044bfb6a44ab3a3e52c9bdd32, type: 3}
+  BonusLifePrefab: {fileID: 2100754865106279568, guid: 3ff9a871038e24f4284542056f00524b, type: 3}
+  BlockBagPrefab: {fileID: 7823192239039271056, guid: 468bd2fc70108c9428d7bd121c34fb5b, type: 3}
+  FreezePrefab: {fileID: 4812794162890724022, guid: 1c2648893b790544d82447de3fc2e326, type: 3}
+  MagnetPrefab: {fileID: 4140517882592963336, guid: 0e784c3912f5f4c44a64c9ebfa374738, type: 3}
+  BrickPrefab: {fileID: 403435849468157611, guid: 913b7999b3bd68f4fb56fd86cc002282, type: 3}
+  SamuraiPrefab: {fileID: 3956584015326333569, guid: 8ef1b1b4532e71d46abaf61575edf37c, type: 3}

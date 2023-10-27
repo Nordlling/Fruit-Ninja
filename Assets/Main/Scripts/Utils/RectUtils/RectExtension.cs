@@ -14,7 +14,7 @@ namespace Main.Scripts.Utils.RectUtils
 
             if (!rect.Contains(pointPosition))
             {
-                Debug.LogWarning("Incorrect point position");
+                // Debug.LogWarning("Incorrect point position");
                 CreateLeftSideSlicedRect(rect, slicedRect);
                 return slicedRect;
             }

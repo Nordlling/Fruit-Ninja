@@ -35,7 +35,10 @@ namespace Main.Scripts.Logic.Blocks
 
         private void Start()
         {
-            _shadowSpriteRenderer.sprite = _spriteRenderer.sprite;
+            if (_spriteRenderer != null)
+            {
+                _shadowSpriteRenderer.sprite = _spriteRenderer.sprite;
+            }
         }
 
         private void Update()

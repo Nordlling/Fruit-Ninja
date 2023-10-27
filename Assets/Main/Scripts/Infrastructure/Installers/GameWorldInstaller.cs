@@ -16,6 +16,7 @@ using Main.Scripts.Infrastructure.Services.Freezing;
 using Main.Scripts.Infrastructure.Services.Health;
 using Main.Scripts.Infrastructure.Services.LivingZone;
 using Main.Scripts.Infrastructure.Services.Magnetism;
+using Main.Scripts.Infrastructure.Services.Mimicring;
 using Main.Scripts.Infrastructure.Services.Samuraism;
 using Main.Scripts.Infrastructure.Services.SaveLoad;
 using Main.Scripts.Infrastructure.Services.Score;
@@ -58,6 +59,7 @@ namespace Main.Scripts.Infrastructure.Installers
             RegisterSpawnFactory(serviceContainer);
             RegisterSliceEffectFactory(serviceContainer);
             RegisterBlockFactory(serviceContainer);
+            RegisterMimickingBlockFactory(serviceContainer);
 
             RegisterLivingZone(serviceContainer);
             RegisterSwiper(serviceContainer);
@@ -74,6 +76,7 @@ namespace Main.Scripts.Infrastructure.Installers
             RegisterMagnetService(serviceContainer);
             RegisterBrickService(serviceContainer);
             RegisterSamuraiService(serviceContainer);
+            RegisterMimicService(serviceContainer);
             
             RegisterSpawner(serviceContainer);
         }
@@ -140,6 +143,12 @@ namespace Main.Scripts.Infrastructure.Installers
         {
             BlockFactory blockFactory = new BlockFactory(serviceContainer,_blocksConfig);
             serviceContainer.SetService<IBlockFactory, BlockFactory>(blockFactory);
+        }
+        
+        private void RegisterMimickingBlockFactory(ServiceContainer serviceContainer)
+        {
+            MimickingBlockFactory mimickingBlockFactory = new MimickingBlockFactory(serviceContainer,_blocksConfig);
+            serviceContainer.SetService<IMimickingBlockFactory, MimickingBlockFactory>(mimickingBlockFactory);
         }
         
 
@@ -269,6 +278,17 @@ namespace Main.Scripts.Infrastructure.Installers
                 );
             
             serviceContainer.SetService<ISamuraiService, SamuraiService>(samuraiService);
+        }
+        
+        private void RegisterMimicService(ServiceContainer serviceContainer)
+        {
+            MimicService mimicService = new MimicService
+            (
+                serviceContainer.Get<IMimickingBlockFactory>(),
+                _blocksConfig.MimicConfig
+            );
+            
+            serviceContainer.SetService<IMimicService, MimicService>(mimicService);
         }
 
         private void RegisterSpawner(ServiceContainer serviceContainer)

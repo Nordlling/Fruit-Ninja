@@ -2,18 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Main.Scripts.Constants;
 using Main.Scripts.Infrastructure.Configs.Boosters;
 using Main.Scripts.Infrastructure.GameplayStates;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
 using Main.Scripts.Infrastructure.Services.Boosters;
 using Main.Scripts.Logic.Blocks;
-using Main.Scripts.Logic.Blocks.BlockBags;
-using Main.Scripts.Logic.Blocks.BonusLifes;
-using Main.Scripts.Logic.Blocks.Freezes;
-using Main.Scripts.Logic.Blocks.Magnets;
-using Main.Scripts.Logic.Blocks.Mimics;
-using Main.Scripts.Logic.Blocks.Samurais;
 using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Services.Magnetism
@@ -25,33 +20,25 @@ namespace Main.Scripts.Infrastructure.Services.Magnetism
         private readonly ITimeProvider _timeProvider;
         private readonly MagnetConfig _magnetConfig;
 
-        private readonly List<Type> _typesToMagnet;
+        private readonly List<Type> _typesToMagnet = new();
         private readonly List<BlockPiece> _attractedBlocks = new();
-        
-        private List<CancellationTokenSource> _cancelTokens = new();
+        private readonly List<CancellationTokenSource> _cancelTokens = new();
 
         public MagnetService(
-            IBoostersCheckerService boostersCheckerService, 
-            IBlockContainerService blockContainerService, 
-            ITimeProvider timeProvider, 
+            IBoostersCheckerService boostersCheckerService,
+            IBlockContainerService blockContainerService,
+            ITimeProvider timeProvider,
             MagnetConfig magnetConfig)
         {
             _boostersCheckerService = boostersCheckerService;
             _blockContainerService = blockContainerService;
             _timeProvider = timeProvider;
             _magnetConfig = magnetConfig;
-
-            _typesToMagnet = new List<Type>
+            
+            foreach (BlockType blockType in magnetConfig.TypesToMagnet)
             {
-                typeof(BlockPiece),
-                typeof(Block),
-                typeof(BonusLife),
-                typeof(BlockBag),
-                typeof(Freeze),
-                typeof(Magnet),
-                typeof(Samurai),
-                typeof(Mimic),
-            };
+                _typesToMagnet.Add(BlockTypesConstants.BlockTypes[blockType]);
+            }
         }
 
         public void Attract(Vector2 attractPosition)

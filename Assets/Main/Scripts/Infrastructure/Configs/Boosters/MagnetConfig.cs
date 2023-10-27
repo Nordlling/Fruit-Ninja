@@ -1,3 +1,4 @@
+using Main.Scripts.Constants;
 using Main.Scripts.Logic.Splashing;
 using UnityEngine;
 
@@ -12,6 +13,8 @@ namespace Main.Scripts.Infrastructure.Configs.Boosters
         public float AttractionForce;
         public float AttractionRadius;
         public float SingularityRadius;
+        
+        public BlockType[] TypesToMagnet;
         
         [Header("Magnet Area Effect")]
         public MagnetAreaEffect MagnetAreaEffectPrefab;

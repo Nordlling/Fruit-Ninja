@@ -18,10 +18,11 @@ namespace Main.Scripts.Infrastructure.Services.Explosion
 
         public void Explode(Vector2 explosionPosition)
         {
-            foreach (BlockPiece block in _blockContainerService.AllBlocks)
+            for (int i = 0; i < _blockContainerService.BlocksCount; i++)
             {
-                float distance = Vector2.Distance(block.transform.position, explosionPosition);
+                BlockPiece block = _blockContainerService.AllBlocks[i];
                 
+                float distance = Vector2.Distance(block.transform.position, explosionPosition);
                 if (distance >= _bombConfig.ExplosionRadius || block.transform.position.Equals(explosionPosition))
                 {
                     continue;
@@ -30,7 +31,10 @@ namespace Main.Scripts.Infrastructure.Services.Explosion
                 float force = _bombConfig.ExplosionForce * ((_bombConfig.ExplosionRadius - distance) / _bombConfig.ExplosionRadius);
                 Vector2 explosionDirection = ((Vector2)block.transform.position - explosionPosition).normalized;
                 Vector2 forcedExplosionDirection = explosionDirection * force;
-                block.BlockMovement.AddForceOnce(forcedExplosionDirection);
+                if (block.BlockMovement != null)
+                {
+                    block.BlockMovement.AddForceOnce(forcedExplosionDirection);
+                }
             }
         }
         

@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using DG.Tweening;
 using Main.Scripts.Infrastructure.Provides;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -8,9 +8,11 @@ namespace Main.Scripts.Logic.Blocks
 {
     public class BlockAnimation : MonoBehaviour
     {
+        [Header("Speed Settings")]
         [SerializeField] private float _minRotateSpeed;
         [SerializeField] private float _maxRotateSpeed;
         
+        [Header("Scale Settings")]
         [SerializeField] private float _minScaleValue;
         [SerializeField] private float _maxScaleValue;
         [SerializeField] private float _minScaleSpeed;
@@ -18,20 +20,43 @@ namespace Main.Scripts.Logic.Blocks
 
         private ITimeProvider _timeProvider;
         
-        private readonly List<Tweener> _tweeners = new();
+        private float _rotateSpeedValue;
+        private int _rotateSign;
+
+        private float _scaleSpeed;
+        private Vector3 _initialScale;
+        private Vector3 _targetScale;
+
+        private float _currentTime;
+
+        private readonly List<Action> _allAnimationActions = new();
+        private readonly List<Action> _selectedAnimationActions = new();
 
         private void Start()
         {
+            InitValues();
+
             FillAnimationList();
-            ExecuteAnimations();
+            SelectAnimations();
         }
 
         private void Update()
         {
-            foreach (Tweener tweener in _tweeners)
+            foreach (Action action in _selectedAnimationActions)
             {
-                tweener.timeScale = _timeProvider.GetTimeScale();
+                action.Invoke();
             }
+        }
+
+        private void InitValues()
+        {
+            _rotateSign = Random.value < 0.5 ? 1 : -1;
+            _rotateSpeedValue = Random.Range(_minRotateSpeed, _maxRotateSpeed) * _rotateSign;
+
+            _initialScale = transform.localScale;
+            float scaleValue = Random.Range(_minScaleValue, _maxScaleValue);
+            _targetScale = new Vector3(scaleValue, scaleValue, scaleValue);
+            _scaleSpeed = Random.Range(_minScaleSpeed, _maxScaleSpeed);
         }
 
         public void Construct(ITimeProvider timeProvider)
@@ -39,56 +64,32 @@ namespace Main.Scripts.Logic.Blocks
             _timeProvider = timeProvider;
         }
 
-        public void StopAnimations()
-        {
-            foreach (Tweener tweener in _tweeners)
-            {
-                tweener.Pause();
-            }
-        }
-
         private void FillAnimationList()
         {
-            CreateRotateTweener();
-            CreateScaleTweener();
+            _allAnimationActions.Add(ExecuteRotateAnimation);
+            _allAnimationActions.Add(ExecuteScaleAnimation);
         }
 
-        private void ExecuteAnimations()
+        private void SelectAnimations()
         {
-            foreach (Tweener tweener in _tweeners)
+            foreach (Action action in _allAnimationActions)
             {
                 if (Random.value > 0.5)
                 {
-                    tweener.Play();
+                    _selectedAnimationActions.Add(action);
                 }
             }
         }
 
-        private void CreateRotateTweener()
+        private void ExecuteRotateAnimation()
         {
-            int randomSign = Random.value < 0.5 ? 1 : -1;
-            Vector3 randomRotateValue = new Vector3(0f, 0f, 360f * randomSign);
-            float randomRotateDuration = Random.Range(_minRotateSpeed, _maxRotateSpeed);
-            
-            Tweener tweener = transform.DORotate(randomRotateValue, randomRotateDuration, RotateMode.FastBeyond360)
-                .SetLoops(-1, LoopType.Restart)
-                .SetRelative()
-                .SetEase(Ease.Linear)
-                .SetLink(gameObject);
-            
-            _tweeners.Add(tweener);
+            transform.Rotate(0f, 0f, _rotateSpeedValue * _timeProvider.GetDeltaTime());
         }
 
-        private void CreateScaleTweener()
+        private void ExecuteScaleAnimation()
         {
-            float randomScaleValue = Random.Range(_minScaleValue, _maxScaleValue);
-            float randomScaleDuration = Random.Range(_minScaleSpeed, _maxScaleSpeed);
-
-            Tweener tweener = transform.DOScale(randomScaleValue, randomScaleDuration)
-                .SetEase(Ease.Linear)
-                .SetLink(gameObject);
-            
-            _tweeners.Add(tweener);
+            transform.localScale = Vector3.Lerp(_initialScale, _targetScale, _currentTime * _scaleSpeed);
+            _currentTime += _timeProvider.GetDeltaTime();
         }
     }
 }

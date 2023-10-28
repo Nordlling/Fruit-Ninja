@@ -101,7 +101,7 @@ namespace Main.Scripts.Infrastructure.Services.Magnetism
                 }
                 
                 block.BlockMovement.AddAttraction(attractionPosition, duration, _magnetConfig);
-                block.BlockAnimation.StopAnimations();
+                block.BlockAnimation.enabled = false;
                 
                 _attractedBlocks.Add(block);
             }

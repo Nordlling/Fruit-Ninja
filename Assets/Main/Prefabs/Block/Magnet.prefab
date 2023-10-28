@@ -262,12 +262,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3feea53011a342858d0d498f50f23e68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _minRotateSpeed: 1
-  _maxRotateSpeed: 8
-  _minScaleValue: 0.5
-  _maxScaleValue: 1.5
-  _minScaleSpeed: 3
-  _maxScaleSpeed: 5
+  _minRotateSpeed: 100
+  _maxRotateSpeed: 250
+  _minScaleValue: 0.8
+  _maxScaleValue: 1.3
+  _minScaleSpeed: 0.3
+  _maxScaleSpeed: 0.6
 --- !u!114 &-6087787132124446531
 MonoBehaviour:
   m_ObjectHideFlags: 0

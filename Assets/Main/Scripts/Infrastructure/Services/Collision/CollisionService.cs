@@ -46,19 +46,15 @@ namespace Main.Scripts.Infrastructure.Services.Collision
 
         private void CheckCollisions()
         {
-            if (!_swiper.HasEnoughSpeed())
-            {
-                return;
-            }
-            
             for (int i = 0; i < _blockContainerService.AllSliceableBlocks.Count; i++)
             {
                 ISliceable sliceable = _blockContainerService.AllSliceableBlocks[i];
-                
-                if (CanSlice(sliceable))
+
+                if (!_swiper.HasEnoughSpeed() || !CanSlice(sliceable))
                 {
-                    sliceable.Slice(_swiper.Position, _swiper.Direction);
+                    continue;
                 }
+                sliceable.Slice(_swiper.Position, _swiper.Direction);
             }
         }
 

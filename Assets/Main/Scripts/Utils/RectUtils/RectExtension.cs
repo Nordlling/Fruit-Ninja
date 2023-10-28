@@ -12,14 +12,15 @@ namespace Main.Scripts.Utils.RectUtils
             SlicedRect slicedRect = new SlicedRect();
             Vector2 directionOffset = pointDirection.normalized * offsetStep;
 
-            if (!rect.Contains(pointPosition))
+            if (!rect.Contains(pointPosition) || directionOffset == Vector2.zero)
             {
-                // Debug.LogWarning("Incorrect point position");
+                // Debug.LogWarning("Incorrect input data");
                 CreateLeftSideSlicedRect(rect, slicedRect);
                 return slicedRect;
             }
-            
-            while (true)
+
+            int stepCount = (int)((rect.width + rect.height) / offsetStep);
+            for (int i = 0; i < stepCount; i++)
             {
                 pointPosition += directionOffset;
                 

@@ -1,6 +1,6 @@
 using System;
+using DG.Tweening;
 using Main.Scripts.Infrastructure.Configs;
-using Main.Scripts.Infrastructure.Services.SaveLoad;
 using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Services.Applications
@@ -30,6 +30,8 @@ namespace Main.Scripts.Infrastructure.Services.Applications
         {
             Application.targetFrameRate = _applicationConfig.TargetFPS;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
+            
+            DOTween.SetTweensCapacity(500, 300);
         }
 
 

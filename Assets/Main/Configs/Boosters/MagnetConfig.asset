@@ -27,4 +27,5 @@ MonoBehaviour:
   AttractionForce: 60
   AttractionRadius: 3
   SingularityRadius: 0.5
+  TypesToMagnet: 0000000001000000030000000400000005000000060000000800000009000000
   MagnetAreaEffectPrefab: {fileID: 8531943058825680658, guid: b5416ec8612799a42b4b33b1bdd78587, type: 3}

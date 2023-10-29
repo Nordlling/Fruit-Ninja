@@ -14,5 +14,6 @@ namespace Main.Scripts.Infrastructure.Services.Blurring
         void BlurAll();
         void UnblurAll();
         Sprite BlurSprite(Texture2D texture);
+        Sprite BlurSprite(Texture2D texture, Rect rect, Vector2 pivot);
     }
 }

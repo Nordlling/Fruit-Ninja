@@ -108,6 +108,12 @@ namespace Main.Scripts.Infrastructure.Services.Blurring
             _blurMaterial.SetTexture(BlurMaterialParams.BlurTex, texture);
             return _blurMaterial.CreateRenderSprite(texture.width, texture.height);
         }
+        
+        public Sprite BlurSprite(Texture2D texture, Rect rect, Vector2 pivot)
+        {
+            _blurMaterial.SetTexture(BlurMaterialParams.BlurTex, texture);
+            return _blurMaterial.CreateRenderSprite(texture.width, texture.height, rect, pivot);
+        }
 
         private void CreateBlurredImages()
         {

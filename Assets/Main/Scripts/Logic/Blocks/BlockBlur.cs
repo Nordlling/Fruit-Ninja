@@ -45,16 +45,14 @@ namespace Main.Scripts.Logic.Blocks
 
         private void CreateBlurSprite()
         {
-            Sprite sprite = _blurService.BlurSprite(_originalSpriteRenderer.sprite.texture);
-
             if (SlicedRect != null)
             {
-                sprite = Sprite.Create(
-                    sprite.texture,
-                    SlicedRect.FirstRectPart,
-                    SlicedRect.FirstPivot);
+                _blurredSpriteRenderer.sprite = _blurService.BlurSprite(_originalSpriteRenderer.sprite.texture, SlicedRect.FirstRectPart, SlicedRect.FirstPivot);
             }
-            _blurredSpriteRenderer.sprite = sprite;
+            else
+            {
+                _blurredSpriteRenderer.sprite = _blurService.BlurSprite(_originalSpriteRenderer.sprite.texture);
+            }
         }
 
         private void StartBlur()

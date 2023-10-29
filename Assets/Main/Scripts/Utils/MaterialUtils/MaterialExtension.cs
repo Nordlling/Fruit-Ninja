@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Main.Scripts.Utils.TextureUtils
+namespace Main.Scripts.Utils.MaterialUtils
 {
     public static class MaterialExtension
     {

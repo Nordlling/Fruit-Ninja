@@ -1,5 +1,5 @@
 using Main.Scripts.Constants;
-using Main.Scripts.Utils.TextureUtils;
+using Main.Scripts.Utils.MaterialUtils;
 using UnityEngine;
 using UnityEngine.UI;
 

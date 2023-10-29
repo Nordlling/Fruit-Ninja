@@ -11,7 +11,7 @@ using Main.Scripts.Logic.Blocks.Freezes;
 using Main.Scripts.Logic.Blocks.Magnets;
 using Main.Scripts.Logic.Blocks.Mimics;
 using Main.Scripts.Logic.Blocks.Samurais;
-using Main.Scripts.Utils.TextureUtils;
+using Main.Scripts.Utils.MaterialUtils;
 using UnityEngine;
 
 namespace Main.Scripts.Infrastructure.Services.Blurring

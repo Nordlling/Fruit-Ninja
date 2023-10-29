@@ -9,6 +9,7 @@ namespace Main.Scripts.UI.Gameplay
         [SerializeField] private Image _backgroundImage;
         [SerializeField] private float _fadeInAlpha;
         [SerializeField] private float _animationDuration;
+        [SerializeField] private Image _blurImage;
 
         private const float _fadeOutAlpha = 0f;
 
@@ -16,6 +17,7 @@ namespace Main.Scripts.UI.Gameplay
         {
             ResetValues();
             
+            _blurImage.DOFade(1f, _animationDuration);
             DOTween.Sequence()
                 .Append(_backgroundImage.DOFade(_fadeInAlpha, _animationDuration))
                 .Play();
@@ -23,6 +25,7 @@ namespace Main.Scripts.UI.Gameplay
 
         public void PlayFadeOutAnimation()
         {
+            _blurImage.DOFade(0f, _animationDuration);
             DOTween.Sequence()
                 .Append(_backgroundImage.DOFade(_fadeOutAlpha, _animationDuration))
                 .Play();

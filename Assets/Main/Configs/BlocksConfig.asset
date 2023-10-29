@@ -15,23 +15,7 @@ MonoBehaviour:
   BlockPiece:
     BlockPrefab: {fileID: 7858959051489891967, guid: 0fbc4c599fcaf8141871143e3957cf2a, type: 3}
     SplashPrefab: {fileID: 0}
-    VisualSprites:
-    - BlockSprite: {fileID: 21300000, guid: 618f16cde5c7c2d40874a47686957699, type: 3}
-      SplashSprite: {fileID: 21300000, guid: ed470200b87d1cd4c96dc4f76d7931b8, type: 3}
-    - BlockSprite: {fileID: 21300000, guid: 34f20bbdfb8fb934582a1e75098a391a, type: 3}
-      SplashSprite: {fileID: 21300000, guid: 8bd45a6e69dbac843bf63493f0256211, type: 3}
-    - BlockSprite: {fileID: 21300000, guid: 88b597bd31720884cbeb73439cb3b2ac, type: 3}
-      SplashSprite: {fileID: 21300000, guid: ed470200b87d1cd4c96dc4f76d7931b8, type: 3}
-    - BlockSprite: {fileID: 21300000, guid: 6415f50c857f80a428101bcb269ff4fa, type: 3}
-      SplashSprite: {fileID: 21300000, guid: 81ea6d9d962c1c84ea60cb9a873d6cd1, type: 3}
-    - BlockSprite: {fileID: 21300000, guid: b35f9fd3734579946b67382e9a9685f8, type: 3}
-      SplashSprite: {fileID: 21300000, guid: 81ea6d9d962c1c84ea60cb9a873d6cd1, type: 3}
-    - BlockSprite: {fileID: 21300000, guid: 3f6a07f47f4799248a455e72df81a091, type: 3}
-      SplashSprite: {fileID: 21300000, guid: 81ea6d9d962c1c84ea60cb9a873d6cd1, type: 3}
-    - BlockSprite: {fileID: 21300000, guid: 1a0fea3cda1fb034885f1fca0f9f6851, type: 3}
-      SplashSprite: {fileID: 21300000, guid: 003798844a593dc458d4fc353875c688, type: 3}
-    - BlockSprite: {fileID: 21300000, guid: 1782614f6a6462447a0b4f1289b68634, type: 3}
-      SplashSprite: {fileID: 21300000, guid: 003798844a593dc458d4fc353875c688, type: 3}
+    VisualSprites: []
   Block:
     BlockPrefab: {fileID: 7451329234354239626, guid: 2f51cb6d3b5579c4cbd086a900f43db0, type: 3}
     SplashPrefab: {fileID: 6408557679186087295, guid: 4448d11c915974b448dcb8e540446e19, type: 3}

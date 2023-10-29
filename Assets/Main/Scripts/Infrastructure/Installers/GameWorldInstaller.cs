@@ -6,6 +6,7 @@ using Main.Scripts.Infrastructure.Services;
 using Main.Scripts.Infrastructure.Services.AnimationTargetContainer;
 using Main.Scripts.Infrastructure.Services.Applications;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
+using Main.Scripts.Infrastructure.Services.Blurring;
 using Main.Scripts.Infrastructure.Services.Boosters;
 using Main.Scripts.Infrastructure.Services.Bricking;
 using Main.Scripts.Infrastructure.Services.ButtonContainer;
@@ -36,7 +37,9 @@ namespace Main.Scripts.Infrastructure.Installers
         [SerializeField] private ScoreConfig _scoreConfig;
         [SerializeField] private WordEndingsConfig _wordEndingsConfig;
         [SerializeField] private BlocksConfig _blocksConfig;
-        
+        [SerializeField] private BlurConfig _blurConfig;
+
+
         [Header("Prefabs")]
         [SerializeField] private Swiper _swiperPrefab;
         [SerializeField] private CollisionService _collisionServicePrefab;
@@ -61,6 +64,8 @@ namespace Main.Scripts.Infrastructure.Installers
             RegisterSliceEffectFactory(serviceContainer);
             RegisterBlockFactory(serviceContainer);
             RegisterMimickingBlockFactory(serviceContainer);
+            
+            RegisterBlurService(serviceContainer);
 
             RegisterLivingZone(serviceContainer);
             RegisterSwiper(serviceContainer);
@@ -153,6 +158,17 @@ namespace Main.Scripts.Infrastructure.Installers
         }
         
 
+        private void RegisterBlurService(ServiceContainer serviceContainer)
+        {
+            BlurService blurService = new BlurService(_blurConfig);
+            if (_blurConfig.Enabled)
+            {
+                blurService.Init();
+            }
+            serviceContainer.SetService<IBlurService, BlurService>(blurService);
+        }
+        
+        
         private void RegisterLivingZone(ServiceContainer serviceContainer)
         {
             serviceContainer.SetServiceSelf(_livingZone);
@@ -245,7 +261,8 @@ namespace Main.Scripts.Infrastructure.Installers
             (
                 serviceContainer.Get<ITimeProvider>(),
                 _blocksConfig.FreezeConfig,
-                serviceContainer.Get<IBoostersCheckerService>()
+                serviceContainer.Get<IBoostersCheckerService>(),
+                serviceContainer.Get<IBlurService>()
             );
             
             serviceContainer.SetService<IFreezeService, FreezeService>(freezeService);

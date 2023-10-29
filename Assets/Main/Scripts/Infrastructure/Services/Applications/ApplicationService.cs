@@ -38,13 +38,7 @@ namespace Main.Scripts.Infrastructure.Services.Applications
 
         private void FocusChanged(bool isFocused)
         {
-            if (isFocused)
-            {
-#if !UNITY_EDITOR
-                OnPaused?.Invoke();
-#endif
-            }
-            else
+            if (!isFocused)
             {
 #if !UNITY_EDITOR
                 OnSaved?.Invoke();

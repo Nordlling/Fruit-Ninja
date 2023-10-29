@@ -1,4 +1,3 @@
-using DG.Tweening;
 using Main.Scripts.Infrastructure.Services.ButtonContainer;
 using Main.Scripts.Infrastructure.Services.Score;
 using Main.Scripts.Infrastructure.States;
@@ -12,18 +11,10 @@ namespace Main.Scripts.UI.Menu
     public class MenuWindow : MonoBehaviour
     {
         [SerializeField] private string _transferSceneName;
+        [SerializeField] private StartGameAnimation _startGameAnimation;
         [SerializeField] private Button _startButton;
         [SerializeField] private Button _exitButton;
         [SerializeField] private TextMeshProUGUI _highScoreText;
-        [SerializeField] private Image _backgroundBlur;
-        [SerializeField] private Image _leftHouseImage;
-        [SerializeField] private Image _rightHouseImage;
-        [SerializeField] private Image _lightImage;
-        [SerializeField] private CanvasGroup _canvasGroup;
-        [SerializeField] private float _canvasGroupAnimationDuration;
-        [SerializeField] private float _blurAnimationDuration;
-        [SerializeField] private float _housesAnimationDuration;
-        [SerializeField] private float _housesScaleTarget;
 
         [SerializeField] private UICurtainView _curtainView;
         
@@ -62,26 +53,8 @@ namespace Main.Scripts.UI.Menu
         {
             _curtainView.gameObject.SetActive(true);
             _buttonContainerService.DisableAllButtons();
-            StartGameAnimation();
-        }
-
-        private void StartGameAnimation()
-        {
-            Vector2 housesRectWidth = new Vector2(_leftHouseImage.rectTransform.rect.width, 0f) * _housesScaleTarget;
-            Vector2 lightRectHeight = new Vector2(0f, _lightImage.rectTransform.rect.height) * _housesScaleTarget;
             
-            _leftHouseImage.rectTransform.DOAnchorPos(-housesRectWidth ,_housesAnimationDuration);
-            _leftHouseImage.rectTransform.DOScale(_housesScaleTarget ,_housesAnimationDuration);
-            
-            _rightHouseImage.rectTransform.DOAnchorPos(housesRectWidth, _housesAnimationDuration);
-            _rightHouseImage.rectTransform.DOScale(_housesScaleTarget ,_housesAnimationDuration);
-            
-            _lightImage.rectTransform.DOAnchorPos(lightRectHeight, _housesAnimationDuration);
-            _lightImage.rectTransform.DOScale(_housesScaleTarget ,_housesAnimationDuration);
-
-            _canvasGroup.DOFade(0f, _canvasGroupAnimationDuration);
-            
-            _backgroundBlur.DOFade(0f, _blurAnimationDuration).OnComplete(StartFadeInCurtain);
+            _startGameAnimation.StartAnimation(StartFadeInCurtain);
         }
 
         private void StartFadeInCurtain()

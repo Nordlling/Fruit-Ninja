@@ -286,6 +286,7 @@ GameObject:
   - component: {fileID: 1898665590903545318}
   - component: {fileID: 1898665590903545319}
   - component: {fileID: 1898665590903545315}
+  - component: {fileID: 8694810403537219086}
   m_Layer: 5
   m_Name: MenuWindow
   m_TagString: Untagged
@@ -389,19 +390,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _transferSceneName: Gameplay
+  _startGameAnimation: {fileID: 8694810403537219086}
   _startButton: {fileID: 355662512715130452}
   _exitButton: {fileID: 718644933982578551}
   _highScoreText: {fileID: 1898665592549247848}
+  _curtainView: {fileID: 0}
+--- !u!114 &8694810403537219086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898665590903545316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa27a1cc9d574bbeaddb33d45a18b707, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _backgroundBlur: {fileID: 5739696656751763008}
   _leftHouseImage: {fileID: 1898665591753246545}
   _rightHouseImage: {fileID: 1898665590706611942}
   _lightImage: {fileID: 1898665591035951025}
   _canvasGroup: {fileID: 9015959716439580614}
-  _canvasGroupAnimationDuration: 1
+  _canvasGroupAnimationDuration: 1.5
   _blurAnimationDuration: 1.5
   _housesAnimationDuration: 1.5
   _housesScaleTarget: 1.5
-  _curtainView: {fileID: 0}
 --- !u!1 &1898665591035951031
 GameObject:
   m_ObjectHideFlags: 0
@@ -1440,6 +1454,10 @@ PrefabInstance:
       value: 0.002
       objectReference: {fileID: 0}
     - target: {fileID: 3789818035002799075, guid: 1665d0f9d32772c42bf7b4c5ca5c5894, type: 3}
+      propertyPath: _material
+      value: 
+      objectReference: {fileID: 2100000, guid: beee12d1b964e73489f31d1131fc9268, type: 2}
+    - target: {fileID: 3789818035002799075, guid: 1665d0f9d32772c42bf7b4c5ca5c5894, type: 3}
       propertyPath: _stepSize
       value: 10
       objectReference: {fileID: 0}
@@ -1455,6 +1473,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: ba389d22801df1549a7b351ead01d29a, type: 3}
+    - target: {fileID: 3789818035002799085, guid: 1665d0f9d32772c42bf7b4c5ca5c5894, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1665d0f9d32772c42bf7b4c5ca5c5894, type: 3}
 --- !u!114 &5739696656751763008 stripped

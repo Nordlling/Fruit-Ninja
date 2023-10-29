@@ -19,27 +19,24 @@ namespace Main.Scripts.UI.Menu
         [SerializeField] private float _housesAnimationDuration;
         [SerializeField] private float _housesScaleTarget;
 
-         private UICurtainView _curtainView;
-        
-        private IGameStateMachine _stateMachine;
+        private const float _pause = 0.2f;
 
         public void StartAnimation(Action onFinished)
         {
             Vector2 housesRectWidth = new Vector2(_leftHouseImage.rectTransform.rect.width, 0f) * _housesScaleTarget;
             Vector2 lightRectHeight = new Vector2(0f, _lightImage.rectTransform.rect.height) * _housesScaleTarget;
-            
-            _leftHouseImage.rectTransform.DOAnchorPos(-housesRectWidth ,_housesAnimationDuration);
-            _leftHouseImage.rectTransform.DOScale(_housesScaleTarget ,_housesAnimationDuration);
-            
-            _rightHouseImage.rectTransform.DOAnchorPos(housesRectWidth, _housesAnimationDuration);
-            _rightHouseImage.rectTransform.DOScale(_housesScaleTarget ,_housesAnimationDuration);
-            
-            _lightImage.rectTransform.DOAnchorPos(lightRectHeight, _housesAnimationDuration);
-            _lightImage.rectTransform.DOScale(_housesScaleTarget ,_housesAnimationDuration);
 
-            _canvasGroup.DOFade(0f, _canvasGroupAnimationDuration);
-            
-            _backgroundBlur.DOFade(0f, _blurAnimationDuration).OnComplete(() => onFinished?.Invoke());
+            DOTween.Sequence()
+                .AppendInterval(_pause)
+                .Append(_leftHouseImage.rectTransform.DOAnchorPos(-housesRectWidth, _housesAnimationDuration))
+                .Join(_leftHouseImage.rectTransform.DOScale(_housesScaleTarget, _housesAnimationDuration))
+                .Join(_rightHouseImage.rectTransform.DOAnchorPos(housesRectWidth, _housesAnimationDuration))
+                .Join(_rightHouseImage.rectTransform.DOScale(_housesScaleTarget, _housesAnimationDuration))
+                .Join(_lightImage.rectTransform.DOAnchorPos(lightRectHeight, _housesAnimationDuration))
+                .Join(_lightImage.rectTransform.DOScale(_housesScaleTarget, _housesAnimationDuration))
+                .Join(_canvasGroup.DOFade(0f, _canvasGroupAnimationDuration))
+                .Join(_backgroundBlur.DOFade(0f, _blurAnimationDuration).OnComplete(() => onFinished?.Invoke()))
+                .Play();
         }
         
     }

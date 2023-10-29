@@ -79,7 +79,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3807286313010990927}
   - component: {fileID: 3807286313010990926}
-  - component: {fileID: 3807286313010990925}
+  - component: {fileID: 9187507219852764284}
   m_Layer: 5
   m_Name: HealthList
   m_TagString: Untagged
@@ -118,7 +118,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3807286313010990924}
   m_CullTransparentMesh: 1
---- !u!114 &3807286313010990925
+--- !u!114 &9187507219852764284
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,7 +127,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3807286313010990924}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -135,15 +135,13 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 5
-  m_Spacing: 20
-  m_ChildForceExpandWidth: 0
-  m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
+  m_ChildAlignment: 2
+  m_StartCorner: 1
+  m_StartAxis: 0
+  m_CellSize: {x: 70, y: 70}
+  m_Spacing: {x: 20, y: 0}
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!1001 &3807286311589196724
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -185,11 +183,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7681712284005586266, guid: 340a23dc18471874588acb19762f6a1b, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 70
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7681712284005586266, guid: 340a23dc18471874588acb19762f6a1b, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 62.19
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7681712284005586266, guid: 340a23dc18471874588acb19762f6a1b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -287,11 +285,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7681712284005586266, guid: 340a23dc18471874588acb19762f6a1b, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 70
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7681712284005586266, guid: 340a23dc18471874588acb19762f6a1b, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 62.19
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7681712284005586266, guid: 340a23dc18471874588acb19762f6a1b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -389,11 +387,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7681712284005586266, guid: 340a23dc18471874588acb19762f6a1b, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 70
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7681712284005586266, guid: 340a23dc18471874588acb19762f6a1b, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 62.19
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7681712284005586266, guid: 340a23dc18471874588acb19762f6a1b, type: 3}
       propertyPath: m_LocalPosition.x

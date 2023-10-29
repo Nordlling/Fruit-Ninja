@@ -18,6 +18,12 @@ namespace Main.Scripts.Infrastructure.Services.SaveLoad
       cancelToken = new CancellationTokenSource();
       SaveAsync(playerScore);
     }
+    
+    public void SaveProgressImmediately(PlayerScore playerScore)
+    {
+      cancelToken.Cancel();
+      Save(playerScore);
+    }
 
     public PlayerScore LoadProgress()
     {
@@ -29,14 +35,17 @@ namespace Main.Scripts.Infrastructure.Services.SaveLoad
       try
       {
         await Task.Delay(_delay, cancelToken.Token);
-
-        PlayerPrefs.SetString(_progressKey, JsonUtility.ToJson(playerScore));
-        PlayerPrefs.Save();
+        Save(playerScore);
       }
       catch (TaskCanceledException e)
       {
       }
     }
-    
+
+    private static void Save(PlayerScore playerScore)
+    {
+      PlayerPrefs.SetString(_progressKey, JsonUtility.ToJson(playerScore));
+      PlayerPrefs.Save();
+    }
   }
 }

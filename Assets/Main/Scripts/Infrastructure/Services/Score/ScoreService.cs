@@ -26,7 +26,7 @@ namespace Main.Scripts.Infrastructure.Services.Score
             _applicationService = applicationService;
             LoadHighScore();
 
-            _applicationService.OnPaused += SaveHighScore;
+            _applicationService.OnSaved += TrySaveHighScore;
         }
         
         public ScoreService(ISaveLoadService saveLoadService)
@@ -67,6 +67,14 @@ namespace Main.Scripts.Infrastructure.Services.Score
         {
             _playerScore = _saveLoadService.LoadProgress() ?? new PlayerScore();
             HighScore = _playerScore.HighScore;
+        }
+
+        private void TrySaveHighScore()
+        {
+            if (CurrentScore > HighScore)
+            {
+                _saveLoadService.SaveProgressImmediately(_playerScore);
+            }
         }
 
         private void SaveHighScore()

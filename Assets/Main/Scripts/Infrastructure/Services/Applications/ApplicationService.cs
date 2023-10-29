@@ -10,6 +10,7 @@ namespace Main.Scripts.Infrastructure.Services.Applications
         private ApplicationConfig _applicationConfig;
 
         public event Action OnPaused;
+        public event Action OnSaved;
 
         public void Construct(ApplicationConfig applicationConfig)
         {
@@ -37,10 +38,16 @@ namespace Main.Scripts.Infrastructure.Services.Applications
 
         private void FocusChanged(bool isFocused)
         {
-            if (!isFocused)
+            if (isFocused)
             {
 #if !UNITY_EDITOR
                 OnPaused?.Invoke();
+#endif
+            }
+            else
+            {
+#if !UNITY_EDITOR
+                OnSaved?.Invoke();
 #endif
             }
         }

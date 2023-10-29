@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17bec3b9417b48e8bec2515a93164137, type: 3}
+  m_Name: BlurConfig
+  m_EditorClassIdentifier: 
+  BlocksConfig: {fileID: 11400000, guid: 6ec0191c3f0b7d2468a37d3fcd9a6ce4, type: 2}
+  BlurMaterial: {fileID: 2100000, guid: 6682ac5fe011922419cc69bd306b26ec, type: 2}
+  Enabled: 1

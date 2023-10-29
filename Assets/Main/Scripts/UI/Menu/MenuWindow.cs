@@ -11,6 +11,7 @@ namespace Main.Scripts.UI.Menu
     public class MenuWindow : MonoBehaviour
     {
         [SerializeField] private string _transferSceneName;
+        [SerializeField] private StartGameAnimation _startGameAnimation;
         [SerializeField] private Button _startButton;
         [SerializeField] private Button _exitButton;
         [SerializeField] private TextMeshProUGUI _highScoreText;
@@ -36,11 +37,6 @@ namespace Main.Scripts.UI.Menu
             _highScoreText.text = _scoreService.HighScore.ToString();
         }
 
-        private void En()
-        {
-            _startButton.interactable = false;
-        }
-
         private void OnDisable()
         {
             _startButton.onClick.RemoveListener(StartGame);
@@ -57,6 +53,12 @@ namespace Main.Scripts.UI.Menu
         {
             _curtainView.gameObject.SetActive(true);
             _buttonContainerService.DisableAllButtons();
+            
+            _startGameAnimation.StartAnimation(StartFadeInCurtain);
+        }
+
+        private void StartFadeInCurtain()
+        {
             _curtainView.FadeInBackground(() => _stateMachine.Enter<LoadSceneState, string>(_transferSceneName));
         }
 

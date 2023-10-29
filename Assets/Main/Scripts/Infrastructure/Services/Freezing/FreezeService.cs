@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Main.Scripts.Infrastructure.Configs.Boosters;
 using Main.Scripts.Infrastructure.GameplayStates;
 using Main.Scripts.Infrastructure.Provides;
+using Main.Scripts.Infrastructure.Services.Blurring;
 using Main.Scripts.Infrastructure.Services.Boosters;
 using Main.Scripts.Logic.Blocks.Freezes;
 using UnityEngine;
@@ -15,13 +16,16 @@ namespace Main.Scripts.Infrastructure.Services.Freezing
         private readonly ITimeProvider _timeProvider;
         private readonly FreezeConfig _freezeConfig;
         private readonly IBoostersCheckerService _boostersCheckerService;
+        private readonly IBlurService _blurService;
         private CancellationTokenSource _cancelToken = new();
 
-        public FreezeService(ITimeProvider timeProvider, FreezeConfig freezeConfig, IBoostersCheckerService boostersCheckerService)
+        public FreezeService(ITimeProvider timeProvider, FreezeConfig freezeConfig,
+            IBoostersCheckerService boostersCheckerService, IBlurService blurService)
         {
             _timeProvider = timeProvider;
             _freezeConfig = freezeConfig;
             _boostersCheckerService = boostersCheckerService;
+            _blurService = blurService;
         }
 
         public event Action OnFreezed;
@@ -29,13 +33,14 @@ namespace Main.Scripts.Infrastructure.Services.Freezing
 
         public void Freeze()
         {
-            OnFreezed?.Invoke();
+            _blurService.BlurAll();
             _boostersCheckerService.SetActivation(typeof(Freeze), true);
             _timeProvider.SlowTime(_freezeConfig.TimeScale);
 
             _cancelToken.Cancel();
             _cancelToken = new();
             FreezeAsync(_freezeConfig.Duration);
+            OnFreezed?.Invoke();
         }
 
         public void Lose()
@@ -66,6 +71,7 @@ namespace Main.Scripts.Infrastructure.Services.Freezing
 
         private void Unfreeze()
         {
+            _blurService.UnblurAll();
             _timeProvider.SetRealTime();
             _boostersCheckerService.SetActivation(typeof(Freeze), false);
             OnUnfreezed?.Invoke();

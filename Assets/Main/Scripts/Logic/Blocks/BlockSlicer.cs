@@ -88,6 +88,7 @@ namespace Main.Scripts.Logic.Blocks
             blockPiece.transform.localScale = transform.localScale;
             blockPiece.BlockMovement.Construct(rectPartDirection, _departureSpeed, blockPiece.TimeProvider);
             blockPiece.SpriteRenderer.sprite = part;
+            blockPiece.BlockBlur.SlicedRect = new SlicedRect{ FirstRectPart = rectPart, FirstPivot = pivot };
         }
 
         private void SpawnSplash()

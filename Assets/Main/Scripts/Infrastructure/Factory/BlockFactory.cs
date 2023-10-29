@@ -2,6 +2,7 @@ using Main.Scripts.Infrastructure.Configs;
 using Main.Scripts.Infrastructure.Provides;
 using Main.Scripts.Infrastructure.Services;
 using Main.Scripts.Infrastructure.Services.BlockContainer;
+using Main.Scripts.Infrastructure.Services.Blurring;
 using Main.Scripts.Infrastructure.Services.Bricking;
 using Main.Scripts.Infrastructure.Services.Combo;
 using Main.Scripts.Infrastructure.Services.Explosion;
@@ -158,11 +159,25 @@ namespace Main.Scripts.Infrastructure.Factory
             randomIndex = Random.Range(0, visualSprites.Length);
             
             T emptyBlock = Object.Instantiate(blockPrefab, position, Quaternion.identity);
-            emptyBlock.Construct(_serviceContainer.Get<IBlockContainerService>(), _serviceContainer.Get<ITimeProvider>(), invulnerabilityDuration);
+            emptyBlock.Construct(
+                _serviceContainer.Get<IBlockContainerService>(), 
+                _serviceContainer.Get<ITimeProvider>(), 
+                invulnerabilityDuration,
+                randomIndex);
+            
+            if (emptyBlock.BlockBlur != null)
+            {
+                emptyBlock.BlockBlur.Construct(_serviceContainer.Get<IBlurService>(), emptyBlock.BlurredSpriteRenderer,
+                    emptyBlock.SpriteRenderer);
+            }
             
             if (visualSprites.Length != 0)
             {
                 emptyBlock.SpriteRenderer.sprite = visualSprites[randomIndex].BlockSprite;
+                if (_serviceContainer.Get<IBlurService>().TryGetBlurredSprite(out Sprite sprite, emptyBlock, randomIndex))
+                {
+                    emptyBlock.BlurredSpriteRenderer.sprite = sprite;
+                }
             }
             
             AddToBlockContainer(emptyBlock);

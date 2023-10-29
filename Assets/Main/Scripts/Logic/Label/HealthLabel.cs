@@ -1,5 +1,6 @@
 ﻿using DG.Tweening;
 using Main.Scripts.Infrastructure.Provides;
+using Main.Scripts.Infrastructure.Services.AnimationTargetContainer;
 using UnityEngine;
 
 namespace Main.Scripts.Logic.Label
@@ -7,17 +8,16 @@ namespace Main.Scripts.Logic.Label
     public class HealthLabel : MonoBehaviour
     {
         [SerializeField] private float _timeBeforeAnimation;
-        [SerializeField] private float _timeAfterAnimation;
         [SerializeField] private float _animationDuration;
         
         private ITimeProvider _timeProvider;
         private Sequence _sequence;
-        private Vector2 _targetPosition;
+        private IAnimationTargetContainer _animationTargetContainer;
 
-        public void Construct(ITimeProvider timeProvider, Vector2 targetPosition)
+        public void Construct(ITimeProvider timeProvider, IAnimationTargetContainer animationTargetContainer)
         {
             _timeProvider = timeProvider;
-            _targetPosition = targetPosition;
+            _animationTargetContainer = animationTargetContainer;
         }
         private void Start()
         {
@@ -33,8 +33,7 @@ namespace Main.Scripts.Logic.Label
         {
             _sequence = DOTween.Sequence()
                 .AppendInterval(_timeBeforeAnimation)
-                .Append(transform.DOMove(_targetPosition, _animationDuration))
-                .Append(transform.DOScale(0f, _timeAfterAnimation))
+                .Append(transform.DOMove(_animationTargetContainer.HealthTarget, _animationDuration))
                 .OnKill(() => Destroy(gameObject))
                 .Play();
         }

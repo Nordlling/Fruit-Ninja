@@ -49,7 +49,7 @@ namespace Main.Scripts.Infrastructure.Factory
         public HealthLabel CreateHealthLabel(HealthLabel healthLabelPrefab, Vector2 position)
         {
             HealthLabel healthLabel = Object.Instantiate(healthLabelPrefab, position, Quaternion.identity);
-            healthLabel.Construct(_serviceContainer.Get<ITimeProvider>(), _serviceContainer.Get<IAnimationTargetContainer>().HealthTarget);
+            healthLabel.Construct(_serviceContainer.Get<ITimeProvider>(), _serviceContainer.Get<IAnimationTargetContainer>());
             return healthLabel;
         }
 

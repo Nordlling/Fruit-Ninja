@@ -417,6 +417,7 @@ MonoBehaviour:
   _scoreConfig: {fileID: 11400000, guid: 4a6b62b958498ab42b13e4cac27d5ad4, type: 2}
   _wordEndingsConfig: {fileID: 11400000, guid: eac58b6b84da1134eb281016a8b17c04, type: 2}
   _blocksConfig: {fileID: 11400000, guid: 6ec0191c3f0b7d2468a37d3fcd9a6ce4, type: 2}
+  _blurConfig: {fileID: 11400000, guid: 32b4d264af72e7048bc11369cd806bb9, type: 2}
   _swiperPrefab: {fileID: 1525716950435999003, guid: 45cf2639433e82249b5f9735ac7a24a8, type: 3}
   _collisionServicePrefab: {fileID: 8882956281239512359, guid: 4cb81bb26e1272649bf4a4f867b661c4, type: 3}
   _comboLabelPrefab: {fileID: 5436899917071665924, guid: 1604aeb51f28e2047a1f9ad5b144d97f, type: 3}
@@ -738,7 +739,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3789818035002799075, guid: 1665d0f9d32772c42bf7b4c5ca5c5894, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3789818035002799075, guid: 1665d0f9d32772c42bf7b4c5ca5c5894, type: 3}
       propertyPath: _blurRadius
@@ -1221,7 +1222,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3789818035002799075, guid: 1665d0f9d32772c42bf7b4c5ca5c5894, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3789818035002799075, guid: 1665d0f9d32772c42bf7b4c5ca5c5894, type: 3}
       propertyPath: _blurRadius
